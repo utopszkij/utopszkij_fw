@@ -1,0 +1,25 @@
+<div class="row" style="background:white; color:black">
+    <div class="col-12">
+            <iframe v-bind:src="'https://www.facebook.com/plugins/share_button.php?href='+encodeURI(location)+'&layout=button_count&size=large&appId=482318802821364&width=113&height=20'" 
+                width="150" height="30" style="border:none;overflow:hidden;" 
+                scrolling="no" frameborder="0" allowfullscreen="true" 
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+            </iframe>
+      </div>
+</div>
+
+
+<div class="row">
+	<div class="col-12">	
+		<a v-bind:href="HREF('home.impressum',{})">Imresszum</a>&nbsp;&nbsp;&nbsp;
+		<a v-bind:href="HREF('home.policy',{})" style="color:white;">{{ lng('POLICY') }}</a>&nbsp;&nbsp;&nbsp;
+		<a v-bind:href="HREF('home.protest',{})" style="color:white;">{{ lng('PROTEST') }}</a>&nbsp;&nbsp;&nbsp;
+		<a v-bind:href="HREF('home.licence',{})" style="color:white;">{{ lng('LICENCE') }}</a>&nbsp;&nbsp;&nbsp;
+		<a href="https://github.com/utopszkij/utopszkij_fw" target="_new" style="color:white;">
+			{{ lng('SOURCE') }}</a>&nbsp;&nbsp;&nbsp;
+	</div>	
+	<div class="col-12">	
+		Ⓒ 2022 {{ lng('COPYRIGHT') }}
+	</div>	
+</div>
+
