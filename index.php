@@ -14,6 +14,8 @@ include_once('vendor/view.php');
 include_once('vendor/controller.php');
 include_once('vendor/fw.php');
 
+
+
 importComponent('upgrade');
 
 $fw = new Fw();
