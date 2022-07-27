@@ -6,8 +6,9 @@ body {text-align:center}
 .form-control {display:inline-block; width:auto}
 label {display:inline-block; width: 30%; text-align:right}
 form .row {margin:20px 0px 20px 0px}
+.link {cursor:pointer; color:#0d6efd; font-style:normal; text-decoration:underline}
 
-#header {height:140px; background-color:silver; 
+#header {height:140px; background-color:silver; cursor:pointer;
 	background-image:url('images/header.png'); background-size: 100% 200px; background-repeat:no-repeat }
 #fomenu {background-color:#655191}
 #popup {position:fixed; z-index:99; top:100px; left:100px; display:none;

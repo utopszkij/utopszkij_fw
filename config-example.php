@@ -10,6 +10,16 @@ DEFINE('USER','mysql-user');
 DEFINE('PSW','mysql-user-password');
 DEFINE('DBNAME','szakacskonyv');
 
+DEFINE('MAIL_HOST','');
+DEFINE('MAIL_PORT','465');
+DEFINE('MAIL_USERNAME','');
+DEFINE('MAIL_PASSWORD','');
+DEFINE('MAIL_ENCRYPTION','SSL');
+DEFINE('MAIL_FROM_ADDRESS','');
+DEFINE('MAIL_FROM_NAME','');
+DEFINE('MAIL_WAIT_SEC','130');
+
+
 DEFINE('MULTIUSER',true); // true: több felhasználós mód, false: egy felhasználós mód
 DEFINE('ADMIN','admin'); // system admin nick név
 

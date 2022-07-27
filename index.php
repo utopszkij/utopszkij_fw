@@ -14,8 +14,6 @@ include_once('vendor/view.php');
 include_once('vendor/controller.php');
 include_once('vendor/fw.php');
 
-
-
 importComponent('upgrade');
 
 $fw = new Fw();
@@ -181,7 +179,13 @@ if (method_exists($comp, 'getTitle')) {
 		// képernyő méretek tárolása csokiba
 		setCookie('screen_width',screen.width,100); 
 		setCookie('screen_height',screen.height,100); 
-	</script>	 
+	</script>	
+	<?php 
+	if (file_exists('languages/'.$comp->getName().'_'.LNG.'.js')) {
+		echo '<script src="languages/'.$comp->getName().'_'.LNG.'.js"></script>'."\n";
+		echo '<script>tokens = Object.assign(tokens, tokensComp);</script>'."\n";
+	} 
+	?>
 </head>	 
 <body>
 
@@ -201,7 +205,12 @@ if (method_exists($comp, 'getTitle')) {
 
 	<div class="container">
 		<div>
-			<div id="header" onclick="document.location='index.php';"></div>
+			<div id="header" onclick="document.location='index.php';">
+				<img src="images/utopszkij_fw_smal.png" style="margin:10px; height:120px; float:left" />
+				<div style="float:right; margin:60px 20px 0px 0px; color:#655191; font-weight:bold">
+					Egyszerű de nagyszerű PHP-MYSQL-VUE-Bootstrap keretrendszer
+				</divr>
+			</div>
 		</div>
 		
 		<?php 
@@ -223,7 +232,7 @@ if (method_exists($comp, 'getTitle')) {
 			?>
 		</div>
 		<?php 
-			view('footer',[],'footer'); 
+			view('footer',[],'footer');
 		?>
 	</div>
 	<p><?php echo $_SESSION['screen_width'].' x '.$_SESSION['screen_height']; ?></p>	

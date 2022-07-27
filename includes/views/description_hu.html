@@ -1,3 +1,8 @@
+<div class="alert alert-danger" v-if="errorMsg != ''"
+	v-html="lng(errorMsg)"></div>
+<div class="alert alert-success" v-if="successMsg != ''"
+	v-html="lng(successMsg)"></div>
+
 <div id="description">
 	<div class="row">
 		<h1>Utopszkij_fw WEB programozási keretrendszer</h1>
@@ -17,6 +22,7 @@
 				<li>facebook megosztás támogatása,</li>
 				<li>egszerű telepíthetőség, nem szükséges konzol hozzáférés,</li>
 				<li>verzió követés a github -ról.</li>
+				<li>php és view.html unittest rendszer</li>
 			</ul>	
 		</div>
 	</div>

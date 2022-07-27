@@ -1,20 +1,21 @@
 <div id="login" class="form">
-    <div class="alert alert-danger" v-if="msg != ''">
-        {{ msg }}
-    </div>
+    <div class="alert alert-danger" v-if="errorMsg != ''" v-html="lng(errorMsg)"></div>
+    <div class="alert alert-success" v-if="successMsg != ''" v-html="lng(successMsg)"></div>
     <div class="row text-center">
         <h1>
                 <em class="fas fa-sign-in-alt"></em>&nbsp;
                 <span>{{ lng('LOGIN') }}</span>
         </h1>
 	</div>	
-    <form name="login" action="index.php" method="post">
+    <form name="login" action="index.php" method="post" 
+		id="formLogin">
     <input type="hidden" name="task" value="user.dologin" />
     <input type="hidden" name="redirect" v-model="redirect" />
+    <input type="hidden" name="key" v-model="key" />
     <div class="row text-center">
 		<div class="col-12">
 			<em class="fas fa-user"></em>&nbsp;
-    	    <input type="text" name="username" 
+    	    <input type="text" name="username" id="username" v-model="username"
         	    v-bind:placeholder="lng('NICKNAME')" required="true" />
 		</div>	
 	</div>	
@@ -47,22 +48,49 @@
 	</form>
     <div class="alert alert-info">{{ lng('REGISTHELP2') }}</div>
     <div class="row">
-       <div class="col-12 text-center">
-          <a v-bind:href="HREF('user.regist',{'redirect':redirect})">
-               {{ lng('DOREGIST') }}
-          </a>
-       </div>
-    </div>
+		<div class="col-12 text-center">
+		   <a v-bind:href="HREF('user.regist',{'redirect':redirect})">
+				{{ lng('DOREGIST') }}
+		   </a>
+		</div>
+	 </div>
+	 <div class="row">
+		<div class="col-12 text-center">
+		   <var v-on:click="resendClick()" class="link">
+				{{ lng('RESEND_ACTIVATOR') }}
+		   </var>
+		</div>
+	 </div>
+	 <div class="row">
+		<div class="col-12 text-center">
+		   <var v-on:click="forgetPswClick()" class="link">
+				{{ lng('FORGET_PASSWORD') }}
+		   </var>
+		</div>
+	 </div>
+	  
 </div>
 
 <script>
 	methods = {
+		afterMount() {
+			this.username = '';
+			document.getElementById('username').focus();
+		},
 		atob(s) {
 			if ((s != '') & (s != undefined))  {
 			  return window.atob(s);
 			} else {
 			  return '';
 			}
+		},
+		resendClick() {
+			document.location=HREF('user.sendactivator',{username:this.username});
+			return false;
+		},
+		forgetPswClick() {
+			document.location=HREF('user.forgetpsw',{username:this.username});
+			return false;
 		}
 	};
 </script>	
