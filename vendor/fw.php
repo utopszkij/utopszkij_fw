@@ -1,5 +1,6 @@
 <?php
 
+include_once('includes/models/usermodel.php');
 global $components; // [[taskName, compName],....]
 $components = [];
 
@@ -122,7 +123,7 @@ class Fw {
 	 * @param array $params [name => value,...]
 	 * @return string
 	 */ 
-	function HREF(string $task, array $params) {
+	public static function HREF(string $task, array $params = []) {
 		$result = SITEURL;
 		if (REWRITE) {
 			$result .= '/task/'.$task;
@@ -155,10 +156,30 @@ class Fw {
 	/**
 	* a bejelentkezett user admin?
 	* globalis funkcióként is hívható 
+	* korábban a logedGroup a sessionban string volt,
+	* most array of {id,name}
 	* @return bool
 	*/
 	public static function isAdmin() {
-		return (($_SESSION['logedGroup'] == 'admin') | ($_SESSION['logedName'] == ADMIN));
+		$result = false;
+		if (isset($_SESSION['loged']))  {
+			$groups = UserModel::getGroups((int) $_SESSION['loged']);
+			if (is_array($groups)) {
+				foreach ($groups as $group) {
+					if (isset($group->name)) {
+						if ($group->name == 'admin') {
+							$result = true;
+						}
+					}
+				}
+			} else {
+				$result = ($groups == 'admin');
+			}
+			if ($_SESSION['logedName'] == ADMIN) {
+				$result = true;
+			}
+		}	
+		return $result;
 	}
 	
 	/**

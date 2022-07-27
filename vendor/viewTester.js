@@ -17,7 +17,8 @@ window = {
       return s;
    },
    HREF: function(task, params) {
-      var result = siteurl;
+      var rewrite = true;
+      var result = 'index.php';
       if (rewrite) {
          result += '/task/'+task;
          for (var fn in params) {
@@ -30,7 +31,9 @@ window = {
          }
       }
       return result;
-   }
+   },
+   siteurl: 'index.php',
+   rewrite: true
 };
 comp = {};
 vueTest = function() {};
@@ -44,6 +47,7 @@ axiosResults = [];
 red = '\x1b[31m%s\x1b[0m';
 green = '\x1b[32m%s\x1b[0m';
 siteURL = 'http://localhost:8000';
+rewrite = true;
 
 class FormData {
    append(name,value) {

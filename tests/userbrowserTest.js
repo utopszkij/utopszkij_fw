@@ -6,6 +6,7 @@ loadView('./includes/views/userbrowser.html', (vue) => {
     vue.errorMsg = '';
 	vue.successMsg = '';
 	vue.items = [{"id":1,"username":"test", "group":""}];
+    vue.logedAdmin = true;
 	
     describe('userBrowser', () => {
        it ('vue test', () => {

@@ -25,6 +25,7 @@
 var NAVTREE =
 [
   [ "Utopszkij_fw", "index.html", [
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ]
     ] ],
@@ -35,13 +36,14 @@ var NAVTREE =
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"_2var_2www_2html_2utopszkij_fw_2vendor_2yidas_2socket-mailer_2src_2_mailer_8php-example.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

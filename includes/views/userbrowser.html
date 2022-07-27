@@ -1,16 +1,16 @@
 <div id="userek">
     <div v-if="errorMsg != ''" class="alert alert-danger">
-        <div v-html="errorMsg"></div>
+        <div v-html="lng(errorMsg)"></div>
     </div>
     <div v-if="successMsg != ''" class="alert alert-success">
-        <div v-html="successMsg"></div>
+        <div v-html="lng(successMsg)"></div>
     </div>
     
     <h2 class="ribbon-banner"><span><em class="fa fa-users" aria-hidden="true"></em>&nbsp;{{ lng('USERS') }}</span></h2>
     <ul>
         <li v-for="record in items">
-            <a v-bind:href="'index.php?task=user.profile&id='+record.id" v-bind:class="record.group">
-                {{ record.username }} | {{ record.group }}</a>
+            <a v-bind:href="HREF('user.profile',{id:record.id, backtask:'user.users'})">
+                {{ record.username }} </a>
         </li>
     </ul>
     include paginator

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['session_0',['Session',['../class_session.html',1,'']]]
+  ['query_0',['Query',['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html',1,'RATWEB::DB']]]
 ];

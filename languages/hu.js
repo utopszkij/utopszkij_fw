@@ -3,9 +3,11 @@ tokens = {
     "CANCEL":"Mégsem",
     "BACK":"VIssza",
     "SAVE":"Tárolás",
+    "SAVED":"Tárolva",
     "EDIT":"Módosítás",
     "ADD":"Új hozzáadása",
     "DELETE":"Törlés",
+    "DELETED":"Törölve",
     "SHOW":"Megnéz",
     "PRINT":"Nyomtatás",
     "YES":"Igen",
@@ -15,6 +17,9 @@ tokens = {
     "SEARCH":"Keresés",
     "CLEARFILTER":"Szűrés törlése",
 	"SETUP":"Beállítás",
+    "NAME":"Név",
+	"SUREDELETE":"Biztos törölni akarod?",
+    "NOT_FOUND":"Nincs ilyen",
 
     "TOTAL":"Osszesen",
     "LINES":"sor",
@@ -26,6 +31,12 @@ tokens = {
     "HOME":"Kezdőlap",
     "LOGOUT":"Kijelentkezés",
     "NEWVERSION":"Új verzió érhető el",
+    "LOGIN":"Bejelentkezés",
+    "REGISTRATION":"Regisztráció",
+    "DESCRIPTION":"Ismertető",
+	"SWDOC":"Dokumentáció",
+	"USERS":"Felhasználók",
+	"GROUPS":"Csoportok",
 
     "POLICY":"Adatkezelési tájékoztató",
     "PROTEST":"Visszaélés jelzése",
@@ -33,28 +44,7 @@ tokens = {
     "SOURCE":"Forrás program",
     "COPYRIGHT":"Minden jog fenntartva",
 
-    "REGISTRATION":"Regisztráció",
-    "LOGIN":"Bejelentkezés",
-	"NICKNAME":"Bejelentkezési név",
-    "USERNAME":"Bejelentkezési név",
-    "PASSWORD":"Jelszó",
-    "PASSWORD_RETYPE":"Jelszó mégegyszer",
-    "FBLOGIN": "Belépés Facebook -al",
-    "GOOGLELOGIN": "Belépés Google -al",
-    "DOREGIST":"Még nincs fiókod? - regisztrálj! (klikk ide)",
-	"REGISTHELP":"Mivel email címet nem tárolunk, elfelejtett jelszó esetén nem tudunk segíteni. Tehát a jelszót jól jegyezd meg!",
-	"REGISTHELP2":"Bejelentkezés után a \"profil\" oldalon avatar képet tölthetsz fel, jelszót változtathatsz, törölheted a fiókodat.",
-
-	"DESCRIPTION":"Ismertető",
-	"SWDOC":"Dokumentáció",
-	"USERS":"Felhasználók",
-	"GROUPS":"Csoportok",
+    "EMAIL_SENDED":"E-mail elküldve",
 	
-	"PROFILE":"Profil",
-	"AVATARFILE":"Avatar képfájl (jpg vagy png, nem kötelező)",
-	"NEWPASSWORD":"Az alábbi két mezőt csak akkor töltsd ki ha jelszót akarsz változtatni!",
-	"GROUP":"Csoport",
-	"SUREDELETE":"Biztos törölni akarod?",
-    
-    "END":"Vége"
+	"END":"Vége"
 };

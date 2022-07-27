@@ -17,11 +17,19 @@ class Home extends Controller {
 	}
 
 	public function show() {
-		view('description',[]);
+		$errorMsg = $this->request->input('errorMsg', $this->session->input('errorMsg',''),NOFILTER);
+		$successMsg = $this->request->input('successMsg', $this->session->input('successMsg',''),NOFILTER);
+		$this->session->set('errorMsg','');
+		$this->session->set('successMsg','');
+
+		view('description',[
+			"errorMsg" => $errorMsg,
+			"successMsg" => $successMsg
+		]);
 	}
 
 	public function description() {
-		view('description',[]);
+		$this->show();
 	}
 	
 	public function licence() {

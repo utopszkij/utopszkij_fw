@@ -2,7 +2,10 @@
 
 PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 
-![logo](./images/utopszkij_fw.png)
+![logo](https://szakacskonyv.nfx.hu/fw/images/utopszkij_fw.png)
+
+## WEB SITE 
+[https://szakacskonyv.nfx.hu/fw](https://szakacskonyv.nfx.hu/fw)
 
 ## Tulajdonságok
 
@@ -15,11 +18,17 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 - SEO url támogatása,
 - facebook megosztás támogatása,
 - egszerű telepíthetőség, nem szükséges konzol hozzáférés,
-- verzió követés a github -ról.
+- php és viewer.html unittest rendszer,
+- verzió követés a github main branch -ról.
 
 ## Dokumentáció
 
-[]()
+[https://szakacskonyv.nfx.hu/fw/task/home.swdoc](https://szakacskonyv.nfx.hu/fw/task/home.swdoc)
+
+A fekhasznált harmadik féltől származó sw elemek (bootstrap, vue, awesome font) a vendor könyvtárba vannak másolva és innen 
+tölti be a program. Azért választottam ezt a megoldást, hogy a web oldalak ne fagyjanak le az online elérhetőséget biztositó szerverek 
+esetleges üzemszüneténél, és a verzió frissitések esetleges visszamenőleges inkopatibilitásából eredő hibákat is elkerüljük. 
+Aki ezzel a módszerrel nem ért egyet az az index.php -t modosítva használhat NET -es eléréseket is (pl cdn).
 
 ### A programot mindenki csak saját felelősségére használhatja.
 						
@@ -90,11 +99,11 @@ Telepiteni kell a phpunit és a nodejs rendszert.
 
 Létre kell hozni egy test adatbázist, az éles adatbázissal azonos strukturával.
 
-Létre kell hozni egy tests/config_test.php fájlt az éles config.php alapján, a test adatbázishoz beállítva.
+Létre kell hozni egy config_test.php fájlt az éles config.php alapján, a test adatbázishoz beállítva.
 
 Ezután linux terminálban:
 ```
-cd docroot
+cd reporoot
 phpunit tests
 ./tools/viewtest.sh
 ```
@@ -114,7 +123,7 @@ A telepitési könyvtáraknak megfelelően módosítani kell documentor.sh fájl
 Ezután linux terminálban:
 
 ```
-cd docroot
+cd reporoot
 ./tools/documentor.sh
 ```
 ## verzió v1.0

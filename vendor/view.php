@@ -81,7 +81,8 @@ function echoEndScript(array $params, string $appName) {
             innerWidth : window.innerWidth,
             HREF: window.HREF,
             lng: window.lng,
-			location: window.location
+			location: window.location,
+            siteurl: "'.SITEURL.'"
             };
         },
         mounted() {

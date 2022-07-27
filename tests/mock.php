@@ -12,7 +12,11 @@ $_POST = [];
 global $viewData;
 
 function isAdmin() {
-   return  false;
+	if (isset($_SESSION['logedName'])) {
+   		return  ($_SESSION['logedName'] == ADMIN);
+	} else {
+		return false;
+	}	
 }
 
 function view($name, $params, $appName='app') {
@@ -27,5 +31,10 @@ function checkView() {
 
 $q = new Query('dbverzio');
 
+class Fw {
+	public static function HREF($task,$params = []) {
+		return $task;
+	}
+}
 
 ?>

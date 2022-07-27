@@ -166,8 +166,31 @@ class Controller {
         // $this->model = new ValamiModel();
         // $this->name = 'xxx';
         // $this->browserURL = '...';
-        // $this->formURL = '...';
+        // $this->addURL = '...';
         // $this->browserTask = '...';
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function newKey() {
+        $key = base64_encode(rand(100000,990000));
+        $this->session->set('key',$key);
+        return $key;
+    }
+
+    public function checkKey() {
+        if ($this->request->input('key') != $this->session->input('key')) {
+            echo 'wrong key'; exit();
+        }
+    }
+
+    /**
+     * bejelentkezett user admin?
+     */
+    public function isAdmin() {
+        Fw::isAdmin();
     }
 
     /**
@@ -238,6 +261,8 @@ class Controller {
             "logedName" => $this->loged,
             "logedAdmin" => $this->logedAdmin,
             "previous" => SITEURL,
+            "addURL" => $this->addURL,
+            "editURL" => $this->editURL,
             "errorMsg" => $this->session->input('errorMsg',''),
             "successMsg" => $this->session->input('successMsg','')
         ]);
@@ -252,7 +277,7 @@ class Controller {
     protected function new() {
         $item = $this->model->emptyRecord();
         if (!$this->accessRight('new',$item)) {
-            $this->session->set('errorMsg','Hozzáférés nem engedélyezett');
+            $this->session->set('errorMsg','ACCESDENIED');
             echo '<script>
             location="'.$this->browserURL.'";
             </script>
@@ -262,6 +287,7 @@ class Controller {
             $item = $this->session->input('oldRecord');
         }
         view($this->name.'form',[
+            "key" => $this->newKey(),
             "record" => $item,
             "loged" => $this->loged,
             "logedName" => $this->loged,
@@ -281,7 +307,7 @@ class Controller {
         $id = $this->request->input('id',0);
         $record = $this->model->getById($id);
         if (!$this->accessRight('edit',$record) & !$this->accessRight('show',$record)) {
-            $this->session->set('errorMsg','Hozzáférés nem engedélyezett');
+            $this->session->set('errorMsg','ACCESSDENIED');
             echo '<script>
             location="'.$this->browserURL.'";
             </script>
@@ -291,6 +317,7 @@ class Controller {
             $record = $this->session->input('oldRecord');
         }
         view($this->name.'form',[
+            "key" => $this->newKey(),
             "record" => $record,
             "logedAdmin" => $this->logedAdmin,
             "loged" => $this->loged,
@@ -305,9 +332,10 @@ class Controller {
      */
     protected function save($record) {
         $this->session->set('oldRecord',$record);
+        $this->checkKey();
         if ($record->id == 0) {
             if (!$this->accessRight('new',$record)) {
-                $this->session->set('errorMsg','Hozzáférés nem engedélyezett');
+                $this->session->set('errorMsg','ACCESSDENIED');
                 echo '<script>
                 location="'.$this->browserURL.'";
                 </script>
@@ -315,7 +343,7 @@ class Controller {
             }
         } else {
             if (!$this->accessRight('edit',$record)) {
-                $this->session->set('errorMsg','Hozzáférés nem engedélyezett');
+                $this->session->set('errorMsg','ACCESSDENIED');
                 echo '<script>
                 location="'.$this->browserURL.'";
                 </script>
@@ -341,7 +369,7 @@ class Controller {
             $this->model->save($record);
             if ($this->model->errorMsg == '') {
                 $this->session->delete('errorMsg');
-                $this->session->set('successMsg','Adat tárolva');
+                $this->session->set('successMsg','SAVED');
                 echo '<script>
                     location="'.$this->browserURL.'";
                 </script>
@@ -359,15 +387,16 @@ class Controller {
         $id = $this->request->input('id',0);
         $item = $this->model->getById($id);
         if (!$this->accessRight('delete',$item)) {
-            $this->session->set('errorMsg','Hozzáférés nem engedélyezett');
+            $this->session->set('errorMsg','ACCESDENIED');
             echo '<script>
-            location="'.$this->browserURL.'";
+            location="'.$this->browserTask.'";
             </script>
             ';
+            return;
         }
         $this->model->delById($id);
         if ($this->model->errorMsg == '') {
-            $this->session->set('successMsg','Adat törölve');
+            $this->session->set('successMsg','DELETED');
             echo '<script>
             location="'.$this->browserURL.'";
             </script>
@@ -375,6 +404,7 @@ class Controller {
         } else {
             echo $this->model->errorMsg; exit();
         }
+
     }
 
     /**
@@ -389,6 +419,39 @@ class Controller {
 			</script>';
 			return;
 		}
-    }    
+    }   
+    
+    /**
+     * email küldés
+	 * szükséges: require __DIR__ . '/../../vendor/autoload.php';
+	 *            use \yidas\socketMailer\Mailer;
+     * @param string $to címzett email címe
+     * @param string $subject levét tárgya
+     * @param string $bodyhtml kód
+     */
+    protected function mailer(string $to, string $subject, string $body):bool {
+        if (DEFINED('UNITTEST')) {
+            if (UNITTEST == 1) {
+                return true;
+            }    
+        }
+		$mailer = new \yidas\socketMailer\Mailer([
+			'host' => MAIL_HOST,
+			'username' => MAIL_USERNAME,
+			'password' => MAIL_PASSWORD,
+			'port' => MAIL_PORT,
+			'encryption' => 'ssl',
+		]);
+		$result = $mailer
+			->setSubject($subject)
+			->setBody($body)
+			->setTo([$to])
+			->setFrom([MAIL_FROM_ADDRESS => ''])
+			->send();
+		if ($result != 1) {
+			echo 'ERROR IN SEND MAIL INTO '.$to; exit();
+		}	
+		return ($result == 1);
+    }
 
 }

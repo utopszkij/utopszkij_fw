@@ -315,6 +315,8 @@ class Upgrade {
 				PRIMARY KEY (`id`)
 			  ) DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci
 			');
+			$q->exec('INSERT INTO groups (id,parent,name) VALUES (1,0,"admin")');
+			$q->exec('INSERT INTO groups (id,parent,name) VALUES (2,0,"moderator")');
 		}	
 	}
 

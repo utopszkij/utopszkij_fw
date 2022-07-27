@@ -2,6 +2,9 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
+require __DIR__ . '/../../vendor/autoload.php';
+use \yidas\socketMailer\Mailer;
+
 include_once __DIR__.'/../models/usermodel.php';
 
 class User extends Controller {
@@ -16,10 +19,51 @@ class User extends Controller {
         $this->browserTask = 'user.users';
 	}
 
+	protected function validator($record): string {
+		$result = '';
+		if ($record->username == '') {
+			$result .= 'USERNAME_REQUED<br>';
+		}
+		if (($record->password == '') & ($record->id == 0)) {
+			$result .= 'PASSWORD_REQUED<br>';
+		}
+		if ($record->realname == '') {
+			$result .= 'REALNAME_REQUED<br>';
+		}
+		if ($record->email == '') {
+			$result .= 'EMAIL_REQUED<br>';
+		}
+		if ($record->password != $record->password2) {
+			$result .= 'PASSWORDS_NOT_EQUALS<br>';
+		}
+		$old = $this->model->getBy('username',$record->username);
+		if (count($old) > 0) {
+			if ($old[0]->id != $record->id) {
+				$result .= 'USER_EXISTS<br>';
+			}
+		}
+		$old = $this->model->getBy('email',$record->email);
+		if (count($old) > 0) {
+			if ($old[0]->id != $record->id) {
+				$result .= 'EMAIL_EXISTS<br>';
+			}
+		}
+		return $result;
+	}
+
+	protected function accessCheck(string $action, Record $record): bool {
+		return true;
+	}
+
 	public function login() {
-		view('login',["msg" => $this->request->input('msg',''),
+		view('login',["errorMsg" => $this->request->input('errorMsg', $this->session->input('errorMsg',''),NOFILTER),
+					  "successMsg" => $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER),
 					  "SITEURL" => SITEURL,
-					  "redirect" => $this->request->input('redirect','')]);
+					  "redirect" => $this->request->input('redirect',''),
+					  "key" => $this->newKey()]);
+		$this->session->set('errorMsg','');
+		$this->session->set('successMsg','');
+							
 	}
 	
 	public function logout() {
@@ -35,12 +79,18 @@ class User extends Controller {
 	}
 	
 	public function regist() {
-		view('regist',["msg" => $this->request->input('msg',''),
+		view('regist',["errorMsg" => $this->request->input('errorMsg', $this->session->input('errorMsg'),NOFILTER),
+					   "successMsg" => $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER),
 					   "SITEURL" => SITEURL,
-					   "redirect" => $this->request->input('redirect','')]);
+					   "redirect" => $this->request->input('redirect',''),
+					   "key" => $this->newKey()]
+					);
+		$this->session->set('errorMsg','');
+		$this->session->set('successMsg','');
 	}
 	
 	public function dologin() {
+		$this->checkKey();
 		$userName = $_POST['username'];
 		$password = $_POST['password'];
 		$redirect = $_POST['redirect'];
@@ -49,30 +99,47 @@ class User extends Controller {
 			$redirect = base64_encode('index.php');
 		}
 		if (count($recs) == 0) {
-				$error = 'Nincs ilyen néven fiók! ';
+				$error = 'USER_NOT_FOUND';
+				$this->session->set('errorMsg',$error);
 				?>
 				<script>
-					document.location="index.php?task=user.login&msg=<?php echo $error; ?>&redirect=<?php echo $redirect; ?>";		
+					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>',redirect:'<?php echo $redirect; ?>'});		
 				</script>
-				<?php			
+				<?php
+				return;			
 		} else {
+			$error = '';
 			$rec = $recs[0];
-			if ($rec->password != md5($password)) {
-				$error = 'Nem jó jelszó!';
-				?>
-				<script>
-					document.location="index.php?task=user.login&msg=<?php echo $error; ?>&redirect=<?php echo $redirect; ?>";		
-				</script>
-				<?php			
-			} else {
-				$rec = $this->model->getById($recs[0]->id);
+
+
+			//echo 'dologin '.JSON_encode($rec); exit();
+
+			if ($rec->password != hash('sha256',$password.$rec->id)) {
+				$error = 'WRONG_PASSWORD<br>';
+			}
+			if ($rec->enabled != 1) {
+				$error .= 'DISABLED<br>';
+			}
+			if ($rec->email_verifyed != 1) {
+				$error .= 'NOT_ACTIVATED<br>';
+			}
+			if ($rec->deleted == 1) {
+				$error .= 'USER_NOT_FOUND<br>';
+			}
+			if ($error == '') {
 				$_SESSION['loged'] = $rec->id;
 				$_SESSION['logedName'] = $rec->username;
 				$_SESSION['logedAvatar'] = $rec->avatar;
-				$_SESSION['logedGroup'] = $rec->group;
 				?>
 				<script>
 					document.location="<?php echo SITEURL.'/'.base64_decode($redirect); ?>";		
+				</script>
+				<?php			
+			} else {
+				$this->session->set('errorMsg',$error);
+				?>
+				<script>
+					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>',redirect:'<?php echo $redirect; ?>'});		
 				</script>
 				<?php			
 			} 
@@ -80,168 +147,358 @@ class User extends Controller {
 	}
 	
 	public function doregist() {
-		$db = new Query('users');
-		$userName = $_POST['username'];
-		$password = $_POST['password'];
-		$password2 = $_POST['password2'];
-		$redirect = base64_decode($_POST['redirect']);
-		$error = '';
-		if ($redirect == '') {
-			$redirect = base64_encode('index.php');
-		}
-		if ($password != $password2) {
-			$error = 'A két jelszó nem azonos!';
+		$this->checkKey();
+		$record = new Record();
+		$record->id = 0; 
+		$record->username = $this->request->input('username');
+		$record->password = $this->request->input('password');
+		$record->password2 = $this->request->input('password2');
+		$record->realname = $this->request->input('realname');
+		$record->email = $this->request->input('email');
+		$record->email_verifyed = $this->request->input('email_verifyed',0);
+		$record->enabled = $this->request->input('enabled',0);
+		$record->deleted = 0;
+		$redirect = base64_decode($this->request->input('redirect'));
+		$error = $this->validator($record);
+		if ($error == '') {
+			$record->enabled = 1;
+			$record->email_verifyed = 0;
+			$id = $this->model->save($record);
+			$this->sendactivator($record->email);
+
+			$this->session->set('successMsg','SAVED<br>EMAIL_SENDED');
+			$this->session->set('errorMsg','');
 			?>
 			<script>
-				document.location="index.php?task=user.regist&msg=<?php echo $error; ?>&redirect=<?php echo $redirect; ?>";		
-			</script>
-			<?php
-		} else if (($userName == '') | ($password == '')) {
-			$error = 'Névet és jelszót meg kell adni!';
-			?>
-			<script>
-				document.location="index.php?task=user.regist&msg=<?php echo $error; ?>&redirect=<?php echo $redirect; ?>";		
+				document.location="<?php echo SITEURL.'/'.$redirect; ?>";		
 			</script>
 			<?php
 		} else {
-			$db->where('username','=','"'.$userName.'"');
-			$rec = $db->first();
-			if (isset($rec->id)) {
-				$error = 'Már van ilyen néven fiók!';
-				?>
-				<script>
-					document.location="index.php?task=user.regist&msg=<?php echo $error; ?>&redirect=<?php echo $redirect; ?>";		
-				</script>
-				<?php			
+			$this->session->set('successMsg','');
+			$this->session->set('errorMsg',$error);
+			?>
+			<script>
+				document.location=HREF('user.regist',{errorMsg:"<?php echo $error; ?>"});		
+			</script>
+			<?php
+		}	
+	}
+	
+	/**
+	 * aktiváló email küldése. az email-ben van egy link amivel a fiók aktiválható:
+	 * domain?task=user.doactivte&code=base64_encode($rec->email.'-'.$rec->id)
+	 * email érkezhet paraméterből (regist hivta) vagy 
+	 * $_GET -ből $username (user kérte az újra küldést)
+	 * hibaüzenetet, sikeres üzenetet csak akkor it ki ha az email $_GET -ből érkezett
+	 */
+	public function sendactivator(string $email = '') {
+		$error = '';
+		$pemail = $email;
+		if ($email == '') {
+			$recs = $this->model->getBy('username',$this->request->input('username',''));
+			if (count($recs) > 0) {
+				$email = $recs[0]->email;
 			} else {
-				$r = new Record();
-				$r->id = 0;
-				$r->username = $userName;
-				$r->password = md5($password);
-				$r->avatar = '';
-				$r->realname = '';
-				$r->email = '';
-				$r->phone = '';
-				if ($userName == ADMIN) {
-					$r->group = 'admin';
-				} else {
-					$r->group = '';
-				}	
-				$userId = $this->model->save($r);
-				$_SESSION['loged'] = $userId;
-				$_SESSION['logedName'] = $userName;
-				$_SESSION['logedAvatar'] = $r->avatar;
-				$_SESSION['logedGroup'] = $r->group;
+				$error = 'NOT_FOUND<br>USERNAME_REQUED<br>';
+			}
+		}
+		if ($error == '') {
+		$recs = $this->model->getBy('email',$email);
+			if (count($recs) == 0) {
+				$error .= 'NOT_FOUND<br>';
+			}	
+		}
+		if ($error == '') {
+			// unit test ne küldjön levelet
+			if ($email != 'test@test.test') {
+				// aktiváló email küldése $recs[0] alapján
+				$code = base64_encode($recs[0]->password.'-'.$recs[0]->id);
+				$mailBody = '<div>
+				<h2>Fiók aktiváláshoz ksattints az alábbi linkre!</h2>
+				<p> </p>
+				<p><a href="'.SITEURL.'/index.php?task=user.doactivate&code='.$code.'">
+					'.SITEURL.'/index.php?task=user.doactivate&code='.$code.'
+				   </a>
+				</p>
+				<p> </p>
+			    <p>vagy másold a fenti web címet a böngésző cím sorába!</p>
+				<p> </p>
+				</div>';
+				$this->mailer($recs[0]->email, 'fiók aktiválás',$mailBody);
+			}
+			if ($pemail == '') {
+				$this->session->set('successMsg','EMAIL_SENDED');
 				?>
 				<script>
-					document.location="<?php echo SITEURL.'/'.base64_decode($redirect); ?>";		
+					document.location=HREF('user.login',{successMsg:'EMAIL_SENDED'});		
 				</script>
-				<?php			
-			}			
+				<?php
+			}
+		} else if ($pemail == '') {
+			$this->session->set('errorMsg',$error);
+			?>
+			<script>
+				document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
+			</script>
+			<?php
 		}	
 	}
 
-	// === profil kezelés v1.3 ===
-  
 	/**
-     * rekord ellenörzés a profil modositásnál van hivva
-     * @param Record $record
-     * @return string üres vagy hibaüzenet
-     */
-    protected function validator($record):string {
-        $result = '';
-		if ($record->password == '') {
-			$result = 'A jelszó nem lehet üres';
-		} else if ($record->password != $record->password2) {
-			$result = 'A két jelszó nem egyforma';
+	 * email virifyed beállítása, --> kezdő lap SAVED üzenettel
+	 * $_GET $code base64_encode($rec-password.'-'.$rec->id)
+	 */
+	public function doactivate() {
+		$error = '';
+		$code = base64_decode($this->request->input('code'));
+		$w = explode('-',$code);
+		$w[] = '0';
+		$rec = $this->model->getById($w[1]);
+		if (isset($rec->password)) {
+			if ($rec->password == $w[0]) {
+				$rec->email_verifyed = 1;
+				$q = new Query('users');
+				$q->where('id','=',$rec->id)->update($rec);
+			} else {
+				$error = 'WRONG_PASSWORD';
+			}
+		} else {
+			$error = 'NOT_FOUND';
 		}
-        return $result;
-    }
+		if ($error == '') {
+			$this->session->set('errorMsg','');
+			$this->session->set('successMsg','SAVED');
+			?>
+			<script>
+				document.location=HREF('user.login',{successMsg:'SAVED'});		
+			</script>
+			<?php
+		} else {
+			$this->session->set('errorMsg',$error);
+			$this->session->set('successMsg','');
+			?>
+			<script>
+				document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
+			</script>
+			<?php
+		}
+	}
 
+	/**
+	 * elfelejtett jelszó email küldése -->login képernyő EMAL_SENDED üzenettel
+	 * $_GET -ben username
+	 * a levélben vagy egy link amivel a progil oldalra lehet belépni bejelentkezés nélkül.
+	 * domain?task=profile&ode=base64_encode($rec->email.'-'.$rec->id)
+	 */
+	public function forgetpsw() {
+		$username = $this->request->input('username');
+		$error = '';
+		if ($username == '') {
+			$error = 'USERNAME_REQUED<br>';
+		} else {
+			$recs = $this->model->getBy('username',$username);
+			if (count($recs) == 0) {
+				$error .= 'NOT_FOUND<br>';
+			}
+		}
+		if ($error == '') {
+			if ($recs[0]->email != 'test@test.test') {
+				$code = base64_encode($recs[0]->password.'-'.$recs[0]->id);
+				$mailBody = '<div>
+				<h2>Új jelszó beállításához ksattints az alábbi linkre!</h2>
+				<p> </p>
+				<p><a href="'.SITEURL.'/index.php?task=user.profile&code='.$code.'">
+					'.SITEURL.'/index.php?task=user.profile&code='.$code.'
+				   </a>
+				</p>
+				<p> </p>
+			    <p>vagy másold a fenti web címet a böngésző cím sorába!</p>
+				<p> </p>
+				</div>';
+				$this->mailer($recs[0]->email, 'új jelszó megadása',$mailBody);
 
-    /**
-     * bejelentkezett user jogosult erre?
-	 * a forman vannak szükség esetén letiltva a modositó mezők 
-     * @param string $action new|edit|delete
-     * @return bool
-     */
-    protected function  accessRight(string $action, $record):bool {
-		$result = true;
-        return $result;
-    }
+			}
+			$this->session->set('successMsg','EMAIL_SENDED');
+			?>
+			<script>
+				document.location=HREF('user.login',{successMsg:'EMAIL_SENDED'});		
+			</script>
+			<?php
+		} else {
+			$this->session->set('errorMsg',$error);
+			?>
+			<script>
+				document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
+			</script>
+			<?php
+		}
+	}
 
-	
+	/**
+	 * user profil képernyő. admin, adott user, mások esetén eltérő adatok és lehetőségek
+	 * $_GET $id user hivta menüből vagy user böngészöből 
+	 * $-GET $code  elfelejtett jelszó email-ben lévő link hívta
+	 */
+	public function profile() {
+		$error = '';
+		$id = $this->request->input('id',0,INTEGER);
+		$code = $this->request->input('code','');
+		$backtask = $this->request->input('backtask','home.show');
+		$errorMsg = $this->request->input('errorMsg', $this->session->input('errorMsg'),NOFILTER);
+		$successMsg = $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER);
+		if ($code != '') {
+			$w = explode('-',base64_decode($code));
+			$psw = $w[0];
+			$id = $w[1];
+			$record = $this->model->getById($id);
+			if (isset($record->password)) {
+				if ($record->password != $psw) {
+					$error = 'NOT_FOUND';
+				} else {
+					$_SESSION['loged'] = $record->id;
+					$_SESSION['logedName'] = $record->username;
+					$_SESSION['logedAvatar'] = $record->avatar;
+				}
+			} else {
+				$error = 'NOT_FOUND';
+			}
+		} else {
+			$record = $this->model->getById($id);
+			if (!isset($record->id)) {
+				$error = 'NOT_FOUND';
+			}
+		}
+
+		if ($error == '') {
+			if ($record->avatar == '')  {
+				$record->avatar = 'noimage.png';
+			}
+			view('profile',[
+				"record" => $record,
+				"key" => $this->newKey(),
+				"loged" => $this->session->input('loged'),
+				"logedAdmin" => isAdmin(),
+				"errorMsg" => $errorMsg,
+				"successMsg" => $successMsg,
+				"userGroups" => $this->model->getGroups($record->id),
+				"allGroups" => $this->model->getAllGroups(),
+				"backtask" => $backtask
+			]);
+			$this->session->delete('errorMsg');
+			$this->session->delete('successMsg');
+		} else {
+			$this->session->set('errorMsg',$error);
+			?>
+			<script>
+				document.location=HREF('home.show',{errorMsg:"<?php echo $error; ?>"});
+			</script>
+			<?php
+		}
+
+	}
+
+	/**
+	 * profile képernyő tárolása egyes adatokat csak admin modosithat, --> home
+	 * egyes adatokat csak admin és az adott user modosithat
+	 * egyes adatokat csak admin és az adott user láthat
+	 */
+	public function saveprofile() {
+		$this->checkKey();
+		$record = new Record();
+		$record->id = $this->request->input('id',0); 
+		$old = $this->model->getById($record->id);
+		$record->username = $old->username; 
+		$record->realname = $this->request->input('realname',''); 
+		$record->email = $this->request->input('email',''); 
+		$record->password = $this->request->input('password',''); 
+		$record->password2 = $this->request->input('password2',''); 
+		$backtask = $this->request->input('backtask','home.show');
+		if (!isAdmin() & ($record->id != $this->session->input('loged'))) {
+			return;
+		}
+		if (isAdmin()) {	
+			$record->email_verifyed = $this->request->input('email_verifyed',0);
+			$record->enabled = $this->request->input('enabled',0);
+		}
+		$error = $this->validator($record);
+		if ($error == '') {
+			$id = $this->model->save($record);
+			if (isAdmin()) {
+				$this->model->saveUserGroups($record->id, $this->request);
+			}
+			$this->session->set('successMsg','SAVED');
+			$this->session->set('errorMsg','');
+			?>
+			<script>
+				document.location=HREF("<?php echo $backtask; ?>",{successMsg:'SAVED'});		
+			</script>
+			<?php
+		} else {
+			$this->session->set('successMsg','');
+			$this->session->set('errorMsg',$error);
+			?>
+			<script>
+				document.location=HREF('user.profile',{id: <?php echo $record->id; ?> ,errorMsg:"<?php echo $error; ?>"});		
+			</script>
+			<?php
+		}	
+	}
+
+	/**
+	 * user fiók logikai törlése. --> home DELETED üzenettel
+	 * admin bárkit törölhet, mások csak saját magukat
+	 * $_GET $id
+	 */
+	public function dodelete() {
+		$id = $this->request->input('id',0);
+		$error = '';
+		if (isAdmin() | $id == $this->session->input('loged')) {
+			$rec = $this->model->getById($id);
+			if (isset($rec->username)) {
+				if ($rec->username != ADMIN) {
+					$rec->username = 'deleted';
+					$rec->realname = 'deleted';
+					$rec->password = rand(1000000,9000000); 
+					$rec->email = '';
+					$rec->avatar = '';
+					$rec->enabled = 0;
+					$rec->deleted = 1;
+					$q = new Query('users');
+					$q->where('id','=',$rec->id)->update($rec);
+					if ($this->session->input('loged') == $rec->id) {
+						$this->logout();
+					}
+					?>
+					<script>
+						document.location=HREF('home.show',{successMsg:'DELETED'});
+					</script>	
+					<?php
+				} else {
+					$error = 'ACCESDENIED';
+				}
+			} else {
+				$error = 'NOT_FOUND';
+			}
+		} else {
+			$error = 'ACCESDENIED';
+		}
+		if ($error != '') {	
+			?>
+			<script>
+				document.location=HREF('home.show',{errorMsg:"<?php echo $error; ?>"});
+			</script>	
+			<?php
+		}
+	}
+
 	/**
      * user browser GET -ben: page, order, filter
-	 * - adminok a névre kattintva modosithatnak,
-	 * - mások a sajátjukra kattintva modosithatnak, másra kattintva csak megnézhetnek
+	 * névre kattintva a profil képernyőt hívja
 	 */
     public function users() {
         $this->items('username');
     }
     
-    /**
-     * user editor/show képernyő GET -ben id
-	 * a userform képernyő oldja meg:
-	 * - saját adataiból password, password2 modositható
-	 * - admin modosithat password, password2, group
-	 * - mások semmit nem modosithatnak
-     */
-    public function profile() {
-        $this->edit();
-    }     
-
-    /**
-     * user tárolása POST -ban: user és profil adatok
-	 * - group -ot csak admin modosithatja
-	 * - password adatokat admin és a record->id user modosithatja
-     */
-    public function usersave() {
-		$id = $this->request->input('id',0);
-		if ($id > 0) {
-			$record = $this->model->getById($id);
-			$record->password2 = $record->password;
-		} else {
-			$record = $this->model->emptyRecord();
-			$record->password2 = '';
-		}
-        $record->id = $id;
-        $password = trim($this->request->input('password',$record->password));
-		if (($password != '') & 
-		    ((isAdmin() | ($record->id == $this->loged)))) {
-			$record->password = md5($password);
-			$record->password2 = md5($this->request->input('password2',''));
-		}	
-		if (isAdmin()) {
-			$record->group = trim($this->request->input('group',$record->group));
-		}	
-        $record->realname = trim($this->request->input('realname',$record->realname));
-        $record->email = trim($this->request->input('email',$record->email));
-        $record->phone = trim($this->request->input('phone',$record->phone));
-		if ((isAdmin() | $this->loged == $record->id)) {
-        	$this->save($record); 
-		}	
-		$record = $this->model->getById($id);
-		$_SESSION['logedAvatar'] = $record->avatar;		
-    }
-  
-    /**
-     * user törlése GET-ben: id
-     */
-    public function userdelete() {
-		$id = $this->request->input('id',0, INTEGER);
-		$record = $this->model->getById($id);
-		$record->username = 'törölt'.$record->id;
-		$record->password= md5(rand(100000,9999999));
-		$record->avatar = '';
-		$record->realname = '';
-		$record->phone = '';
-		$record->email = '';
-		$record->password = md5(rand(10000,99000));
-		$record->password2 = $record->password;
-        $this->save($record); 
-    }    
-
 
 }
 
