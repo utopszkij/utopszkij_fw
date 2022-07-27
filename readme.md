@@ -126,8 +126,9 @@ Ezután linux terminálban:
 cd reporoot
 ./tools/documentor.sh
 ```
-## verzió v1.0
-2022.??.??
+## verzió v1.0.0
+2022.07.27
+
 ### *************************************
 
 
