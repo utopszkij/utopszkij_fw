@@ -37,6 +37,7 @@ tokens = {
 	"SWDOC":"Dokumentáció",
 	"USERS":"Felhasználók",
 	"GROUPS":"Csoportok",
+    "SPONZOR":"Támogatás",
 
     "POLICY":"Adatkezelési tájékoztató",
     "PROTEST":"Visszaélés jelzése",
