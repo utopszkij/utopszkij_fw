@@ -340,6 +340,7 @@ vueTest = function(v)  {
 		   }	   
 	   }
 	}
+   global.siteurl = window.siteurl;
 
 	// vue elemek tesztelése
 	for (i=0; i < v.vueElements.length; i++) {

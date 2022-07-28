@@ -23,7 +23,7 @@ tokensComp = {
     "USERNAME_REQUED":"Bejelentkezési nevet meg kell adni",
 	"REALNAME_REQUED":"Valódi nevet meg kell adni",
 	"EMAIL_REQUED":"E-mail -t meg kell adni",
-	"PASSWORD_REQUED":"Jelsó nem lehet üres",
+	"PASSWORD_REQUED":"Jelszó nem lehet üres",
 	"PASSWORDS_NOT_EQUALS":"A két beírt jelszó nem azonos",
     "USER_EXISTS":"Már van ilyen nevű fiók",
     "EMAIL_EXISTS":"Már van ezzel az e-mail -el fiók",
@@ -35,6 +35,8 @@ tokensComp = {
     "RESEND_ACTIVATOR":"Aktiváló email újra küldése",
     "FORGET_PASSWORD":"Elfelejtett jelszó",
     "ONLY_IF_CAN_CHANGE_PSW":"Ha jelszót akarsz változtatni:",
-
+    "ACCEPT":"Az <a href=\"index.php?task=home.policy\" target=\"_new\">adatkezelési leírást</a> elolvastam, megértettem, hozzájárulok az adatkezeléshez",
+    "ACCEPT_REQUED":"Adatkezeléshez hozzá kell járulni!",
+    "MYDATA":"Adataim JSON formában",
     "END":"Vége"
 };

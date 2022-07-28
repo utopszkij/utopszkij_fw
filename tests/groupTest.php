@@ -84,6 +84,8 @@ class GroupTest extends TestCase {
 		$this->logout();		
         $_POST['id'] = 0;
         $_POST['name'] = 'admin';
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->controller->store();
 		$this->expectOutputRegex('/ACCESSDENIED/'); 
 	}
@@ -92,6 +94,8 @@ class GroupTest extends TestCase {
 		$this->loginNotAdmin();		
         $_POST['id'] = 0;
         $_POST['name'] = 'admin';
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->controller->store();
 		$this->expectOutputRegex('/ACCESSDENIED/'); 
 	}
@@ -100,6 +104,8 @@ class GroupTest extends TestCase {
 		$this->loginAdmin();		
         $_POST['id'] = 0;
         $_POST['name'] = 'admin';
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->controller->store();
         $_POST['id'] = 0;
         $_POST['name'] = 'moderator';
@@ -115,6 +121,8 @@ class GroupTest extends TestCase {
 
 	public function test_store_editAdmin_logedAdmin() {
 		$this->loginAdmin();		
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$db = new Query('groups');
 		$adminGroup = $db->where('name','=','admin')->first();
         $_POST['id'] = $adminGroup->id;
@@ -157,6 +165,8 @@ class GroupTest extends TestCase {
 	}	
 
 	public function test_remove_notloged() {
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->logout();
 		$db = new Query('groups');
 		$moderatorGroup = $db->where('name','=','moderator')->first();
@@ -167,6 +177,8 @@ class GroupTest extends TestCase {
 	}
 
 	public function test_remove_logedNotAdmin() {
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->loginNotAdmin();
 		$db = new Query('groups');
 		$moderatorGroup = $db->where('name','=','moderator')->first();
@@ -177,6 +189,8 @@ class GroupTest extends TestCase {
 	}
 
 	public function test_remove_admin_logedAdmin() {
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->loginAdmin();
 		$db = new Query('groups');
 		$adminGroup = $db->where('name','=','admin')->first();
@@ -187,6 +201,8 @@ class GroupTest extends TestCase {
 	}
 
 	public function test_remove_logedAdmin_ok() {
+		$_SESSION['key'] = '123';
+		$_POST['key'] = '123';
 		$this->loginAdmin();
 		$db = new Query('groups');
 		$moderatorGroup = $db->where('name','=','moderator')->first();

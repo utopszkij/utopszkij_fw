@@ -15,7 +15,7 @@
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fa fa-user"></em>{{ lng('USERNAME') }}&nbsp;
-		</label><input type="text" name="username" id="username"
+		</label><input type="text" name="username" id="username" v-model="record.username"
             v-bind:placeholder="lng('NICKNAME')" required="true" class="form-control" />
         </div>
 	</div>	
@@ -36,13 +36,14 @@
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fas fa-id-badge"></em>{{ lng('REALNAME') }}&nbsp;</label>
-		<input type="text" name="realname" 
+		<input type="text" name="realname"  v-model="record.realname"
 		v-bind:placeholder="lng('REALNAME')" required="true" class="form-control"/>
 		</div>	
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">
-        <label><em class="fas fa-envelope"></em>{{ lng('EMAIL') }}&nbsp;</label><input type="text" name="email" 
+        <label><em class="fas fa-envelope"></em>{{ lng('EMAIL') }}&nbsp;</label>
+		<input type="text" name="email" v-model="record.email"
 		v-bind:placeholder="lng('EMAIL')" required="true" class="form-control"/>
 		</div>	
 	</div>	
@@ -55,10 +56,14 @@
 		</div>	
 	</div>	
 	<div class="row text-center">
+		<div class="col-12" v-html="lng(polocyAccept)"></div>
+		<input type="checkbox" name="accept" value="1" />&nbsp;
+	</div>	
+	<div class="row text-center">
 		<div class="col-12">
-        <button type="submit" class="btn btn-primary" name="submit" style="width:250px">
-            <em class="fas fa-check"></em>&nbsp;{{ lng('OK') }}
-        </button>    
+    	    <button type="submit" class="btn btn-primary" name="submit" style="width:250px">
+        	    <em class="fas fa-check"></em>&nbsp;{{ lng('OK') }}
+        	</button>    
 		</div>
 	</div>	
     </form>
