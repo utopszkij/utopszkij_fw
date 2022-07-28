@@ -14,25 +14,25 @@ DEFINE('SIGNO','Fogler Tibor<br>2022.07.28.');
 
 // MYSQL
 DEFINE('HOST','localhost');
-DEFINE('USER','mysql-user');
-DEFINE('PSW','mysql-user-password');
-DEFINE('DBNAME','valami');
+DEFINE('USER','***');
+DEFINE('PSW','***');
+DEFINE('DBNAME','***');
 // SMTP
-DEFINE('MAIL_HOST','smtp.valami.hu');
+DEFINE('MAIL_HOST','***');
 DEFINE('MAIL_PORT','465');
-DEFINE('MAIL_USERNAME','valaki@valami.hu');
-DEFINE('MAIL_PASSWORD','valami');
+DEFINE('MAIL_USERNAME','***');
+DEFINE('MAIL_PASSWORD','***');
 DEFINE('MAIL_ENCRYPTION','SSL');
-DEFINE('MAIL_FROM_ADDRESS','valaki@valami.hu');
-DEFINE('MAIL_FROM_NAME',''valaki);
+DEFINE('MAIL_FROM_ADDRESS','***');
+DEFINE('MAIL_FROM_NAME','***');
 DEFINE('MAIL_WAIT_SEC','130');
 // Facebook login
-DEFINE('FB_APPID','123456');
-DEFINE('FB_SECRET','123456');
+DEFINE('FB_APPID','***');
+DEFINE('FB_SECRET','***');
 DEFINE('FB_REDIRECT',SITEURL.'/vendor/fblogin.php');
 // Google login
-DEFINE('GOOGLE_APPID','123456');
-DEFINE('GOOGLE_SECRET','123456');
+DEFINE('GOOGLE_APPID','***');
+DEFINE('GOOGLE_SECRET','***');
 DEFINE('GOOGLE_REDIRECT',SITEURL.'/vendor/googlelogin.php');
 
 ?>
