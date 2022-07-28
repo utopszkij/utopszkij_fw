@@ -1,7 +1,7 @@
 tokens = {
     "OK":"Rendben",
     "CANCEL":"Mégsem",
-    "BACK":"VIssza",
+    "BACK":"Vissza",
     "SAVE":"Tárolás",
     "SAVED":"Tárolva",
     "EDIT":"Módosítás",
@@ -21,7 +21,7 @@ tokens = {
 	"SUREDELETE":"Biztos törölni akarod?",
     "NOT_FOUND":"Nincs ilyen",
 
-    "TOTAL":"Osszesen",
+    "TOTAL":"Összesen",
     "LINES":"sor",
     "FIRST":"Első",
     "PREVIOUS":"Elöző",

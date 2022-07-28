@@ -79,9 +79,22 @@ class User extends Controller {
 	}
 	
 	public function regist() {
-		view('regist',["errorMsg" => $this->request->input('errorMsg', $this->session->input('errorMsg'),NOFILTER),
+		$record = new Record();
+		$record->id = 0;
+		$record->username = '';
+		$record->realname = '';
+		$record->email = '';
+		if ($this->session->input('oldRec') != '') {
+			$old = JSON_encode($this->session->input('oldRec'));
+			if ($old->id == 0) {
+				$record = $old;
+			}	
+		}		
+		view('regist',["record" => $record,
+					   "errorMsg" => $this->request->input('errorMsg', $this->session->input('errorMsg'),NOFILTER),
 					   "successMsg" => $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER),
 					   "SITEURL" => SITEURL,
+					   "polocyAccept" => 'ACCEPT',
 					   "redirect" => $this->request->input('redirect',''),
 					   "key" => $this->newKey()]
 					);
@@ -120,8 +133,10 @@ class User extends Controller {
 			if ($rec->enabled != 1) {
 				$error .= 'DISABLED<br>';
 			}
-			if ($rec->email_verifyed != 1) {
-				$error .= 'NOT_ACTIVATED<br>';
+			if (LOGIN_MUST_VERIFYED_EMAIL) {
+				if ($rec->email_verifyed != 1) {
+					$error .= 'NOT_ACTIVATED<br>';
+				}
 			}
 			if ($rec->deleted == 1) {
 				$error .= 'USER_NOT_FOUND<br>';
@@ -157,9 +172,13 @@ class User extends Controller {
 		$record->email = $this->request->input('email');
 		$record->email_verifyed = $this->request->input('email_verifyed',0);
 		$record->enabled = $this->request->input('enabled',0);
+		$this->session->set('oldRec', JSON_encode($record));
 		$record->deleted = 0;
 		$redirect = base64_decode($this->request->input('redirect'));
 		$error = $this->validator($record);
+		if ($this->request->input('accept') != '1') {
+			$error .= 'ACCEPT_REQUED<br>';
+		}
 		if ($error == '') {
 			$record->enabled = 1;
 			$record->email_verifyed = 0;
@@ -168,6 +187,7 @@ class User extends Controller {
 
 			$this->session->set('successMsg','SAVED<br>EMAIL_SENDED');
 			$this->session->set('errorMsg','');
+			$this->session->delete('oldRec');
 			?>
 			<script>
 				document.location="<?php echo SITEURL.'/'.$redirect; ?>";		
@@ -368,7 +388,12 @@ class User extends Controller {
 				$error = 'NOT_FOUND';
 			}
 		}
-
+		if ($this->session->input('oldRec','') != '') {
+			$old = JSON_decode($this->session->input('oldRec'));
+			if ($old->id == $record->id) {
+				$record = $old;
+			}
+		}		
 		if ($error == '') {
 			if ($record->avatar == '')  {
 				$record->avatar = 'noimage.png';
@@ -412,6 +437,7 @@ class User extends Controller {
 		$record->email = $this->request->input('email',''); 
 		$record->password = $this->request->input('password',''); 
 		$record->password2 = $this->request->input('password2',''); 
+		$record->avatar = $old->avatar;
 		$backtask = $this->request->input('backtask','home.show');
 		if (!isAdmin() & ($record->id != $this->session->input('loged'))) {
 			return;
@@ -420,6 +446,7 @@ class User extends Controller {
 			$record->email_verifyed = $this->request->input('email_verifyed',0);
 			$record->enabled = $this->request->input('enabled',0);
 		}
+		$this->session->set('oldRec', JSON_encode($record));
 		$error = $this->validator($record);
 		if ($error == '') {
 			$id = $this->model->save($record);
@@ -428,6 +455,7 @@ class User extends Controller {
 			}
 			$this->session->set('successMsg','SAVED');
 			$this->session->set('errorMsg','');
+			$this->session->delete('oldRec');
 			?>
 			<script>
 				document.location=HREF("<?php echo $backtask; ?>",{successMsg:'SAVED'});		
@@ -496,10 +524,25 @@ class User extends Controller {
 	 * névre kattintva a profil képernyőt hívja
 	 */
     public function users() {
+		$this->session->delete('oldRec');
         $this->items('username');
     }
     
-
+	public function mydata() {
+		$id = $this->request->input('id',0,INTEGER);
+		$rec = $this->model->getbyId($id);
+		if (isset($rec->id)) {
+			if (($rec->id == $this->session->input('loged')) |
+			    isAdmin()) {
+				$rec->groups = $this->model->getGroups($id);
+				unset($rec->password);
+				echo '<p>Copy - paste this json code into a local file, or send it into your partner!</p>';
+				echo '<pre style="height:400px"><code style="height:400px">'.
+					JSON_encode($rec, JSON_PRETTY_PRINT).
+				'</code></pre>';
+			}
+		}	
+	}
 }
 
 

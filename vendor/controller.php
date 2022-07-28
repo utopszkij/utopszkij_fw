@@ -227,6 +227,8 @@ class Controller {
         $order = $this->session->input($this->name.'order',$order);
         $order = $this->request->input('order',$order);
         $total = $this->model->getTotal($filter);
+        $this->session->delete($this->neme.'_oldRecord');
+
         if ($page < 1) {
             $page = 1;
         }
@@ -283,8 +285,14 @@ class Controller {
             </script>
             ';
         }
-        if ($this->session->isset('oldRecord')) {
-            $item = $this->session->input('oldRecord');
+        if ($this->session->isset($this->name.'_oldRecord')) {
+            $old = JSON_decode($this->session->input($this->name.'_oldRecord'));
+            if (!isset($old->id)) {
+                $item = $old;
+            }
+            if ($old->id == 0) {
+                $item = $old;
+            }
         }
         view($this->name.'form',[
             "key" => $this->newKey(),
@@ -313,8 +321,11 @@ class Controller {
             </script>
             ';
         }
-        if ($this->session->isset('oldRecord')) {
-            $record = $this->session->input('oldRecord');
+        if ($this->session->isset($this->name.'_oldRecord')) {
+            $old = JSON_decode($this->session->input($this->name.'_oldRecord'));
+            if ($old->id == $record->id) {
+                $record = $old;
+            }
         }
         view($this->name.'form',[
             "key" => $this->newKey(),
@@ -331,7 +342,7 @@ class Controller {
      * edit vagy new form tárolása
      */
     protected function save($record) {
-        $this->session->set('oldRecord',$record);
+        $this->session->set($this->name.'_oldRecord',JSON_encode($record));
         $this->checkKey();
         if ($record->id == 0) {
             if (!$this->accessRight('new',$record)) {
@@ -365,7 +376,7 @@ class Controller {
                 ';
             }    
         } else {
-            $this->session->delete('oldRecord');
+            $this->session->delete($this->name.'_oldRecord');
             $this->model->save($record);
             if ($this->model->errorMsg == '') {
                 $this->session->delete('errorMsg');

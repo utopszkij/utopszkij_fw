@@ -51,7 +51,7 @@
 		v-bind:placeholder="lng('REALNAME')" class="form-control"/>
 		</div>	
 	</div>	
-	<div class="row text-center">
+	<div class="row text-center" v-if="(logedAdmin | (loged == record.id))">
 		<div class="col-12">
         <label><em class="fas fa-envelope"></em>{{ lng('EMAIL') }}&nbsp;</label>
         <input type="text" name="email" v-model="record.email"
@@ -119,6 +119,11 @@
                 <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
             </button>&nbsp;
             <button type="button" class="btn btn-secondary" 
+                style="width:250px" v-on:click="myDataClick"
+                v-if="logedAdmin | (record.id == loged)">
+                <em class="fas fa-file"></em>&nbsp;{{ lng('MYDATA') }}
+            </button>&nbsp;
+            <button type="button" class="btn btn-secondary" 
                 style="width:250px" v-on:click="cancelClick"
                 v-if="!logedAdmin & (record.id != loged)">
                 <em class="fas fa-check"></em>&nbsp;{{ lng('BACK') }}
@@ -158,6 +163,9 @@
             popupConfirm(lng('SUREDELETE'), function() {
                 document.location=HREF('user.dodelete',{id: app.record.id});
             })
+        },
+        myDataClick() {
+            document.location=HREF('user.mydata',{id: app.record.id});
         }
 	};
 </script>	

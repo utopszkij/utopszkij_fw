@@ -28,26 +28,64 @@ class Home extends Controller {
 		]);
 	}
 
+	/**
+	 * web hely leírásának megjelenítése
+	 */
 	public function description() {
 		$this->show();
 	}
 	
+	/**
+	 * web hely licensz megjelenítése
+	 */
 	public function licence() {
 		view('licence',[]);
 	}
 	
+	/**
+	 * web hely adatkezelési leírás megjelenítése
+	 */
 	public function policy() {
-		view('policy',[]);
+		view('policy',["ADATKEZELO" => ADATKEZELO, 
+		"ADATFELDOLGOZO" => ADATFELDOLGOZO, 
+		"SIGNO" => SIGNO]);
 	}
 	
+	/**
+	 * web hely adatkezelési szabályzat megjelenítése
+	 */
+	public function policy2() {
+		view('policy2',["ADATKEZELO" => ADATKEZELO, 
+		"ADATFELDOLGOZO" => ADATFELDOLGOZO, 
+		"SIGNO" => SIGNO]);
+	}
+	
+	/**
+	 * web hely adatkezelési folyamatok megjelenítése
+	 */
+	public function policy3() {
+		view('policy3',["ADATKEZELO" => ADATKEZELO, 
+		"ADATFELDOLGOZO" => ADATFELDOLGOZO, 
+		"SIGNO" => SIGNO]);
+	}
+	
+	/**
+	 * Jogsértő tartalom jelentése
+	 */
 	public function protest() {
 		view('protest',[]);
 	}
 	
+	/**
+	 * impresszum megjelenítése
+	 */
 	public function impressum() {
 		view('impressum',[]);
 	}
 
+	/**
+	 * szoftver dokumentáció megjelenítése
+	 */
 	public function swdoc() {
 		view('swdoc',[]);
 	}

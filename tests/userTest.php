@@ -64,6 +64,7 @@ class UserTest extends TestCase {
 		$_POST['password2'] = '123456';
 		$_POST['realname'] = 'Test Elek';
 		$_POST['email'] = 'test@test.test';
+		$_POST['accept'] = 1;
 		$this->controller->doregist();
 		$this->expectOutputRegex('/SAVED/');
 		$this->expectOutputRegex('/abc/');
@@ -78,6 +79,7 @@ class UserTest extends TestCase {
 		$_POST['password2'] = '123456';
 		$_POST['realname'] = 'administrator';
 		$_POST['email'] = 'admin@test.test';
+		$_POST['accept'] = 1;
 		$this->controller->doregist();
 		$q = new Query('user_group');
 		$this->assertEquals($q->count(),1);
@@ -306,7 +308,6 @@ class UserTest extends TestCase {
 		$this->expectOutputRegex('/DELETED/');
 		$this->assertEquals(isset($rec->realname),false);
 	}
-
 
 }
 

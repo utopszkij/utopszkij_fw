@@ -19,7 +19,7 @@ importComponent('upgrade');
 $fw = new Fw();
 
 //+ ----------- verzio kezelés start ------------
-$fileVerzio = 'v1.0';
+$fileVerzio = 'v1.0.1';
 $upgrade = new \Upgrade();
 $dbverzio  = $upgrade->getDBVersion();
 $lastVerzio = $upgrade->getLastVersion();
@@ -236,5 +236,21 @@ if (method_exists($comp, 'getTitle')) {
 		?>
 	</div>
 	<p><?php echo $_SESSION['screen_width'].' x '.$_SESSION['screen_height']; ?></p>	
+	<script>
+		console.log(document.cookie);
+		console.log(document.location);
+		if (document.cookie.search('cookieEnabled=2') > 0) {
+			document.write('<p>Csoki kezelés engedélyezve van. Letiltásához kattints ide:'+
+			'<a href="index.php" onclick="setCookie(\'cookieEnabled\',0,100);">Letilt</a></p>');
+		} else if (document.location.href.search('home.policy') < 0) {
+			popupConfirm('Ennek a web oldalnak a használatához un. "munkamenet csokik" használtata szükséges.'+
+			'<br />Lásd: <a href="index.php?task=home.policy">Adatkezelési leírás</a>'+
+			'<br />Kérjük engedélyezd a csokik kezelését!',
+			function() {
+				setCookie('cookieEnabled',2,100);
+				document.location='index.php';
+			})
+		}
+	</script>	
 </body>
 </html>

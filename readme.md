@@ -57,10 +57,9 @@ GNU v3
 
 - adatbázis létrehozása (utf8, magyar rendezéssel),
 - config.php elkészítése a a config-example.php alapján,
-- a views/impressum, policy, fájlok szükség szerinti módosítása
+- a views/impressum, policy, policy2, policy3 fájlok szükség szerinti módosítása
 - fájlok és könyvtárak feltöltése a szerverre,
 - az images könyvtár legyen irható a web szerver számára, a többi csak olvasható legyen,
-- adatbázis kezdeti feltöltése a vendor/database/dbinit.sql segitségével,
 - többfelhasználós üzemmód esetén; a program "Regisztrálás" menüpontjában hozzuk létre a
   a system adminisztrátor fiokot (a config.php -ban beállított bejelentkezési névvel).
 
@@ -126,6 +125,10 @@ Ezután linux terminálban:
 cd reporoot
 ./tools/documentor.sh
 ```
+## verzió v1.0.1
+2022.07.28
+GDPR megfelelés
+### *************************************
 ## verzió v1.0.0
 2022.07.27
 
