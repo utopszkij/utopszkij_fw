@@ -89,6 +89,10 @@ class Home extends Controller {
 	public function swdoc() {
 		view('swdoc',[]);
 	}
+
+	public function sponzor() {
+		view('sponzor',[]);
+	}
 	
 	
 }
