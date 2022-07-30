@@ -6,5 +6,7 @@ var searchData=
   ['delete_3',['delete',['../class_session.html#ad5070b43b963e1a7315072cfdfe6522f',1,'Session\delete()'],['../class_controller.html#a13bdffdd926f26b825ea57066334ff01',1,'Controller\delete()'],['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#a13bdffdd926f26b825ea57066334ff01',1,'RATWEB\DB\Query\delete()']]],
   ['delfile_4',['delFile',['../class_upgrade.html#a26f7bf2ecc84dfaea73d7f4759a8a892',1,'Upgrade']]],
   ['deprecated_20list_5',['Deprecated List',['../deprecated.html',1,'']]],
-  ['downloadfile_6',['downloadFile',['../class_upgrade.html#af1740b110a1c43b6219fa157fd4a3ebe',1,'Upgrade']]]
+  ['description_6',['description',['../class_home.html#a5c46fb6f231cf347080b6019437bb5e6',1,'Home']]],
+  ['downloadfile_7',['downloadFile',['../class_upgrade.html#af1740b110a1c43b6219fa157fd4a3ebe',1,'Upgrade']]],
+  ['dropifexists_8',['dropIfExists',['../class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#a69c4145b0e184ce708a8d1c15fa13775',1,'RATWEB::DB::Table']]]
 ];

@@ -125,6 +125,9 @@ Ezután linux terminálban:
 cd reporoot
 ./tools/documentor.sh
 ```
+## verzió v1.0.2
+table create, alter, drop a database interface-be
+### *************************************
 ## verzió v1.0.1
 2022.07.28
 GDPR megfelelés

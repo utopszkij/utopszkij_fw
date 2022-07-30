@@ -70,7 +70,6 @@ class User extends Controller {
 		$_SESSION['loged'] = -1;
 		$_SESSION['logedName'] = 'guest';
 		$_SESSION['logedAvatar'] = '';
-		$_SESSION['logedGroup'] = '';
 		?>
 		<script>
 				document.location="index.php";		

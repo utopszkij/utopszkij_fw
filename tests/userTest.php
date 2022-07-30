@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use RATWEB\DB\Query;
 use RATWEB\DB\Record;
+use RATWEB\DB\Table;
 DEFINE('UNITTEST',1);
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -309,6 +310,28 @@ class UserTest extends TestCase {
 		$this->assertEquals(isset($rec->realname),false);
 	}
 
+	public function createTable() {
+		$table = new Table('unittest');
+		$table->id();
+		$table->string('data1')->nullable()->comment('data1');
+		$table->integer('data2');
+		$table->bigint('data3');
+		$table->number('data4');
+		$table->date('data5');
+		$table->time('data6');
+		$table->datettime('data7');
+		$table->bool('data8');
+		$table->index(['data1']);
+		$table->index(['data2','data3']);
+		$table->createInDB();
+		$this->assertEquals($table->error,'');
+	}
+
+	public function dropTable() {
+		$table = new Table('unittest');
+		$table->dropIfExists();
+		$this->assertEquals($table->error,'');
+	}
 }
 
 
