@@ -20,5 +20,6 @@ var searchData=
   ['setuseincludepath_17',['setUseIncludePath',['../class_composer_1_1_autoload_1_1_class_loader.html#aed3e96782322ebc7352f1e62de1cc38c',1,'Composer::Autoload::ClassLoader']]],
   ['sqlname_18',['sqlName',['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#acdc7e10399042d89b45fad8d527d431a',1,'RATWEB::DB::Query']]],
   ['sqlvalue_19',['sqlValue',['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#a118498dc3fe9db7d7b79291370156d43',1,'RATWEB\DB\Query\sqlValue()'],['../class_r_a_t_w_e_b_1_1_model.html#ade441dfa6283a851c8a6b80cac9dbf99',1,'RATWEB\Model\sqlValue()']]],
-  ['store_20',['store',['../class_group.html#a98e4b7b7529a9a5f6d7e96909cba8bfe',1,'Group']]]
+  ['store_20',['store',['../class_group.html#a98e4b7b7529a9a5f6d7e96909cba8bfe',1,'Group']]],
+  ['swdoc_21',['swdoc',['../class_home.html#aea67507d1ba7ad61b3d3e8603671eb2e',1,'Home']]]
 ];

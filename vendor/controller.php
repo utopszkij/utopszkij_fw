@@ -161,8 +161,7 @@ class Controller {
         $this->loged = $this->session->input('loged',0,INTEGER);
         $this->logedName = $this->session->input('logedName','Látogató');
         $this->logedAdmin = isAdmin();
-        $this->logedGroup = $this->session->input('logedGroup');
-        $this->logedAvatar = $this->session->input('logedGroup');
+        $this->logedAvatar = $this->session->input('logedAvatar');
         // $this->model = new ValamiModel();
         // $this->name = 'xxx';
         // $this->browserURL = '...';

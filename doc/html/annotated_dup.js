@@ -9,8 +9,10 @@ var annotated_dup =
     ] ],
     [ "RATWEB", "namespace_r_a_t_w_e_b.html", [
       [ "DB", null, [
+        [ "Field", "class_r_a_t_w_e_b_1_1_d_b_1_1_field.html", null ],
         [ "Query", "class_r_a_t_w_e_b_1_1_d_b_1_1_query.html", "class_r_a_t_w_e_b_1_1_d_b_1_1_query" ],
         [ "Record", "class_r_a_t_w_e_b_1_1_d_b_1_1_record.html", null ],
+        [ "Table", "class_r_a_t_w_e_b_1_1_d_b_1_1_table.html", "class_r_a_t_w_e_b_1_1_d_b_1_1_table" ],
         [ "Union", "class_r_a_t_w_e_b_1_1_d_b_1_1_union.html", "class_r_a_t_w_e_b_1_1_d_b_1_1_union" ],
         [ "Where", "class_r_a_t_w_e_b_1_1_d_b_1_1_where.html", "class_r_a_t_w_e_b_1_1_d_b_1_1_where" ]
       ] ],
@@ -28,7 +30,7 @@ var annotated_dup =
     [ "Group", "class_group.html", "class_group" ],
     [ "GroupModel", "class_group_model.html", "class_group_model" ],
     [ "GroupTest", "class_group_test.html", null ],
-    [ "Home", "class_home.html", null ],
+    [ "Home", "class_home.html", "class_home" ],
     [ "Request", "class_request.html", "class_request" ],
     [ "Session", "class_session.html", "class_session" ],
     [ "Upgrade", "class_upgrade.html", "class_upgrade" ],

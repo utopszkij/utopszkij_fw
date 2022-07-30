@@ -7,6 +7,7 @@ var hierarchy =
       [ "Group", "class_group.html", null ],
       [ "Home", "class_home.html", null ]
     ] ],
+    [ "Field", "class_r_a_t_w_e_b_1_1_d_b_1_1_field.html", null ],
     [ "Fw", "class_fw.html", null ],
     [ "InstalledVersions", "class_composer_1_1_installed_versions.html", null ],
     [ "MailerInterface", "interfaceyidas_1_1socket_mailer_1_1_mailer_interface.html", [
@@ -20,6 +21,7 @@ var hierarchy =
     [ "Record", "class_r_a_t_w_e_b_1_1_d_b_1_1_record.html", null ],
     [ "Request", "class_request.html", null ],
     [ "Session", "class_session.html", null ],
+    [ "Table", "class_r_a_t_w_e_b_1_1_d_b_1_1_table.html", null ],
     [ "Union", "class_r_a_t_w_e_b_1_1_d_b_1_1_union.html", null ],
     [ "Upgrade", "class_upgrade.html", null ],
     [ "Where", "class_r_a_t_w_e_b_1_1_d_b_1_1_where.html", null ],

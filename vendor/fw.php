@@ -43,13 +43,11 @@ class Fw {
 		   $_SESSION['loged'] = -1;
 		   $_SESSION['logedName'] = 'guest';
 		   $_SESSION['logedAvatar'] = '';
-		   $_SESSION['logedGroup'] = '';
 		 }
 		} else {
 			$_SESSION['loged'] = 1;
 			$_SESSION['logedName'] = 'user';
 			$_SESSION['logedAvatar'] = '';
-			$_SESSION['logedGroup'] = 'admin';
 		}
 
 		// Facebbok/google loginból érkező hívás feldolgozása
@@ -76,13 +74,6 @@ class Fw {
 				$_SESSION['loged'] = $userId;
 				$_SESSION['logedName'] = $userName;
 				$_SESSION['logedAvatar'] = '';
-				$_SESSION['logedGroup'] = '';
-				$db = new \RATWEB\DB\Query('profilok');
-				$profil = $db->where('id','=',$userId)->first();
-				if (isset($profil->avatar)) {
-					$_SESSION['logedAvatar'] = $profil->avatar;
-					$_SESSION['logedGroup'] = $profil->group;
-				}
 			} else {
 				echo 'kodolási hiba userId='.$userId.' userName='.$userName; exit();	
 			}

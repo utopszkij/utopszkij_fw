@@ -2,6 +2,7 @@
 <?php					
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
+use \RATWEB\DB\Table;
 
 /*
 
@@ -287,6 +288,7 @@ class Upgrade {
 
 	protected function do_v1_0($dbverzio) {
 		if ($this->versionAdjust($dbverzio) < 'v 1. 0') {
+			/*
 			$q = new Query('users');
 			$q->exec('CREATE TABLE IF NOT EXISTS `users` (
 				`id` int NOT NULL AUTO_INCREMENT,
@@ -317,7 +319,67 @@ class Upgrade {
 			');
 			$q->exec('INSERT INTO `groups` (`id`,`parent`,`name`) VALUES (1,0,"admin")');
 			$q->exec('INSERT INTO `groups` (`id`,`parent`,`name`) VALUES (2,0,"moderator")');
-			$q->exec('UPDATE `dbverzio` SET `verzio` = "v1.0")');
+			*/
+			$table = new Table('users');
+			$table->id();
+			$table->string('username');
+			$table->string('password');
+			$table->string('realname');
+			$table->string('email');
+			$table->string('avatar')->nullable();
+			$table->bool('email_verifyed');
+			$table->bool('enabled');
+			$table->bool('deleted');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+			$table = new Table('groups');
+			$table->id();
+			$table->bigint('parent');
+			$table->string('name');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+
+			$table = new Table('user_group');
+			$table->id();
+			$table->bigint('user_id');
+			$table->bigint('group_id');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+			
+			$r = new Record();
+			$r->id = 1;
+			$r->parent = 0;
+			$r->name = 'admin';	
+			$q = new Query('groups');
+			$q->insert($r);
+			if ($q->error != '') {
+				echo $q->error.'<br>';
+			}	
+
+			$r->id = 2;
+			$r->parent = 0;
+			$r->name = 'moderator';	
+			$q = new Query('groups');
+			$q->insert($r);
+			$q->insert($r);
+			if ($q->error != '') {
+				echo $q->error.'<br>';
+			}	
+
+			$r = new Record();			
+			$r->verzio = 'v1.0.0';
+			$q = new Query('dbverzio');
+			$q->update($r);
+			if ($q->error != '') {
+				echo $q->error.'<br>';
+			}	
+
 		}	
 	}
 

@@ -19,7 +19,7 @@ importComponent('upgrade');
 $fw = new Fw();
 
 //+ ----------- verzio kezelés start ------------
-$fileVerzio = 'v1.0.1';
+$fileVerzio = 'v1.0.2';
 $upgrade = new \Upgrade();
 $dbverzio  = $upgrade->getDBVersion();
 $lastVerzio = $upgrade->getLastVersion();
@@ -219,7 +219,6 @@ if (method_exists($comp, 'getTitle')) {
 				'loged' => $_SESSION['loged'],
 				'logedAvatar' => $_SESSION['logedAvatar'],
 				'logedName' => $_SESSION['logedName'],
-				'logedGroup' => $_SESSION['logedGroup'],
 				'isAdmin' => isAdmin(),
 				'lastVerzio' => Upgrade::versionAdjust($lastVerzio),
 				'fileVerzio' => Upgrade::versionAdjust($fileVerzio)

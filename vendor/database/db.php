@@ -696,5 +696,240 @@ class Query {
 	}
 }
 
+/**
+* tábla kreálás, droppolás
+* =========================
+*
+* Példa:
+* $table = new Table('valami');
+* $table->id();
+* $table->string('data1')->nullable()->comment('első adat');
+* $table->datetime('idopont')->nullable()->comment('időpont');
+* ... 
+* $table->index(['data1']);
+* $table->createInDB();
+*
+* $table = new Table('valami');
+* $table->dropIfExists();
+*/
+class Field {
+	public string $type;
+	public string $name;
+	public string $comment;
+	public bool $autoinc;
+	public bool $primaryKey;
+	public bool $nullable;
+
+	public function nullable() {
+		$this->nullable = true;
+		return $this;
+	}
+
+	public function comment(string $comment) {
+		$this->comment = $comment;
+		return $this;
+	}
+	public function sql(): string {
+		$result = '`'.$this->name.'` '.$this->type;
+		if ($this->autoinc) {
+			$result .= ' AUTO_INCREMENT';
+		}
+		if (!$this->nullable) {
+			$result .= ' NOT NULL';
+		}
+		if ($this->comment != '') {
+			$result .= ' COMMENT "'.$this->comment.'"';
+		}
+		return $result;
+	}
+} 
+
+class Table {
+	public string $name;
+	public array $fileds = [];
+	public array $indexes = [];
+	public string $error = '';
+
+	function __construct(string $name) {
+		$this->name = $name;
+		$this->fields = [];
+		$this->indexes = [];
+	}
+
+	public function id() {
+		$result = new Field();
+		$result->type = 'bigint';
+		$result->name = 'id';
+		$result->comment = 'unique auto id';
+		$result->autoinc = true;
+		$result->primaryKey = true;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}	
+	public function integer(string $name) {
+		$result = new Field();
+		$result->type = 'int';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function bigint(string $name) {
+		$result = new Field();
+		$result->type = 'bigint';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function number(string $name) {
+		$result = new Field();
+		$result->type = 'DOUBLE';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function string(string $name) {
+		$result = new Field();
+		$result->type = 'varchar(256)';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function text(string $name) {
+		$result = new Field();
+		$result->type = 'text';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function date(string $name) {
+		$result = new Field();
+		$result->type = 'date';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function time(string $name) {
+		$result = new Field();
+		$result->type = 'time';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function dateTtime(string $name) {
+		$result = new Field();
+		$result->type = 'datetime';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function bool(string $name) {
+		$result = new Field();
+		$result->type = 'bool';
+		$result->name = $name;
+		$result->comment = '';
+		$result->autoinc = false;
+		$result->primaryKey = false;
+		$result->nullable = false;
+		$this->fields[] = $result;
+		return $this->fields[count($this->fields) - 1];
+	}
+	public function index(array $fieldNames) {
+		$this->indexes[] = $fieldNames;
+	}
+
+	/**
+	 * Tábla létrehozása az adatbázisban
+	 * @return bool sikeres vagy nem
+	 */
+	public function createInDB():bool {
+		$sqlStr = 'CREATE TABLE `'.$this->name.'` (';
+		$term = '';
+		$primKey = '';
+		foreach ($this->fields as $field) {
+			$sqlStr .= $term.$field->sql();
+			$term = ',';
+			if ($field->primaryKey) {
+				$primKey = ',PRIMARY KEY (`'.$field->name.'`)';
+			}
+		}
+		$sqlStr .= $primKey;
+		foreach ($this->indexes as $index) {
+			$sqlStr .= ',INDEX ('.implode(',',$index).')';
+		}
+		$sqlStr .= ')';
+		$q = new Query('dbverzio');
+		$q->exec($sqlStr);
+		$this->error = $q->error;
+		if ($this->error != '') {
+			echo $sqlStr.' error = '.$this->error.'<br>';
+		}
+		return ($this->error == '');
+	}
+
+	/**
+	 * tábla struktúra modosítása az adatbázisban
+	 * @return bool sikeres vagy nem
+	 */
+	public function alterInDB() {
+		$sqlStr = 'ALTER TABLE `'.$this->name.'` (';
+		$term = '';
+		foreach ($this->fields as $field) {
+			$sqlStr .= 'ADD COLUMN '.$term.$field->sql();
+			$term = ',';
+		}
+		foreach ($this->indexes as $index) {
+			$sqlStr .= ',ADD INDEX ('.implode(',',$index).')';
+		}
+		$q = new Query('dbverzio');
+		$q->exec($sqlStr);
+		$this->error = $q->error;
+		return ($this->error == '');
+	}
+
+	/**
+	 * Tábla törlése az adatbázisból
+	 * @return bool sikeres vagy nem
+	 */
+	public function dropIfExists(): bool {
+		$this->error = '';
+		$q->exec('DROP TABLE IF EXISTS `'.$this->name.'`');
+		$this->error = $q->error;
+		return ($this->error == '');
+	}
+}
+
 
 ?>
