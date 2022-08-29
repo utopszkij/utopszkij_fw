@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['register_0',['register',['../class_composer_1_1_autoload_1_1_class_loader.html#a3968965f178f6a5ef212b31b72231e69',1,'Composer::Autoload::ClassLoader']]],
-  ['reload_1',['reload',['../class_composer_1_1_installed_versions.html#a01b4ca6bbbb1e3337f987c9461405985',1,'Composer::InstalledVersions']]],
-  ['remove_2',['remove',['../class_group.html#aff9a1fb07dca963c2c9a8ffe66b45ded',1,'Group']]]
+  ['policy_0',['policy',['../class_home.html#a4af508e6da6be65b83840a2f9ef70c54',1,'Home']]],
+  ['policy2_1',['policy2',['../class_home.html#a96b49618db02a815fb1248671fb0fd0f',1,'Home']]],
+  ['policy3_2',['policy3',['../class_home.html#a76ee32294da52abfa6b17a75d48803fb',1,'Home']]],
+  ['processfilestxt_3',['processFilesTxt',['../class_upgrade.html#a537b6408f89cc8b9790ea115a2c076ef',1,'Upgrade']]],
+  ['protest_4',['protest',['../class_home.html#ab275055b7acfe96cabd1f0655471801a',1,'Home']]]
 ];

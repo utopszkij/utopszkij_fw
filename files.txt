@@ -3,21 +3,22 @@
 -rw-r--r-- 1 utopszkij utopszkij  1379 2022-07-28 config-example.php
 -rw-r--r-- 1 utopszkij utopszkij  1275 2022-07-30 config.php
 -rw-r--r-- 1 utopszkij utopszkij  1205 2022-07-28 config_test.php
-drwxrwxr-x 3 utopszkij utopszkij  4096 2022-07-27 doc
--rw-r--r-- 1 utopszkij utopszkij     0 2022-07-30 files.txt
+drwxrwxr-x 3 utopszkij utopszkij  4096 2022-08-11 doc
+-rw-r--r-- 1 utopszkij utopszkij     0 2022-08-29 files.txt
 drwxrwxr-x 3 utopszkij utopszkij  4096 2022-07-28 images
 drwxrwxr-x 5 utopszkij utopszkij  4096 2022-07-27 includes
--rw-r--r-- 1 utopszkij utopszkij  7655 2022-07-30 index.php
+-rw-r--r-- 1 utopszkij utopszkij  7655 2022-08-29 index.php
 drwxrwxr-x 2 utopszkij utopszkij  4096 2022-07-27 languages
 -rw-r--r-- 1 utopszkij utopszkij 35149 2022-07-21 LICENSE
--rw-r--r-- 1 utopszkij utopszkij  4432 2022-07-30 readme.md
+-rw-r--r-- 1 utopszkij utopszkij  4557 2022-08-29 readme.md
 -rw-r--r-- 1 utopszkij utopszkij  2464 2022-07-24 style.css
 drwxrwxr-x 2 utopszkij utopszkij  4096 2022-07-27 tests
 drwxrwxrwx 2 utopszkij utopszkij  4096 2022-07-29 tools
 drwxrwxr-x 8 utopszkij utopszkij  4096 2022-07-27 vendor
 
 ./doc:
-összesen 36
+összesen 40
+-rw-rw-r-- 1 utopszkij utopszkij   601 2022-08-04 bintest.php
 -rw-r--r-- 1 utopszkij utopszkij   598 2022-07-20 footer.htm
 drwxrwxr-x 3 utopszkij utopszkij 12288 2022-07-30 html
 -rw-r--r-- 1 utopszkij utopszkij   169 2022-07-20 olvassel.txt
@@ -450,8 +451,8 @@ drwxrwxr-x 2 utopszkij utopszkij 4096 2022-07-27 js
 -rw-r--r-- 1 utopszkij utopszkij  1070 2022-07-26 LICENSE
 
 ./vendor/database:
-összesen 24
--rw-r--r-- 1 utopszkij utopszkij 23893 2022-07-30 db.php
+összesen 28
+-rw-r--r-- 1 utopszkij utopszkij 24707 2022-08-29 db.php
 
 ./vendor/fontawesome:
 összesen 40

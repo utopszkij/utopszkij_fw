@@ -929,6 +929,53 @@ class Table {
 		$this->error = $q->error;
 		return ($this->error == '');
 	}
+
+	/**
+	 * lock tables
+	 * @param array $lockDefs ["tableName" => "Read"|"write", ...]
+	 * @return void
+	 */
+	public function lockTables(array $lockDefs) {
+		$sql = 'LOCK TABLES ';
+		foreach ($lockDefs as $fn => $fv) {
+			$sql .= $fn.' '.$fv.' ';
+		}
+		$q = new Query('dbverzio');
+		$q->exec($sql);
+	}
+
+	/**
+	 * unlock tables
+	 */
+	public function unlockTables() {
+		$q = new Query('dbverzio');
+		$q->exec('UNLOCK TABLES');
+	}
+
+	/**
+	 * Begin transaction
+	 */
+	public function beginTransaction() {
+		$q = new Query('dbverzio');
+		$q->exec('BEGIN');
+	}
+
+	/**
+	 * Commit transaction
+	 */
+	public function commitTransaction() {
+		$q = new Query('dbverzio');
+		$q->exec('COMMIT');
+	}
+
+	/**
+	 * Rollback transaction
+	 */
+	public function rollBackTransaction() {
+		$q = new Query('dbverzio');
+		$q->exec('ROLLBACK');
+	}
+
 }
 
 

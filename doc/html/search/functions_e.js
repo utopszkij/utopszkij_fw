@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['policy_0',['policy',['../class_home.html#a4af508e6da6be65b83840a2f9ef70c54',1,'Home']]],
-  ['policy2_1',['policy2',['../class_home.html#a96b49618db02a815fb1248671fb0fd0f',1,'Home']]],
-  ['policy3_2',['policy3',['../class_home.html#a76ee32294da52abfa6b17a75d48803fb',1,'Home']]],
-  ['processfilestxt_3',['processFilesTxt',['../class_upgrade.html#a537b6408f89cc8b9790ea115a2c076ef',1,'Upgrade']]],
-  ['protest_4',['protest',['../class_home.html#ab275055b7acfe96cabd1f0655471801a',1,'Home']]]
+  ['offset_0',['offset',['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#a0d40a942c4a701607a4785b62fa3b63d',1,'RATWEB::DB::Query']]],
+  ['or_1',['or',['../class_r_a_t_w_e_b_1_1_d_b_1_1_where.html#a7ae4ac83b977ef7051800033db4551c5',1,'RATWEB::DB::Where']]],
+  ['orderby_2',['orderBy',['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#af194ab3f46f11e63423c6743a4a508ed',1,'RATWEB::DB::Query']]],
+  ['orderdir_3',['orderDir',['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#a75332f1869cf90de26f0e94b27bc2786',1,'RATWEB::DB::Query']]],
+  ['orwhere_4',['orWhere',['../class_r_a_t_w_e_b_1_1_d_b_1_1_union.html#a15f9faaf94a5de7a741213a18fc61d60',1,'RATWEB\DB\Union\orWhere()'],['../class_r_a_t_w_e_b_1_1_d_b_1_1_query.html#a15f9faaf94a5de7a741213a18fc61d60',1,'RATWEB\DB\Query\orWhere()']]]
 ];

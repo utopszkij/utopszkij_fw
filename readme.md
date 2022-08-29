@@ -125,6 +125,9 @@ Ezután linux terminálban:
 cd reporoot
 ./tools/documentor.sh
 ```
+## verzió v1.0.3
+table lock, unlock, tranzakció kezelés a database interface-be
+### *************************************
 ## verzió v1.0.2
 table create, alter, drop a database interface-be
 ### *************************************

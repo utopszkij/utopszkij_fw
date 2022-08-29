@@ -134,6 +134,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6effc5fe2ba0476deec3171fb7d7d4d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69c4145b0e184ce708a8d1c15fa13775"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#a69c4145b0e184ce708a8d1c15fa13775">dropIfExists</a> ()</td></tr>
 <tr class="separator:a69c4145b0e184ce708a8d1c15fa13775"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ea3ed717f1e5358e626e82368943ce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#aa8ea3ed717f1e5358e626e82368943ce">lockTables</a> (array $lockDefs)</td></tr>
+<tr class="separator:aa8ea3ed717f1e5358e626e82368943ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7d90009efa0706e7356f97a15db46f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#a6b7d90009efa0706e7356f97a15db46f">unlockTables</a> ()</td></tr>
+<tr class="separator:a6b7d90009efa0706e7356f97a15db46f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3380f3b13931d581fa973a382946b32"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#af3380f3b13931d581fa973a382946b32">beginTransaction</a> ()</td></tr>
+<tr class="separator:af3380f3b13931d581fa973a382946b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc95fb0d27bada24f816703817abd614"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#afc95fb0d27bada24f816703817abd614">commitTransaction</a> ()</td></tr>
+<tr class="separator:afc95fb0d27bada24f816703817abd614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e37e7f65d2a39729eac508211715564"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_t_w_e_b_1_1_d_b_1_1_table.html#a3e37e7f65d2a39729eac508211715564">rollBackTransaction</a> ()</td></tr>
+<tr class="separator:a3e37e7f65d2a39729eac508211715564"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -166,6 +176,42 @@ string&#160;</td><td class="memItemRight" valign="bottom"><b>$error</b> = ''</td
       </table>
 </div><div class="memdoc">
 <p >tábla struktúra modosítása az adatbázisban </p><dl class="section return"><dt>Returns</dt><dd>bool sikeres vagy nem </dd></dl>
+
+</div>
+</div>
+<a id="af3380f3b13931d581fa973a382946b32" name="af3380f3b13931d581fa973a382946b32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3380f3b13931d581fa973a382946b32">&#9670;&nbsp;</a></span>beginTransaction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">beginTransaction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Begin transaction </p>
+
+</div>
+</div>
+<a id="afc95fb0d27bada24f816703817abd614" name="afc95fb0d27bada24f816703817abd614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc95fb0d27bada24f816703817abd614">&#9670;&nbsp;</a></span>commitTransaction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">commitTransaction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Commit transaction </p>
 
 </div>
 </div>
@@ -202,6 +248,67 @@ string&#160;</td><td class="memItemRight" valign="bottom"><b>$error</b> = ''</td
       </table>
 </div><div class="memdoc">
 <p >Tábla törlése az adatbázisból </p><dl class="section return"><dt>Returns</dt><dd>bool sikeres vagy nem </dd></dl>
+
+</div>
+</div>
+<a id="aa8ea3ed717f1e5358e626e82368943ce" name="aa8ea3ed717f1e5358e626e82368943ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8ea3ed717f1e5358e626e82368943ce">&#9670;&nbsp;</a></span>lockTables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">lockTables </td>
+          <td>(</td>
+          <td class="paramtype">array&#160;</td>
+          <td class="paramname"><em>$lockDefs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >lock tables </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramtype">array</td><td class="paramname">$lockDefs</td><td>["tableName" =&gt; "Read"|"write", ...] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
+</div>
+</div>
+<a id="a3e37e7f65d2a39729eac508211715564" name="a3e37e7f65d2a39729eac508211715564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e37e7f65d2a39729eac508211715564">&#9670;&nbsp;</a></span>rollBackTransaction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rollBackTransaction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Rollback transaction </p>
+
+</div>
+</div>
+<a id="a6b7d90009efa0706e7356f97a15db46f" name="a6b7d90009efa0706e7356f97a15db46f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b7d90009efa0706e7356f97a15db46f">&#9670;&nbsp;</a></span>unlockTables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unlockTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >unlock tables </p>
 
 </div>
 </div>

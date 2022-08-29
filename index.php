@@ -19,7 +19,7 @@ importComponent('upgrade');
 $fw = new Fw();
 
 //+ ----------- verzio kezelés start ------------
-$fileVerzio = 'v1.0.2';
+$fileVerzio = 'v1.0.3';
 $upgrade = new \Upgrade();
 $dbverzio  = $upgrade->getDBVersion();
 $lastVerzio = $upgrade->getLastVersion();
