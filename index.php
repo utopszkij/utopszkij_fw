@@ -1,7 +1,6 @@
 <?php
 session_start();
 global $components;
-
 // server infok hozzáférhetővé tétele a php számára
 define('DOCROOT',__DIR__);
 $w1 = (int) str_replace('M', '', ini_get('post_max_size'));
@@ -13,11 +12,8 @@ include_once('vendor/model.php');
 include_once('vendor/view.php');
 include_once('vendor/controller.php');
 include_once('vendor/fw.php');
-
 importComponent('upgrade');
-
 $fw = new Fw();
-
 //+ ----------- verzio kezelés start ------------
 $fileVerzio = 'v1.0.3';
 $upgrade = new \Upgrade();
@@ -26,7 +22,6 @@ $lastVerzio = $upgrade->getLastVersion();
 $upgrade->dbUpgrade($dbverzio);
 $branch = $upgrade->branch;
 //- ----------- verzio kezelés end ------------
-
 // képernyő méretek elérése
 if (isset($_COOKIE['screen_width'])) {
 	$_SESSION['screen_width'] = $_COOKIE['screen_width'];
@@ -97,6 +92,26 @@ if (method_exists($comp, 'getTitle')) {
 			}
 			document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 		}
+
+		/**
+		* csoki lekérdezése
+		*/	
+		function getCookie(cname) {
+		  let name = cname + "=";
+		  let decodedCookie = decodeURIComponent(document.cookie);
+		  let ca = decodedCookie.split(';');
+		  for(let i = 0; i <ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+			  c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+			  return c.substring(name.length, c.length);
+			}
+		  }
+		  return "";
+		}
+		
 		/**
 		 * user jováhagyás kérés popup ablakban
 		 */
@@ -221,7 +236,7 @@ if (method_exists($comp, 'getTitle')) {
 				'logedName' => $_SESSION['logedName'],
 				'isAdmin' => isAdmin(),
 				'lastVerzio' => Upgrade::versionAdjust($lastVerzio),
-				'fileVerzio' => Upgrade::versionAdjust($fileVerzio)
+				'fileVerzio' => $fileVerzio
 				],'mainmenu'); 
 		?>
 
@@ -233,12 +248,25 @@ if (method_exists($comp, 'getTitle')) {
 		<?php 
 			view('footer',[],'footer');
 		?>
+		<div id="themeTogle">
+			<button class="btn btn-toggle btn-secondary" 
+				type="button" onclick="themeTogle()">
+				<em class="fas fa-adjust"></em>&nbsp;
+				Világos/sötét mód váltás
+			</button>
+		</div>
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
 	</div>
 	<p><?php echo $_SESSION['screen_width'].' x '.$_SESSION['screen_height']; ?></p>	
 	<script>
 		console.log(document.cookie);
 		console.log(document.location);
-		if (document.cookie.search('cookieEnabled=2') > 0) {
+		if (document.cookie.search('cookieEnabled=2') >= 0) {
 			document.write('<p>Csoki kezelés engedélyezve van. Letiltásához kattints ide:'+
 			'<a href="index.php" onclick="setCookie(\'cookieEnabled\',0,100);">Letilt</a></p>');
 		} else if (document.location.href.search('home.policy') < 0) {
@@ -252,4 +280,34 @@ if (method_exists($comp, 'getTitle')) {
 		}
 	</script>	
 </body>
+
+<script type="text/javascript">
+		// világos/sötét téma
+		
+		function themeTogle() {
+			const currentTheme = getCookie("theme");
+			var theme = getCookie("theme");
+			if (currentTheme == "dark") {
+				document.body.className = 'light';
+				theme = 'light';
+			} else if (currentTheme == "light") {
+				document.body.className = 'dark';
+				theme = 'dark';
+			} else {
+				document.body.className = 'dark';
+				theme = 'dark';
+			}
+			setCookie("theme", theme);
+		}
+
+		const currentTheme = getCookie("theme");
+		if (currentTheme == "dark") {
+	  		document.body.className = 'dark';
+		} else if (currentTheme == "light") {
+			document.body.className = 'light';
+		} else {
+			document.body.className = 'light';
+		}
+</script>
+
 </html>

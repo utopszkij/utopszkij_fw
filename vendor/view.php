@@ -33,6 +33,7 @@
  * @return void
  */
 
+
 function view(string $name,array $params, string $appName = 'app') {
     $scriptExist = false;
     if (file_exists(__DIR__.'/../includes/views/'.$name.'_'.LNG.'.html')) {

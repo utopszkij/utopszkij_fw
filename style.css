@@ -1,12 +1,14 @@
 html {font-size:18px}
-body {text-align:center}
+body.light {text-align:center; background-color:white; color:black}
+body.dark {text-align:center; background-color:black; color:white}
 .page {min-height:600px; text-align:left; padding:1%}
 .warning {background-color:red; color:yellow; padding:1%;}
 .warning a {color:yellow;}
 .form-control {display:inline-block; width:auto}
 label {display:inline-block; width: 30%; text-align:right}
 form .row {margin:20px 0px 20px 0px}
-.link {cursor:pointer; color:#0d6efd; font-style:normal; text-decoration:underline}
+.light .link, .light a {cursor:pointer; color:#0d6efd; font-style:normal; text-decoration:underline}
+.dark .link, .dark a {cursor:pointer; color:#ADD8E6; font-style:normal; text-decoration:underline}
 
 #header {height:140px; background-color:silver; cursor:pointer;
 	background-image:url('images/header.png'); background-size: 100% 200px; background-repeat:no-repeat }
@@ -17,6 +19,8 @@ form .row {margin:20px 0px 20px 0px}
 .popupError {background-color:red; color:white}
 .popupSuccess {background-color:rgb(80, 156, 96); color:rgb(24, 16, 16)}
 .popupSimple {background-color:silver; color:black;} 
+
+.dark .alert-info {background-color:#472D2D; color:white}
 
 .paginator {display:inline-block; list-style: none;}
 .paginator li {margin-right:0px;}
@@ -45,8 +49,9 @@ pre {line-height:15px; overflow:hidden; background-color:#f4e6e6; padding:5px;}
 pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:14px;}
 
 
-#footer {background-color:black; color:white}
-#footer a {text-decoration:none; color:white}
+#footer {background-color:black; color:white; text-align:center}
+#footer a {text-decoration:none; color:white;}
+#themeTogle {text-align:center}
 
 @media screen and (max-width: 992px) {
 }
