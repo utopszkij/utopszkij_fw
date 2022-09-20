@@ -287,39 +287,10 @@ class Upgrade {
 	} 
 
 	protected function do_v1_0($dbverzio) {
+		
+		echo 'db verzio '.$dbverzio.'<br />'; 
+		
 		if ($this->versionAdjust($dbverzio) < 'v 1. 0') {
-			/*
-			$q = new Query('users');
-			$q->exec('CREATE TABLE IF NOT EXISTS `users` (
-				`id` int NOT NULL AUTO_INCREMENT,
-				`username` varchar(80) default "",
-				`password` varchar(80) default "",
-				`realname` varchar(80) default "",
-				`email` varchar(80) default "",
-				`avatar` varchar(128) default "",
-				`email_verifyed` int(1) default 0,
-				`enabled` int(1) default 1,
-				`deleted` int(1) default 0,
-				PRIMARY KEY (`id`)
-			  ) DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci
-			');
-			$q->exec('CREATE TABLE IF NOT EXISTS `groups` (
-				`id` int NOT NULL AUTO_INCREMENT,
-				`parent` int,
-				`name` varchar(80) default "",
-				PRIMARY KEY (`id`)
-			  ) DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci
-			');
-			$q->exec('CREATE TABLE IF NOT EXISTS `user_group` (
-				`id` int NOT NULL AUTO_INCREMENT,
-				`user_id` int,
-				`group_id` int,
-				PRIMARY KEY (`id`)
-			  ) DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci
-			');
-			$q->exec('INSERT INTO `groups` (`id`,`parent`,`name`) VALUES (1,0,"admin")');
-			$q->exec('INSERT INTO `groups` (`id`,`parent`,`name`) VALUES (2,0,"moderator")');
-			*/
 			$table = new Table('users');
 			$table->id();
 			$table->string('username');
@@ -372,14 +343,16 @@ class Upgrade {
 				echo $q->error.'<br>';
 			}	
 
-			$r = new Record();			
+			$q = new Query('dbverzio');
+			$q->exec('SET SQL_SAFE_UPDATES = 0');	
+			
+			$r = new Record();		
 			$r->verzio = 'v1.0.0';
 			$q = new Query('dbverzio');
 			$q->update($r);
 			if ($q->error != '') {
 				echo $q->error.'<br>';
 			}	
-
 		}	
 	}
 
