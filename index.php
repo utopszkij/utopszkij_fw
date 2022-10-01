@@ -297,17 +297,23 @@ if (method_exists($comp, 'getTitle')) {
 				document.body.className = 'dark';
 				theme = 'dark';
 			}
-			setCookie("theme", theme);
+			setCookie("theme", theme,100);
 		}
 
 		const currentTheme = getCookie("theme");
+		var theme = '';
 		if (currentTheme == "dark") {
 	  		document.body.className = 'dark';
+	  		theme = 'dark';
 		} else if (currentTheme == "light") {
 			document.body.className = 'light';
+	  		theme = 'light';
 		} else {
 			document.body.className = 'light';
+	  		theme = 'light';
 		}
+		setCookie("theme", theme,100);
+		
 </script>
 
 </html>

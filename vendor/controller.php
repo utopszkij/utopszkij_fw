@@ -173,17 +173,36 @@ class Controller {
         return $this->name;
     }
 
+	/**
+	 * új munkafolyamat ellenörző kulcs képzése és tárolása sessionba
+	 */ 
     public function newKey() {
         $key = base64_encode(rand(100000,990000));
         $this->session->set('key',$key);
         return $key;
     }
 
+	/**
+	 * munkafolyamat ellenörző kulcs vizsgálata
+	 */ 
     public function checkKey() {
-        if ($this->request->input('key') != $this->session->input('key')) {
-            echo 'wrong key'; exit();
+        if (($this->session->input('key') == 'used') |
+            ($this->request->input('key') == $this->session->input('oldKey')))  {
+			// user böngésző refresh -t használt	
+            $this->session->set('oldKey', $this->session->input('key','none'));
+            $this->session->set('key','used');
+			echo '<script>
+			location="'.$url.'";
+			</script>
+            </body></html>';
+            exit();
+            return true;
         }
-    }
+        $result = ($this->request->input('key') == $this->session->input('key')); 
+        $this->session->set('oldKey', $this->session->input('key','none'));
+        $this->session->set('key','used');
+        return $result;
+   }
 
     /**
      * bejelentkezett user admin?
@@ -342,52 +361,55 @@ class Controller {
      */
     protected function save($record) {
         $this->session->set($this->name.'_oldRecord',JSON_encode($record));
-        $this->checkKey();
-        if ($record->id == 0) {
-            if (!$this->accessRight('new',$record)) {
-                $this->session->set('errorMsg','ACCESSDENIED');
-                echo '<script>
-                location="'.$this->browserURL.'";
-                </script>
-                ';
-            }
-        } else {
-            if (!$this->accessRight('edit',$record)) {
-                $this->session->set('errorMsg','ACCESSDENIED');
-                echo '<script>
-                location="'.$this->browserURL.'";
-                </script>
-                ';
-            }
-        }   
-        $error = $this->validator($record);
-        if ($error != '') {
-            $this->session->set('errorMsg',$error);
-            if ($record->id == 0) {
-                echo '<script>
-                location="'.$this->addURL.'";
-                </script>
-                ';
-            } else {
-                echo '<script>
-                location="'.$this->editURL.'";
-                </script>
-                ';
-            }    
-        } else {
-            $this->session->delete($this->name.'_oldRecord');
-            $this->model->save($record);
-            if ($this->model->errorMsg == '') {
-                $this->session->delete('errorMsg');
-                $this->session->set('successMsg','SAVED');
-                echo '<script>
-                    location="'.$this->browserURL.'";
-                </script>
-                ';
-            } else {
-                echo $this->model->errorMsg; exit();
-            }
-        }
+        if ($this->checkKey()) {
+			if ($record->id == 0) {
+				if (!$this->accessRight('new',$record)) {
+					$this->session->set('errorMsg','ACCESSDENIED');
+					echo '<script>
+					location="'.$this->browserURL.'";
+					</script>
+					';
+				}
+			} else {
+				if (!$this->accessRight('edit',$record)) {
+					$this->session->set('errorMsg','ACCESSDENIED');
+					echo '<script>
+					location="'.$this->browserURL.'";
+					</script>
+					';
+				}
+			}   
+			$error = $this->validator($record);
+			if ($error != '') {
+				$this->session->set('errorMsg',$error);
+				if ($record->id == 0) {
+					echo '<script>
+					location="'.$this->addURL.'";
+					</script>
+					';
+				} else {
+					echo '<script>
+					location="'.$this->editURL.'";
+					</script>
+					';
+				}    
+			} else {
+				$this->session->delete($this->name.'_oldRecord');
+				$this->model->save($record);
+				if ($this->model->errorMsg == '') {
+					$this->session->delete('errorMsg');
+					$this->session->set('successMsg','SAVED');
+					echo '<script>
+						location="'.$this->browserURL.'";
+					</script>
+					';
+				} else {
+					echo $this->model->errorMsg; exit();
+				}
+			}
+		} else {
+			echo 'Munkafolyamat ellenörző kulcs hibás. Lehet, hogy túl hosszú várakozás miatt lejárt a munkamenet.'; exit();
+		}
     }
 
     /**
