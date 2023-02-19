@@ -9,6 +9,7 @@ label {display:inline-block; width: 30%; text-align:right}
 form .row {margin:20px 0px 20px 0px}
 .light .link, .light a {cursor:pointer; color:#0d6efd; font-style:normal; text-decoration:underline}
 .dark .link, .dark a {cursor:pointer; color:#ADD8E6; font-style:normal; text-decoration:underline}
+.light a.btn {color:white}
 
 #header {height:140px; background-color:silver; cursor:pointer;
 	background-image:url('images/header.png'); background-size: 100% 200px; background-repeat:no-repeat }
@@ -51,6 +52,9 @@ pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:1
 
 #footer {background-color:black; color:white; text-align:center}
 #footer a {text-decoration:none; color:white;}
+#footer a:hover {text-decoration:none; color:#13E1F0;}
+
+#scrolltotop {position:fixed; z-index:99; background-color:blue; color:white; opacity:0.5; bottom:5px; right:5px;}
 #themeTogle {text-align:center}
 
 @media screen and (max-width: 992px) {

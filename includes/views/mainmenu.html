@@ -22,10 +22,13 @@
                 <a class="nav-link" v-bind:href="HREF('home.description',{})">
                 <em class="fas fa-book"></em>&nbsp;{{ lng('DESCRIPTION') }}</a>
               </li>
-
               <li class="nav-item">
                 <a class="nav-link" href="index.php?task=home.swdoc">
                 <em class="fas fa-code"></em>&nbsp;{{ lng('SWDOC') }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index.php?task=demo.items">
+                <em class="fas fa-wine-glass"></em>&nbsp;{{ lng('DEMO') }}</a>
               </li>
               <li class="nav-item">
                   <var class="nav-link" onclick="submenuToggle()" 
@@ -36,7 +39,8 @@
                           <a class="dropdown-item" v-bind:href="HREF('user.users',{})" v-if="MULTIUSER">
                             {{ lng('USERS') }}
                           </a>
-                          <a class="dropdown-item" v-bind:href="HREF('group.groups',{})">{{ lng('GROUPS') }}</a>
+                          <a class="dropdown-item" v-bind:href="HREF('group.items',{})">{{ lng('GROUPS') }}</a>
+                          <a class="dropdown-item" v-bind:href="HREF('tag.items',{})">{{ lng('TAGS') }}</a>
                       </div>
               </li>	
             </ul>

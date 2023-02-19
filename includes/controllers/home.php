@@ -22,6 +22,12 @@ class Home extends Controller {
 		$this->session->set('errorMsg','');
 		$this->session->set('successMsg','');
 
+		$q = new \RATWEB\DB\Query('users');
+		$rec = $q->where('username','=',ADMIN)->first();
+		if (!isset($rec->id)) {
+			echo '<div class="alert alert-warning">Regisztráld az "'.ADMIN.'" felhasználót!</div>';
+		} 
+
 		view('description',[
 			"errorMsg" => $errorMsg,
 			"successMsg" => $successMsg
@@ -87,7 +93,7 @@ class Home extends Controller {
 	 * szoftver dokumentáció megjelenítése
 	 */
 	public function swdoc() {
-		view('swdoc',[]);
+		view('swdoc',["p1" => 0]);
 	}
 
 	public function sponzor() {

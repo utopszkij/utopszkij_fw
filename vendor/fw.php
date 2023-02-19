@@ -1,12 +1,12 @@
 <?php
 
-include_once('includes/models/usermodel.php');
 global $components; // [[taskName, compName],....]
 $components = [];
 
 class Fw {
 	public $task = '';
 	public $comp = false;
+	public $compName = '';
 
 	function __construct() {
 		global $components;
@@ -43,11 +43,13 @@ class Fw {
 		   $_SESSION['loged'] = -1;
 		   $_SESSION['logedName'] = 'guest';
 		   $_SESSION['logedAvatar'] = '';
+		   $_SESSION['logedGroup'] = '';
 		 }
 		} else {
 			$_SESSION['loged'] = 1;
 			$_SESSION['logedName'] = 'user';
 			$_SESSION['logedAvatar'] = '';
+			$_SESSION['logedGroup'] = 'admin';
 		}
 
 		// Facebbok/google loginból érkező hívás feldolgozása
@@ -60,20 +62,35 @@ class Fw {
 				$db = new \RATWEB\DB\Query('users');
 				$db->where('username','=','"'.$userName.'"');
 				$rec = $db->first();
-				if ($db->error != '') {
+				if (!isset($rec->id)) {
 					// nincs, létrehozzuk és az újra jelentkezünk be
-					$r = new \RATWEB\DB\Record();
-					$r->username = $userName;
-					$r->password = $w[2];
-					$userId = $db->insert($r);
+					$rec = new \RATWEB\DB\Record();
+					$rec->username = $userName;
+					$rec->password = $w[2];
+					$rec->realname = $userName;
+					$rec->email = '';
+					$rec->avatar = '';
+					$rec->email_verifyed = 1;
+					$rec->enabled = 1;
+					$rec->deleted = 0;
+					$userId = $db->insert($rec);
+
 				} else {
-					// van erre jelentkezünk be
+					// van; erre jelentkezünk be
 					$userId = $rec->id;
 				}
 				// bejelentkeztetés
+				$_SESSION['logedAvatar'] = $rec->avatar;
 				$_SESSION['loged'] = $userId;
 				$_SESSION['logedName'] = $userName;
-				$_SESSION['logedAvatar'] = '';
+				// logedGroups
+				$q = new \RATWEB\DB\Query('user_group','ug');
+				$w = $q->select(['g.id, g.name'])
+					->join('INNER','groups','g','g.id','=','ug.group_id')
+					->where('ug.user_id','=',$userId)
+					->orderBy('g.name')
+					->all();
+				$_SESSION['logedGroup'] = JSON_encode($w);
 			} else {
 				echo 'kodolási hiba userId='.$userId.' userName='.$userName; exit();	
 			}
@@ -87,12 +104,15 @@ class Fw {
 		} else {
 			$this->task = 'home.show';
 		}
+
 		if (strpos($this->task,'.')) {
 			$w = explode('.',$this->task);
 			$compName = $w[0];
 			$this->task = $w[1];
-			importComponent($compName); 
+			importComponent($compName);
+			$compName = ucFirst($compName); 
 			$this->comp = new $compName();
+			$this->compName = $compName;
 		} else {
 			$compName = '';
 			for ($i=0; $i<count($components); $i++) {
@@ -102,6 +122,7 @@ class Fw {
 			} 
 			if ($compName != '') {
 				$this->comp = new $compName ();
+				$this->compName = $compName;
 			} else {
 				echo 'Fatal error  compName not found!'; exit();
 			}	
@@ -114,7 +135,7 @@ class Fw {
 	 * @param array $params [name => value,...]
 	 * @return string
 	 */ 
-	public static function HREF(string $task, array $params = []) {
+	function HREF(string $task, array $params) {
 		$result = SITEURL;
 		if (REWRITE) {
 			$result .= '/task/'.$task;
@@ -147,30 +168,10 @@ class Fw {
 	/**
 	* a bejelentkezett user admin?
 	* globalis funkcióként is hívható 
-	* korábban a logedGroup a sessionban string volt,
-	* most array of {id,name}
 	* @return bool
 	*/
 	public static function isAdmin() {
-		$result = false;
-		if (isset($_SESSION['loged']))  {
-			$groups = UserModel::getGroups((int) $_SESSION['loged']);
-			if (is_array($groups)) {
-				foreach ($groups as $group) {
-					if (isset($group->name)) {
-						if ($group->name == 'admin') {
-							$result = true;
-						}
-					}
-				}
-			} else {
-				$result = ($groups == 'admin');
-			}
-			if ($_SESSION['logedName'] == ADMIN) {
-				$result = true;
-			}
-		}	
-		return $result;
+		return (($_SESSION['logedGroup'] == 'admin') | ($_SESSION['logedName'] == ADMIN));
 	}
 	
 	/**

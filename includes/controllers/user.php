@@ -17,6 +17,16 @@ class User extends Controller {
         $this->addURL = 'index.php?task=user.regist';
         $this->editURL = 'index.php?task=useredit';
         $this->browserTask = 'user.users';
+        $this->mailer = new Mailer();
+        
+        $this->mailer = new \yidas\socketMailer\Mailer([
+		'host' => MAIL_HOST,
+		'username' => MAIL_USERNAME,
+		'password' => MAIL_PASSWORD,
+		'port' => MAIL_PORT,
+		'encryption' => MAIL_ENCRYPTION		
+		]);
+		$this->mailer->debugMode = 2;
 	}
 
 	protected function validator($record): string {
@@ -60,16 +70,16 @@ class User extends Controller {
 					  "successMsg" => $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER),
 					  "SITEURL" => SITEURL,
 					  "redirect" => $this->request->input('redirect',''),
-					  "key" => $this->newKey()]);
+					  "key" => $this->newFlowKey()]);
 		$this->session->set('errorMsg','');
 		$this->session->set('successMsg','');
-							
 	}
 	
 	public function logout() {
 		$_SESSION['loged'] = -1;
 		$_SESSION['logedName'] = 'guest';
 		$_SESSION['logedAvatar'] = '';
+		$_SESSION['logedGroup'] = '';
 		?>
 		<script>
 				document.location="index.php";		
@@ -84,8 +94,8 @@ class User extends Controller {
 		$record->realname = '';
 		$record->email = '';
 		if ($this->session->input('oldRec') != '') {
-			$old = JSON_encode($this->session->input('oldRec'));
-			if ($old->id == 0) {
+			$old = JSON_decode($this->session->input('oldRec'));
+			if (isset($old->id) & ($old->id == 0)) {
 				$record = $old;
 			}	
 		}		
@@ -95,27 +105,29 @@ class User extends Controller {
 					   "SITEURL" => SITEURL,
 					   "polocyAccept" => 'ACCEPT',
 					   "redirect" => $this->request->input('redirect',''),
-					   "key" => $this->newKey()]
+					   "key" => $this->newFlowKey()]
 					);
 		$this->session->set('errorMsg','');
 		$this->session->set('successMsg','');
 	}
 	
 	public function dologin() {
-		$this->checkKey();
+		// $this->checkFlowKey($this->browserURL);
 		$userName = $_POST['username'];
 		$password = $_POST['password'];
-		$redirect = $_POST['redirect'];
+		$redirect = urlencode($_POST['redirect']);
 		$recs = $this->model->getBy('username',$userName);
+		/*
 		if ($redirect == '') {
 			$redirect = base64_encode('index.php');
 		}
+		*/
 		if (count($recs) == 0) {
 				$error = 'USER_NOT_FOUND';
 				$this->session->set('errorMsg',$error);
 				?>
 				<script>
-					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>',redirect:'<?php echo $redirect; ?>'});		
+					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
 				</script>
 				<?php
 				return;			
@@ -144,16 +156,17 @@ class User extends Controller {
 				$_SESSION['loged'] = $rec->id;
 				$_SESSION['logedName'] = $rec->username;
 				$_SESSION['logedAvatar'] = $rec->avatar;
+				$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
 				?>
 				<script>
-					document.location="<?php echo SITEURL.'/'.base64_decode($redirect); ?>";		
+					document.location="<?php echo SITEURL; ?>";		
 				</script>
 				<?php			
 			} else {
 				$this->session->set('errorMsg',$error);
 				?>
 				<script>
-					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>',redirect:'<?php echo $redirect; ?>'});		
+					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
 				</script>
 				<?php			
 			} 
@@ -161,7 +174,7 @@ class User extends Controller {
 	}
 	
 	public function doregist() {
-		$this->checkKey();
+		$this->checkFlowKey($this->browserURL);
 		$record = new Record();
 		$record->id = 0; 
 		$record->username = $this->request->input('username');
@@ -189,7 +202,7 @@ class User extends Controller {
 			$this->session->delete('oldRec');
 			?>
 			<script>
-				document.location="<?php echo SITEURL.'/'.$redirect; ?>";		
+				document.location="<?php echo SITEURL; ?>";		
 			</script>
 			<?php
 		} else {
@@ -200,8 +213,8 @@ class User extends Controller {
 				document.location=HREF('user.regist',{errorMsg:"<?php echo $error; ?>"});		
 			</script>
 			<?php
-		}	
-	}
+		}
+	}	
 	
 	/**
 	 * aktiváló email küldése. az email-ben van egy link amivel a fiók aktiválható:
@@ -243,15 +256,25 @@ class User extends Controller {
 			    <p>vagy másold a fenti web címet a böngésző cím sorába!</p>
 				<p> </p>
 				</div>';
-				$this->mailer($recs[0]->email, 'fiók aktiválás',$mailBody);
+				
+				$result = $this->mailer
+					->setSubject('Fiók aktiválás')
+					->setBody($mailBody)
+					->setTo([$recs[0]->email])
+					->setFrom([MAIL_FROM_ADDRESS])
+					->setCc([])
+					->setBcc([])
+					->send();			
 			}
-			if ($pemail == '') {
+			if ($result) {
 				$this->session->set('successMsg','EMAIL_SENDED');
 				?>
 				<script>
 					document.location=HREF('user.login',{successMsg:'EMAIL_SENDED'});		
 				</script>
 				<?php
+			} else {
+				echo '<div class="alert alert-danger">Hiba email küldés közben'.JSON_encode($result).'</div>';
 			}
 		} else if ($pemail == '') {
 			$this->session->set('errorMsg',$error);
@@ -334,7 +357,14 @@ class User extends Controller {
 			    <p>vagy másold a fenti web címet a böngésző cím sorába!</p>
 				<p> </p>
 				</div>';
-				$this->mailer($recs[0]->email, 'új jelszó megadása',$mailBody);
+				$result = $this->mailer
+					->setSubject('Elfelejtett jelszó')
+					->setBody($mailBody)
+					->setTo([$recs[0]->email])
+					->setFrom([MAIL_FROM_ADDRESS])
+					->setCc([])
+					->setBcc([])
+					->send();			
 
 			}
 			$this->session->set('successMsg','EMAIL_SENDED');
@@ -362,7 +392,7 @@ class User extends Controller {
 		$error = '';
 		$id = $this->request->input('id',0,INTEGER);
 		$code = $this->request->input('code','');
-		$backtask = $this->request->input('backtask','home.show');
+		$backtask = 'home.show';
 		$errorMsg = $this->request->input('errorMsg', $this->session->input('errorMsg'),NOFILTER);
 		$successMsg = $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER);
 		if ($code != '') {
@@ -399,13 +429,14 @@ class User extends Controller {
 			}
 			view('profile',[
 				"record" => $record,
-				"key" => $this->newKey(),
+				"key" => $this->newFlowKey(),
 				"loged" => $this->session->input('loged'),
 				"logedAdmin" => isAdmin(),
 				"errorMsg" => $errorMsg,
 				"successMsg" => $successMsg,
 				"userGroups" => $this->model->getGroups($record->id),
 				"allGroups" => $this->model->getAllGroups(),
+				"logedGroup" => $this->logedGroup,
 				"backtask" => $backtask
 			]);
 			$this->session->delete('errorMsg');
@@ -427,7 +458,7 @@ class User extends Controller {
 	 * egyes adatokat csak admin és az adott user láthat
 	 */
 	public function saveprofile() {
-		$this->checkKey();
+		$this->checkFlowKey($this->browserURL);
 		$record = new Record();
 		$record->id = $this->request->input('id',0); 
 		$old = $this->model->getById($record->id);
@@ -439,6 +470,7 @@ class User extends Controller {
 		$record->avatar = $old->avatar;
 		$backtask = $this->request->input('backtask','home.show');
 		if (!isAdmin() & ($record->id != $this->session->input('loged'))) {
+			echo 'Access violation';
 			return;
 		}
 		if (isAdmin()) {	
@@ -455,6 +487,10 @@ class User extends Controller {
 			$this->session->set('successMsg','SAVED');
 			$this->session->set('errorMsg','');
 			$this->session->delete('oldRec');
+			if ($this->loged > 0) {
+				$user = $this->model->getById($this->loged);
+				$this->session->set('logedAvatar',$user->avatar);
+			}
 			?>
 			<script>
 				document.location=HREF("<?php echo $backtask; ?>",{successMsg:'SAVED'});		

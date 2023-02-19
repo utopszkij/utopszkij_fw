@@ -31,14 +31,109 @@ class Upgrade {
 		if (isset($_GET['branch'])) {
 			$this->branch = $_GET['branch'];
 			$_SESSION['branch'] = $this->branch;
-			$this->github = 'https://raw.githubusercontent.com/utopszkij/utopszkij_fw/'.$this->branch.'/';
 		} else if (isset($_SESSION['branch'])) {
 			$this->branch = $_SESSION['branch'];
 			$_SESSION['branch'] = $this->branch;
-			$this->github = 'https://raw.githubusercontent.com/utopszkij/utopszkij_fw/'.$this->branch.'/';
 		}
+		$this->github = 'https://raw.githubusercontent.com/utopszkij/__utopszkij_fw/'.$this->branch.'/';  // ====== FIGYELEM ÁTIRNI !!!! ===========
 		$this->githubReadme = $this->github.'readme.md';
 	}
+
+
+	protected function do_v1_0($dbverzio) {
+		if ($this->versionAdjust($dbverzio) < $this->versionAdjust('v1.0')) {
+			$table = new Table('users');
+			$table->id();
+			$table->string('username');
+			$table->string('password');
+			$table->string('realname');
+			$table->string('email');
+			$table->string('avatar')->nullable();
+			$table->bool('email_verifyed');
+			$table->bool('enabled');
+			$table->bool('deleted');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+			$table = new Table('groups');
+			$table->id();
+			$table->bigint('parent');
+			$table->string('name');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+
+			$table = new Table('user_group');
+			$table->id();
+			$table->bigint('user_id');
+			$table->bigint('group_id');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+			
+			$r = new Record();
+			$r->id = 1;
+			$r->parent = 0;
+			$r->name = 'admin';	
+			$q = new Query('groups');
+			$q->insert($r);
+			if ($q->error != '') {
+				echo $q->error.'<br>';
+			}	
+
+			$r->id = 2;
+			$r->parent = 0;
+			$r->name = 'moderator';	
+			$q = new Query('groups');
+			$q->insert($r);
+			$q->insert($r);
+			if ($q->error != '') {
+				echo $q->error.'<br>';
+			}	
+			
+			$this->setDbVersion('v1.0.0');
+		}	
+	}
+
+	protected function do_v1_1_0($dbverzio) {
+		if ($this->versionAdjust($dbverzio) < $this->versionAdjust('v1.1.0')) {
+			$table = new Table('demo');
+			$table->id();
+			$table->string('name');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}
+			
+			$table = new Table('tags');
+			$table->id();
+			$table->string('name');
+			$table->integer('parent');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+						
+			$this->setDbVersion('v1.1.0');
+		}	
+	}
+
+	/**
+	 * szükség szerint adatbázis alterek, új táblák létrehozása
+	 * adatbázisban tárolt dbverzio frissitése
+	 * @param string $dbverzio jelenlegi telepitett adatbázis verzió
+	 */
+	public function dbUpgrade(string $dbverzio) {
+		$this->do_v1_0($dbverzio);
+		$this->do_v1_1_0($dbverzio);
+		// ide jönek a későbbi verziokhoz szükséges db alterek növekvő verzió szerint
+	}
+
+
+// --------------------------------  innen kezdve ne módosíts! -----------------------------------------
 
 	/**
 	 * verzió átalakitása v##.##.## formára (az összehasonlíthatóság kedvéért)
@@ -58,19 +153,21 @@ class Upgrade {
 	 */
 	public function getLastVersion() {
 		$result = 'v0.0';
-		$lines = file($this->githubReadme);
-		// keresi az új verio sort
-		for ($i=0; (($i<count($lines)) & 
-		            (strpos(strtolower($lines[$i]), '# verzió ') <= 0)); $i++) {
-						//echo 'ciklusban '.$lines[$i].'<br>';
-		}
-		// echo 'ciklus után '.$lines[$i].'<br>'; exit();
-		if ($i < count($lines)) {
-			$w = explode(' ', strtolower($lines[$i]));
-			if (count($w) > 2) {
-				$result = trim($w[2]);
-			}	
-		}
+		if (file_exists($this->githubReadme)) {
+			$lines = file($this->githubReadme);
+			// keresi az új verio sort
+			for ($i=0; (($i<count($lines)) & 
+						(strpos(strtolower($lines[$i]), '# verzió ') <= 0)); $i++) {
+							//echo 'ciklusban '.$lines[$i].'<br>';
+			}
+			// echo 'ciklus után '.$lines[$i].'<br>'; exit();
+			if ($i < count($lines)) {
+				$w = explode(' ', strtolower($lines[$i]));
+				if (count($w) > 2) {
+					$result = trim($w[2]);
+				}	
+			}
+		}	
 		return $result;
 	}
 	
@@ -171,8 +268,11 @@ class Upgrade {
 	public function upgrade1() {
 		$version = $_GET['version'];
 		// a files.txt és a github -on lévő files.txt -ből változás infó olvasása
-		$files = $this->getNewFilesList($this->githubReadme, $version);
-		
+		if (file_exists($this->githubReadme)) {
+			$files = $this->getNewFilesList($this->githubReadme, $version);
+		} else {
+			$version = 'v0.0';
+		}
 		?>
 		<div class="upgrade">
 			<h2>Új verzió <?php echo $version; ?></h2>
@@ -220,14 +320,13 @@ class Upgrade {
 	 * változott fájlok frissitése
 	 * GET: version
 	 * 
-	 * TEST egyenlőre nem aktiv
-	 * 
 	 */
 	public function upgrade2() {
 		error_reporting(E_ERROR | E_PARSE);
 		$this->errorCount = 0;
 		try {	
 			$this->upgradeChangedFiles();
+			// biztonsági beállítás
 		} catch (Exception $e) {	
 			$this->errorCount++;
 			$this->msg = JSON_encode($e);
@@ -285,86 +384,20 @@ class Upgrade {
 		*/
 		return $result;
 	} 
-
-	protected function do_v1_0($dbverzio) {
-		
-		echo 'db verzio '.$dbverzio.'<br />'; 
-		
-		if ($this->versionAdjust($dbverzio) < 'v 1. 0') {
-			$table = new Table('users');
-			$table->id();
-			$table->string('username');
-			$table->string('password');
-			$table->string('realname');
-			$table->string('email');
-			$table->string('avatar')->nullable();
-			$table->bool('email_verifyed');
-			$table->bool('enabled');
-			$table->bool('deleted');
-			$table->createInDB();
-			if ($table->error != '') {
-				echo $table->error.'<br>';
-			}	
-			$table = new Table('groups');
-			$table->id();
-			$table->bigint('parent');
-			$table->string('name');
-			$table->createInDB();
-			if ($table->error != '') {
-				echo $table->error.'<br>';
-			}	
-
-			$table = new Table('user_group');
-			$table->id();
-			$table->bigint('user_id');
-			$table->bigint('group_id');
-			$table->createInDB();
-			if ($table->error != '') {
-				echo $table->error.'<br>';
-			}	
-			
-			$r = new Record();
-			$r->id = 1;
-			$r->parent = 0;
-			$r->name = 'admin';	
-			$q = new Query('groups');
-			$q->insert($r);
-			if ($q->error != '') {
-				echo $q->error.'<br>';
-			}	
-
-			$r->id = 2;
-			$r->parent = 0;
-			$r->name = 'moderator';	
-			$q = new Query('groups');
-			$q->insert($r);
-			$q->insert($r);
-			if ($q->error != '') {
-				echo $q->error.'<br>';
-			}	
-
+	
+	protected function setDbVersion($v) {
 			$q = new Query('dbverzio');
 			$q->exec('SET SQL_SAFE_UPDATES = 0');	
 			
 			$r = new Record();		
-			$r->verzio = 'v1.0.0';
+			$r->verzio = $v;
 			$q = new Query('dbverzio');
 			$q->update($r);
 			if ($q->error != '') {
 				echo $q->error.'<br>';
 			}	
-		}	
-	}
+	}	
 
-	/**
-	 * szükség szerint adatbázis alterek, új táblák létrehozása
-	 * adatbázisban tárolt dbverzio frissitése
-	 * @param string $dbverzio jelenlegi telepitett adatbázis verzió
-	 */
-	public function dbUpgrade(string $dbverzio) {
-		$this->do_v1_0($dbverzio);
-		// ide jönek a későbbi verziokhoz szükséges db alterek növekvő verzió szerint
-	}
 
 	/**
 	 * files.txt fájl feldolgozása

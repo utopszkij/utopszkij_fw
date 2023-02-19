@@ -9,7 +9,7 @@
     <h2 class="ribbon-banner"><span><em class="fa fa-users" aria-hidden="true"></em>&nbsp;{{ lng('USERS') }}</span></h2>
     <ul>
         <li v-for="record in items">
-            <a v-bind:href="HREF('user.profile',{id:record.id, backtask:'user.users'})">
+            <a v-bind:href="HREF('user.profile',{id:record.id, backtask:'home.show'})">
                 {{ record.username }} </a>
         </li>
     </ul>

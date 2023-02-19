@@ -77,15 +77,16 @@ Könyvtár szerkezet a futtató web szerveren:
       viewer templates  spec. html fájlok. vue elemeket tartalmaznak
   [vendor]
     keretrendszer fájlok és harmadik féltől származó fájlok (több alkönyvtárat is tartalmaz)
+  [styles]
+    megjelenést befolyásoló fájlok (css-ek stb)  
   index.php  - fő program
   config.php - konfigurációs adatok
-  style.css  - megjelenés
   files.txt  - a telepített fájlok felsorolása, az upgrade folyamat használja
 
 ```  
 index.php paraméter nélküli hívással a "home.show" taskal indul a program.
 
-index.php?task=upgrade1&version=vx.x&branch=xxxx hívással a github megadott branch -et használva  
+index.php?task=upgrade.upgrade1&version=vx.x&branch=xxxx hívással a github megadott branch -et használva  
 is tesztelhető/használható az upgrade folyamat.
 
 ## unit test
@@ -125,6 +126,27 @@ Ezután linux terminálban:
 cd reporoot
 ./tools/documentor.sh
 ```
+
+## ÚJ CRUD modul létrehozása
+
+(CRUD: Create - read - update - delete)
+
+- index.php -ban verzió szám emelés
+- controllers/upgrade.php -ban adatbázist modosítás
+- controllers/{newModeulNaev}.php létrehozása
+- models/{newModeulNaev}model.php létrehozása
+- views/{newModeulNaev}browser.php létrehozása
+- views/{newModeulNaev}form.php létrehozása
+- languages/{lng}.js modosítása
+- főmenüben (vagy máshol) a modult inditó link elhelyezése
+- program inditása böngészöből
+
+Lásd a "demo" modult: controllers/demo.php, models/demomodel.php,
+views/demobrowser.php, views/demoform.php, languages/hu.js
+controllers/upgrade.php -ben a v1.1.0 tartozik ehhez.
+ 
+
+
 ## verzió v1.0.3
 table lock, unlock, tranzakció kezelés a database interface-be
 ### *************************************

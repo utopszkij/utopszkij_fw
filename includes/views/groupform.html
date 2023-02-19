@@ -6,8 +6,9 @@
 <div id="group">
     <form id="groupForm" action="index.php" method="post" 
         enctype="multipart/form-data">
-        <input type="hidden" value="group.store" name="task" />			
+        <input type="hidden" value="group.save" name="task" />			
         <input type="hidden" v-model="record.id" name="id" />
+        <input type="hidden" v-model="flowKey" name="flowKey" />
         <div class="row text-center">
             <h2><em class="fas fa-address-card"></em>{{ lng('GROUP') }}</h2>
             <h3 v-if="logedAdmin & (record.id == 0)">{{ lng('ADD')}}</h3>
@@ -52,7 +53,7 @@
         delClick() {
             popupConfirm(lng('SUREDELETE'), 
             function() {
-                location=HREF('group.remove',{id:app.record.id}); 
+                location=HREF('group.remove',{id:app.record.id, key:app.key}); 
             })
         }    
     }

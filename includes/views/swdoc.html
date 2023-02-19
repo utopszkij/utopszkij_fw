@@ -1,8 +1,6 @@
-<style type="text/css">
-	pre {background-color:silver; line-height:18px; padding:10px;}
-</style>
-<h1>Utopszkij_fw keretrendszer program dokumentáció</h1>
+<div id="swdoc">
 <div id="Tartalomjegyzék1" dir="ltr">
+	<h1>Utopszkij_fw keretrendszer program dokumentáció</h1>
 	<div id="Tartalomjegyzék1_Head" dir="ltr"><p style="margin-top: 0.42cm; margin-bottom: 0.21cm; background: transparent; line-height: 100%; page-break-after: avoid">
 		<font face="Liberation Sans, sans-serif"><font size="4" style="font-size: 16pt"><b>Tartalomjegyzék</b></font></font></p>
 	</div>
@@ -178,7 +176,7 @@ esetben a hibaüzenetet tartalmazza.</p>
  use \RATWEB\DB\Query;  
  use \RATWEB\DB\Record;  
 
- include_once __DIR__.'/../models/valamimodel.php';  
+ //a szükséges  model php fileok inclodolása
  class Valami extends Controller {  
 
         function __construct() {  
@@ -268,7 +266,7 @@ a megadott paramétereket átadva.</p>
 <p>A viewer fájlok formája:</p>
 <pre> &lt;div&gt;  
  .... vue elemeket is tartalmazhat,   
- include&nbsp;viewName sorokat is tartalmazhat  
+ &#105;nclude filename  sorokat is tartalmazhat
  .....  
  &lt;/div&gt;  
  &lt;script&gt;  
@@ -277,7 +275,8 @@ a megadott paramétereket átadva.</p>
             },  
             .....  
         }  
- &lt;/script&gt;  </pre><p>
+ &lt;/script&gt; 
+ </pre><p>
 Lásd a vendor/view.php -t is!</p>
 <p>Ha létezik a <strong>views</strong> könyvtárban <strong>{viewName}_{lng}.html</strong> akkor ezt használja,
 	 ha nem akkor a <strong>{viewName}.html</strong> -t.</p>
@@ -285,7 +284,7 @@ Lásd a vendor/view.php -t is!</p>
 2.3.1 paginátor</h3>
 <p>A template -be a 
 </p>
-<pre> include paginator  </pre><p>
+<pre> &#105;nclude paginator  </pre><p>
 sort kell elhelyezni és a controllerben a viewer-nek át kell adni a <strong>
 total</strong> (összes rekord szám), <strong>pages</strong> ([1,2,3...] a
 teljes megjelenítéshet szükséges lapok felsorolása), <strong>limit</strong>
@@ -356,3 +355,4 @@ git push origin v#.#.#
 <p>A viewerekben a szövegek  <strong>lng("token")</strong> formában szerepeljenek.</p>
 <p>A "token" formája lehet: <strong>token1&lt;br&gt;token2...</strong> is. 
 	Ilyenkor a forditás a &lt;br&gt; -el szeparált szegmensenként külön-külön történik.</p>
+</div>

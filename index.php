@@ -1,6 +1,10 @@
 <?php
+if (isset($_COOKIE['sid'])) {
+	session_id($_COOKIE['sid']);
+}
 session_start();
 global $components;
+
 // server infok hozzáférhetővé tétele a php számára
 define('DOCROOT',__DIR__);
 $w1 = (int) str_replace('M', '', ini_get('post_max_size'));
@@ -12,16 +16,25 @@ include_once('vendor/model.php');
 include_once('vendor/view.php');
 include_once('vendor/controller.php');
 include_once('vendor/fw.php');
+include_once('includes/models/statisticmodel.php');
+
 importComponent('upgrade');
+
+// statisztikai adatgyüjtés
+// $statisticModel = new StatisticModel();
+// $statisticModel->saveStatistic();
+
 $fw = new Fw();
+
 //+ ----------- verzio kezelés start ------------
-$fileVerzio = 'v1.0.3';
+$fileVerzio = 'v2.0.0';
 $upgrade = new \Upgrade();
 $dbverzio  = $upgrade->getDBVersion();
 $lastVerzio = $upgrade->getLastVersion();
 $upgrade->dbUpgrade($dbverzio);
 $branch = $upgrade->branch;
 //- ----------- verzio kezelés end ------------
+
 // képernyő méretek elérése
 if (isset($_COOKIE['screen_width'])) {
 	$_SESSION['screen_width'] = $_COOKIE['screen_width'];
@@ -41,6 +54,13 @@ if (method_exists($comp, 'getTitle')) {
 	$title = $comp->getTitle($task);
 } 
 
+// execute API backends
+if (in_array($fw->compName.'.'.$fw->task,
+    ['apaTask'])) {
+	$comp->$task ();
+    exit();
+}
+
 ?>
 <html lang="en">
 <head>
@@ -48,19 +68,21 @@ if (method_exists($comp, 'getTitle')) {
     <meta charset="UTF-8">
 	<meta property="og:title"  content="<?php echo $title; ?>" />
 	<base href="<?php echo SITEURL; ?>/">
-	<link rel="icon" type="image/x-icon" href="images/utopszkij_fw.ico">
+	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- bootstrap -->	
-	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+	 <!-- bootstrap -->	
+	 <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- vue -->
     <script src="vendor/vue/vue.global.js"></script>
+	<!-- axios -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<!-- fontawesome --> 
 	<script src="vendor/fontawesome/js/all.min.js"></script>
 	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
+	<link rel="stylesheet" href="admin.css?t=<?php echo $fileVerzio; ?>">
 	<link rel="stylesheet" href="style.css?t=<?php echo $fileVerzio; ?>">
 	<!-- multi language -->
 	<?php
@@ -79,131 +101,12 @@ if (method_exists($comp, 'getTitle')) {
 		}
 	?>
 	<script type="text/javascript">
-	    const { createApp } = Vue; 
-		/**
-		 * csoki beállítás
-		 */
-		function setCookie(name,value,days) {
-			var expires = "";
-			if (days) {
-				var date = new Date();
-				date.setTime(date.getTime() + (days*24*60*60*1000));
-				expires = "; expires=" + date.toUTCString();
-			}
-			document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-		}
-
-		/**
-		* csoki lekérdezése
-		*/	
-		function getCookie(cname) {
-		  let name = cname + "=";
-		  let decodedCookie = decodeURIComponent(document.cookie);
-		  let ca = decodedCookie.split(';');
-		  for(let i = 0; i <ca.length; i++) {
-			let c = ca[i];
-			while (c.charAt(0) == ' ') {
-			  c = c.substring(1);
-			}
-			if (c.indexOf(name) == 0) {
-			  return c.substring(name.length, c.length);
-			}
-		  }
-		  return "";
-		}
-		
-		/**
-		 * user jováhagyás kérés popup ablakban
-		 */
-		function popupConfirm(txt, yesfun) {
-			document.getElementById('popupOkBtn').style.display="inline-block";
-			document.getElementById('popupNoBtn').style.display='inline-block';
-			document.getElementById('popup').className='popupSimple';
-			document.getElementById('popupTxt').innerHTML = txt;
-			document.getElementById('popupOkBtn').onclick=yesfun;
-			document.getElementById('popup').style.display='block';
-		}
-		/**
-		 * poup ablak bezárása
-		 */
-		function popupClose() {
-			document.getElementById('popup').style.display='none';
-		}
-		/**
-		 * popup üzenet
-		 */
-		function popupMsg(txt,className) {
-			if (className == undefined) {
-				className = 'popupSimple';
-			}
-			document.getElementById('popupOkBtn').style.display="none";
-			document.getElementById('popupNoBtn').style.display='none';
-			document.getElementById('popup').className=className;
-			document.getElementById('popupTxt').innerHTML = txt;
-			document.getElementById('popup').style.display='block';
-		}
-		/**
-		 * nyelvi fordítás
-		 */
-		function lng(token) {
-			var result = token;
-			var w = token.split('<br>');
-			for (var i = 0; i < w.length; i++) {
-				if (tokens[w[i]] != undefined) {
-					w[i] = tokens[w[i]];
-			    }
-			}
-			result = w.join('<br>');	
-			return result;
-		}
-		/**
-		 * felső menüben almenü megjelenés/elrejtés
-		 */
-		function submenuToggle() {
-			var submenu = document.getElementById('submenu');
-			if (submenu.style.display == 'block') {
-				submenu.style.display = 'none';
-			} else {
-				submenu.style.display = 'block';
-			}
-		}
-
 		var rewrite = <?php echo (int)REWRITE; ?>;
         var siteurl = "<?php echo SITEURL; ?>"; 
-
-		/**
-		 * seo barát url képzéshez segéd rutin
-		 * @param string task
-		 * @param object params {name:value,...}
-		 */
-		function HREF(task, params) {
-			var result = siteurl;
-			if (rewrite) {
-				result += '/task/'+task;
-				for (var fn in params) {
-					result += '/'+fn+'/'+params[fn];
-				}
-			} else {
-				result += '?task='+task;
-				for (var fn in params) {
-					result += '&'+fn+'='+params[fn];
-				}
-			}
-			return result;
-		}
-		// képernyő méretek tárolása csokiba
-		setCookie('screen_width',screen.width,100); 
-		setCookie('screen_height',screen.height,100); 
 	</script>	
-	<?php 
-	if (file_exists('languages/'.$comp->getName().'_'.LNG.'.js')) {
-		echo '<script src="languages/'.$comp->getName().'_'.LNG.'.js"></script>'."\n";
-		echo '<script>tokens = Object.assign(tokens, tokensComp);</script>'."\n";
-	} 
-	?>
+	<script src="index.js"></script>
 </head>	 
 <body>
-
 	<div id="popup">
 		<div style="text-align:right">
 			<button type="button" onclick="popupClose()" 
@@ -218,60 +121,60 @@ if (method_exists($comp, 'getTitle')) {
 		</div>
 	</div>
 
-	<div class="container">
-		<div>
-			<div id="header" onclick="document.location='index.php';">
-				<img src="images/utopszkij_fw_smal.png" style="margin:10px; height:120px; float:left" />
-				<div style="float:right; margin:60px 20px 0px 0px; color:#655191; font-weight:bold">
-					Egyszerű de nagyszerű PHP-MYSQL-VUE-Bootstrap keretrendszer
-				</divr>
+	<?php
+	// extra html -ek betöltése (pl extra js -ek belodolása)
+	if (file_exists(__DIR__.'/includes/extras/'.$task.'.html')) {
+		include __DIR__.'/includes/extras/'.$task.'.html';
+	}
+	?>
+
+	<div class="container" id="container">
+		<div class="row">
+			<div class="col-12">
+				<div id="header" onclick="document.location='index.php';"></div>
+			</div> 
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<?php 
+					if (($_SESSION['loged'] > 0) & ($_SESSION['logedAvatar'] == '')) {
+						$_SESSION['logedAvatar'] = 'noavatar.png';
+					}
+					view('mainmenu',[
+						'MULTIUSER' => MULTIUSER,
+						'loged' => $_SESSION['loged'],
+						'logedAvatar' => $_SESSION['logedAvatar'],
+						'logedName' => $_SESSION['logedName'],
+						'isAdmin' => isAdmin(),
+						'lastVerzio' => Upgrade::versionAdjust($lastVerzio),
+						'fileVerzio' => Upgrade::versionAdjust($fileVerzio)
+						],'mainmenu'); 
+				?>
 			</div>
 		</div>
 		
-		<?php 
-			view('mainmenu',[
-				'MULTIUSER' => MULTIUSER,
-				'loged' => $_SESSION['loged'],
-				'logedAvatar' => $_SESSION['logedAvatar'],
-				'logedName' => $_SESSION['logedName'],
-				'isAdmin' => isAdmin(),
-				'lastVerzio' => Upgrade::versionAdjust($lastVerzio),
-				'fileVerzio' => $fileVerzio
-				],'mainmenu'); 
-		?>
-
 		<div class="page">
 			<?php
 				$comp->$task ();			
 			?>
 		</div>
+
 		<?php 
-			view('footer',[],'footer');
+			view('footer',[
+				'fileVerzio' => Upgrade::versionAdjust($fileVerzio)
+			],'footer'); 
 		?>
-		<div id="themeTogle">
-			<button class="btn btn-toggle btn-secondary" 
-				type="button" onclick="themeTogle()">
-				<em class="fas fa-adjust"></em>&nbsp;
-				Világos/sötét mód váltás
-			</button>
-		</div>
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
 	</div>
-	<p><?php echo $_SESSION['screen_width'].' x '.$_SESSION['screen_height']; ?></p>	
+	<button onclick="window.scrollTo(0,0);" id="scrolltotop" title="Fel a tetejére">
+		<em class="fa fa-arrow-up"></em>
+	</button>
 	<script>
-		console.log(document.cookie);
-		console.log(document.location);
 		if (document.cookie.search('cookieEnabled=2') >= 0) {
-			document.write('<p>Csoki kezelés engedélyezve van. Letiltásához kattints ide:'+
+			document.write('<p id="cookieEnabled">Csoki kezelés engedélyezve van. Letiltásához kattints ide:'+
 			'<a href="index.php" onclick="setCookie(\'cookieEnabled\',0,100);">Letilt</a></p>');
-		} else if (document.location.href.search('home.policy') < 0) {
+		} else if (document.location.href.search('adatkezeles') < 0) {
 			popupConfirm('Ennek a web oldalnak a használatához un. "munkamenet csokik" használtata szükséges.'+
-			'<br />Lásd: <a href="index.php?task=home.policy">Adatkezelési leírás</a>'+
+			'<br />Lásd: <a href="index.php?task=adatkezeles">Adatkezelési leírás</a>'+
 			'<br />Kérjük engedélyezd a csokik kezelését!',
 			function() {
 				setCookie('cookieEnabled',2,100);
@@ -280,10 +183,9 @@ if (method_exists($comp, 'getTitle')) {
 		}
 	</script>	
 </body>
-
 <script type="text/javascript">
-		// világos/sötét téma
-		
+
+		// világos/sötét téma váltás
 		function themeTogle() {
 			const currentTheme = getCookie("theme");
 			var theme = getCookie("theme");
@@ -300,20 +202,40 @@ if (method_exists($comp, 'getTitle')) {
 			setCookie("theme", theme,100);
 		}
 
-		const currentTheme = getCookie("theme");
-		var theme = '';
-		if (currentTheme == "dark") {
-	  		document.body.className = 'dark';
-	  		theme = 'dark';
-		} else if (currentTheme == "light") {
-			document.body.className = 'light';
-	  		theme = 'light';
-		} else {
-			document.body.className = 'light';
-	  		theme = 'light';
+		// mozgatható elemek
+		dragElement(document.getElementById("popup"));
+
+		// sessionId csokiba
+		window.sessionId = "<?php echo session_id(); ?>";
+		setCookie("sid","<?php echo session_id(); ?>", 500);
+
+		// képek realtime betöltése, scrolltotop button megjelenítés/elrejtés
+		window.onscroll = function() {
+			window.scrollFunction(); window.scrollFunction()
+			if (window.scrollY < 20) {
+				document.getElementById('scrolltotop').style.display = 'none';
+			} else {
+				document.getElementById('scrolltotop').style.display = 'block';
+			}
+		};
+		window.setTimeout('window.scrollFunction()',1000);
+
+		window.rewrite = <?php echo (int)REWRITE; ?>;
+        window.siteurl = "<?php echo SITEURL; ?>"; 
+		
+		// iframe elemek átméretezése a parent div mérethez
+		var frames = document.getElementsByTagName("iframe");
+		var sz = 0, max = 0;
+		for (var i = 0; i < frames.length; i++) {
+			max = frames[i].parentNode.getBoundingClientRect().width * 0.9;
+			if (frames[i].width > max) {
+				sz = max / frames[i].width;
+				frames[i].width = Math.round(max);
+				frames[i].height = Math.round(frames[i].height * sz);
+			}
 		}
-		setCookie("theme", theme,100);
+		
+		
 		
 </script>
-
 </html>
