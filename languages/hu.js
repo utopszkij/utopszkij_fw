@@ -101,7 +101,7 @@ tokens = {
 
 	/* demo CURD modul */
 	"DEMO":"Példa",
-	"DEMOS":"Péda adatok",
+	"DEMOS":"Példa adatok",
 	"NAME_REQUERED":"Nevet meg kell adni!",
 	"NOT_ITEMS":"Nincs adat",
 	
@@ -111,5 +111,5 @@ tokens = {
 	"PARENT":"Tulajdonos",
 	"PARENT_ERROR":"Hibás tulajdonos adat!",
 	
-	"END":"Vége"
+    "END":"Vége"
 };

@@ -122,8 +122,11 @@
                     }
                     $target_dir .= '/';
                     $target_file = $target_dir.$id.'-'.basename($_FILES['avatar']["name"]);
-                    $targe_file = $this->clearFileName($target_file);
+                    $target_file = $this->clearFileName($target_file);
                     $uploadFileExt = pathinfo($target_file,PATHINFO_EXTENSION);
+                    // az ékezetes fájl nevekkel baj van :(
+                    $target_file = $target_dir.$record->id.'.'.$uploadFileExt;
+                    
                     if (!in_array($uploadFileExt, Array('jpg','jpeg','png','gif'))) {
                         echo JSON_encode(array('error'=>'upload not enabled'));
                         exit();	
@@ -142,7 +145,7 @@
                         if (!move_uploaded_file($_FILES['avatar']["tmp_name"], $target_file)) {
                             $error = "Hiba a kép fájl feltöltés közben "; 
                         }
-                        $record->avatar = $this->clearFileName($record->id.'-'.basename($_FILES['avatar']["name"]));
+                        $record->avatar = $record->id.'.'.$uploadFileExt;
                         $record->password = '';    
                         $this->save($record);
                     } else {

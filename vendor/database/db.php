@@ -295,6 +295,8 @@ class Query {
 			$result = $s;
 		} else if (is_bool($s)) {
 			$result = $s;
+		} else if ($s == 'NULL') {
+			$result = $s;	
 		} else if (substr((string)$s,0,1) == '"') {
 			$s = trim(str_replace('--','__',$s));
 			$s = substr($s,1,strlen($s)-2); // eltávolítja a kezdő és záró " -t
@@ -856,7 +858,7 @@ class Table {
 		$this->fields[] = $result;
 		return $this->fields[count($this->fields) - 1];
 	}
-	public function dateTtime(string $name) {
+	public function dateTime(string $name) {
 		$result = new Field();
 		$result->type = 'datetime';
 		$result->name = $name;

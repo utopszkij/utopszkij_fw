@@ -61,6 +61,52 @@
             $recs = $db->all();
             return count($recs);
         }
+        
+		protected function usortFun($a, $b) {
+			$result = 0;
+			$order = $this->order;
+			if ($a->$order < $b->$order) {
+				$result = -1;
+			}
+			if ($a->$order > $b->$order) {
+				$result = 1;
+			}
+			return $result;
+		}
+				
+		/**
+		 * rekurziv eljárás adott tulajdonos alrekordjait olvassa
+		 * a $result tömbbe, kiegészítve a $level adattal
+		 * ez a result felhasználható fa szerkezetű megjelenitéshez
+		 * @param int $parentId
+		 * @param int $level
+		 * @param array &$result [{id, parent, level, name}, ...]
+		 * @return void
+		 */ 
+		public function getSubItems(int $parentId, int $level, array &$result) {
+			$q = new \RATWEB\DB\Query($this->table);
+			$recs = $q->where('parent','=',$parentId)->orderBy('name')->all();
+			foreach($recs as $rec) {
+				$rec->level = $level;
+				$result[] = $rec;
+				$this->getSubItems($rec->id, $level+1, $result);
+			} 
+		}
+		
+		/**
+		 * where tag in lista használathou tag lista előállítása
+		 * @param int $parentId
+		 * @return string 'tagName,tagNae,....'
+		 */ 
+		public function getSubList(int $parentId): string {
+			$recs = [];
+			$this->getSubItems($parentId,0,$recs);
+			$w = [];
+			foreach ($recs as $rec) {
+				$w[] = $rec->name;
+			}
+			return implode(',',$w);
+		}
 
   }    
 ?>

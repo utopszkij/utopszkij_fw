@@ -8,12 +8,29 @@
     
     <h2 class="ribbon-banner"><span>{{ lng('DEMOS') }}</span></h2>
     <div class="row">
-		<table class="col-12" style="width:auto" v-if="items.length > 0">
+		<div class="col-12">
+			<h4>{{ lng('SEARCH') }}</h4>
+			<form class="filterForm" id="filterForm" method="post" action="index.php">
+				<input type="hidden" name="task" value="demo.items" />
+				<input type="hidden" name="page" value="1" />
+				<label>{{ lng('NAME') }}</label>
+				<input type="text" name="filter_name" id="filter_name"/>
+				<button type="submit" class="btn btn-primary" v-bind:title="lng('SEARCH')">
+					<em class="fas fa-search"></em>
+				</button>
+				<button type="button" class="btn btn-secondary" v-on:click="delSearchClick()">
+					<em class="fas fa-times"></em>
+				</button>
+			</form>
+		</div>
+	</div>
+    <div class="row">
+		<table class="col-12 table table-bordered table-striped" style="width:auto" v-if="items.length > 0">
 			<tr><th style="width:30px">ID</th>
 				<th style="width:60px">{{ lng('NAME') }}</th>
 				<th></th>
 			</tr>
-			<tr v-for="item in items" style="border-style:solid; border-width:1px;">
+			<tr v-for="item in items">
 				<td>{{ item.id }}</td>
 				<td> <a v-bind:href="HREF('demo.edit',{id:item.id, backtask:'demo.items'})">
 						{{ item.name }}
@@ -21,10 +38,10 @@
 				</td>    
 				<td>
 					<a class="btn btn-primary" v-if="logedAdmin" v-bind:href="HREF('demo.edit',{id:item.id, backtask:'demo.items'})">
-						<em class="fas fa-edit"></em><span>{{ lng('EDIT') }}</span>
+						<em class="fas fa-edit" v-bind:title="lng('EDIT')"></em><span>{{ lng('EDIT') }}</span>
 					</a>
 					<button type="button" class="btn btn-danger" v-if="logedAdmin" v-on:click="delClick(item.id)">
-						<em class="fas fa-eraser"></em><span>{{ lng('DELETE') }}</span>
+						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em><span>{{ lng('DELETE') }}</span>
 					</button>
 				</td> 
 			</tr>
@@ -44,6 +61,19 @@
 
 <script>
     methods = {
+		afterMount() {
+			if (this.filter != undefined) {
+				// filter strintg (name|value....)  to filterForm
+				var filter = this.filter.split('|');
+				var i = 0;
+				var fn = '';
+				while (i < filter.length) {
+					fn = filter[i];
+					document.getElementById('filter_'+fn).value = filter[i+1];
+					i = i + 2;
+				}
+			}
+		},
         makePaginatorClass(p,page) {
             var result = '';
             if (p == page) {
@@ -58,7 +88,11 @@
             function() {
                 location=HREF('demo.delete',{'id':id, key:app.flowKey}); 
             })
-        }    
+        },
+        delSearchClick() {
+			document.getElementById('filter_name').value = '';
+			document.getElementById('filterForm').submit();
+		}    
         
     }
 </script>

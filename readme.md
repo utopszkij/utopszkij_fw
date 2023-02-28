@@ -145,6 +145,11 @@ Lásd a "demo" modult: controllers/demo.php, models/demomodel.php,
 views/demobrowser.php, views/demoform.php, languages/hu.js
 controllers/upgrade.php -ben a v1.1.0 tartozik ehhez.
  
+vagy parancssorból varázslóval:
+
+cd {documentroot}
+
+php ./tools/createCURD {compName}
 
 
 ## verzió v1.0.3

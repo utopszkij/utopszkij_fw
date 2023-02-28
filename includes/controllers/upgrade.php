@@ -89,7 +89,6 @@ class Upgrade {
 			$r->name = 'moderator';	
 			$q = new Query('groups');
 			$q->insert($r);
-			$q->insert($r);
 			if ($q->error != '') {
 				echo $q->error.'<br>';
 			}	

@@ -11,7 +11,7 @@
     <form name="registration" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="task" value="user.doregist" />
     <input type="hidden" name="redirect" v-model="redirect" />
-    <input type="hidden" name="key" v-model="key" />
+    <input type="hidden" name="flowKey" v-model="flowKey" />
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fa fa-user"></em>{{ lng('USERNAME') }}&nbsp;
@@ -88,11 +88,14 @@
 <script>
 	methods = {
 		atob(s) {
+			/*
 			if ((s != '') & (s != undefined))  {
 			  return window.atob(s);
 			} else {
 			  return '';
 			}
+			*/
+			return s;
 		},
 		afterMount() {
 			document.getElementById('username').focus();

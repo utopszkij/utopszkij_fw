@@ -82,11 +82,14 @@
 			document.getElementById('username').focus();
 		},
 		atob(s) {
+			/*
 			if ((s != '') & (s != undefined))  {
 			  return window.atob(s);
 			} else {
 			  return '';
 			}
+			*/
+			return s;
 		},
 		resendClick() {
 			document.location=HREF('user.sendactivator',{username:this.username});

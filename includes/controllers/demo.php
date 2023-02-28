@@ -68,6 +68,28 @@ class Demo extends Controller {
 		}
         return $result;
     }
+    
+    /**
+     * rekord készlet lekérdezés
+     * GET|POST page, order, limit, filter, 
+     * POST filter_name....
+     */ 
+    public function items($order = 1) {
+		// képernyöről POST -ban érkező filter_name paraméterek
+		// átalakitása 'name|value...' string formára
+		$pFilter = [];
+		foreach ($_POST as $fn => $fv) {
+			if (substr($fn,0,7) == 'filter_') {
+				$fv = $this->request->input($fn); // sql injection szürés
+				$pFilter[] = substr($fn,7,100); 
+				$pFilter[] = $fv; 
+			}
+		}
+		if ($this->request->input('filter') == '') {
+			$this->request->set('filter', implode('|',$pFilter));
+		}
+		parent::items();
+	}
 	
 }
 

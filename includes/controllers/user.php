@@ -2,8 +2,12 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
-require __DIR__ . '/../../vendor/autoload.php';
-use \yidas\socketMailer\Mailer;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/phpmailer/src/Exception.php';
+require 'vendor/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/src/SMTP.php';
 
 include_once __DIR__.'/../models/usermodel.php';
 
@@ -17,16 +21,15 @@ class User extends Controller {
         $this->addURL = 'index.php?task=user.regist';
         $this->editURL = 'index.php?task=useredit';
         $this->browserTask = 'user.users';
-        $this->mailer = new Mailer();
-        
-        $this->mailer = new \yidas\socketMailer\Mailer([
-		'host' => MAIL_HOST,
-		'username' => MAIL_USERNAME,
-		'password' => MAIL_PASSWORD,
-		'port' => MAIL_PORT,
-		'encryption' => MAIL_ENCRYPTION		
-		]);
-		$this->mailer->debugMode = 2;
+        $this->mailer =  new PHPMailer(true);
+		$this->mailer->isSMTP();                                //Send using SMTP
+		$this->mailer->Host       = MAIL_HOST;                  //Set the SMTP server to send through
+		$this->mailer->SMTPAuth   = true;                       //Enable SMTP authentication
+		$this->mailer->Username   = MAIL_USERNAME;                  //SMTP username
+		$this->mailer->Password   = MAIL_PASSWORD;              //SMTP password
+		$this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;//Enable implicit TLS encryption
+		$this->mailer->Port       = MAIL_PORT;                  //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $this->mailer->CharSet    = 'utf-8';
 	}
 
 	protected function validator($record): string {
@@ -70,7 +73,7 @@ class User extends Controller {
 					  "successMsg" => $this->request->input('successMsg', $this->session->input('successMsg'),NOFILTER),
 					  "SITEURL" => SITEURL,
 					  "redirect" => $this->request->input('redirect',''),
-					  "key" => $this->newFlowKey()]);
+					  "flowkey" => $this->newFlowKey()]);
 		$this->session->set('errorMsg','');
 		$this->session->set('successMsg','');
 	}
@@ -93,6 +96,7 @@ class User extends Controller {
 		$record->username = '';
 		$record->realname = '';
 		$record->email = '';
+		$record->avatar = '';
 		if ($this->session->input('oldRec') != '') {
 			$old = JSON_decode($this->session->input('oldRec'));
 			if (isset($old->id) & ($old->id == 0)) {
@@ -105,7 +109,7 @@ class User extends Controller {
 					   "SITEURL" => SITEURL,
 					   "polocyAccept" => 'ACCEPT',
 					   "redirect" => $this->request->input('redirect',''),
-					   "key" => $this->newFlowKey()]
+					   "flowKey" => $this->newFlowKey()]
 					);
 		$this->session->set('errorMsg','');
 		$this->session->set('successMsg','');
@@ -125,19 +129,11 @@ class User extends Controller {
 		if (count($recs) == 0) {
 				$error = 'USER_NOT_FOUND';
 				$this->session->set('errorMsg',$error);
-				?>
-				<script>
-					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
-				</script>
-				<?php
+				$this->login();
 				return;			
 		} else {
 			$error = '';
 			$rec = $recs[0];
-
-
-			//echo 'dologin '.JSON_encode($rec); exit();
-
 			if ($rec->password != hash('sha256',$password.$rec->id)) {
 				$error = 'WRONG_PASSWORD<br>';
 			}
@@ -164,11 +160,7 @@ class User extends Controller {
 				<?php			
 			} else {
 				$this->session->set('errorMsg',$error);
-				?>
-				<script>
-					document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
-				</script>
-				<?php			
+				$this->login();
 			} 
 		}	
 	}
@@ -196,23 +188,18 @@ class User extends Controller {
 			$record->email_verifyed = 0;
 			$id = $this->model->save($record);
 			$this->sendactivator($record->email);
-
-			$this->session->set('successMsg','SAVED<br>EMAIL_SENDED');
+			if (LOGIN_MUST_VERIFYED_EMAIL) {
+				$this->session->set('successMsg','SAVED<br>EMAIL_SENDED');
+			} else {
+				$this->session->set('successMsg','SAVED');
+			}			
 			$this->session->set('errorMsg','');
 			$this->session->delete('oldRec');
-			?>
-			<script>
-				document.location="<?php echo SITEURL; ?>";		
-			</script>
-			<?php
+			$this->login();
 		} else {
 			$this->session->set('successMsg','');
 			$this->session->set('errorMsg',$error);
-			?>
-			<script>
-				document.location=HREF('user.regist',{errorMsg:"<?php echo $error; ?>"});		
-			</script>
-			<?php
+			$this->regist();
 		}
 	}	
 	
@@ -242,7 +229,7 @@ class User extends Controller {
 		}
 		if ($error == '') {
 			// unit test ne küldjön levelet
-			if ($email != 'test@test.test') {
+			if (($email != 'test@test.test') & (LOGIN_MUST_VERIFYED_EMAIL)) {
 				// aktiváló email küldése $recs[0] alapján
 				$code = base64_encode($recs[0]->password.'-'.$recs[0]->id);
 				$mailBody = '<div>
@@ -257,32 +244,23 @@ class User extends Controller {
 				<p> </p>
 				</div>';
 				
-				$result = $this->mailer
-					->setSubject('Fiók aktiválás')
-					->setBody($mailBody)
-					->setTo([$recs[0]->email])
-					->setFrom([MAIL_FROM_ADDRESS])
-					->setCc([])
-					->setBcc([])
-					->send();			
-			}
-			if ($result) {
-				$this->session->set('successMsg','EMAIL_SENDED');
-				?>
-				<script>
-					document.location=HREF('user.login',{successMsg:'EMAIL_SENDED'});		
-				</script>
-				<?php
-			} else {
-				echo '<div class="alert alert-danger">Hiba email küldés közben'.JSON_encode($result).'</div>';
-			}
+				$this->mailer->setFrom(MAIL_FROM_ADDRESS);
+				$this->mailer->addAddress($recs[0]->email);     //Add a recipient
+				$this->mailer->isHTML(true);                                  //Set email format to HTML
+				$this->mailer->Subject = 'Fiok aktivalas';
+				$this->mailer->Body    = $mailBody;
+				$result = $this->mailer->send();
+				
+				if ($result) {
+					$this->session->set('successMsg','EMAIL_SENDED');
+					$this->login();
+				} else {
+					echo '<div class="alert alert-danger">Hiba email küldés közben'.JSON_encode($result).'</div>';
+				}
+			}	
 		} else if ($pemail == '') {
 			$this->session->set('errorMsg',$error);
-			?>
-			<script>
-				document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
-			</script>
-			<?php
+			$this->login();
 		}	
 	}
 
@@ -310,19 +288,11 @@ class User extends Controller {
 		if ($error == '') {
 			$this->session->set('errorMsg','');
 			$this->session->set('successMsg','SAVED');
-			?>
-			<script>
-				document.location=HREF('user.login',{successMsg:'SAVED'});		
-			</script>
-			<?php
+			$this->login();
 		} else {
 			$this->session->set('errorMsg',$error);
 			$this->session->set('successMsg','');
-			?>
-			<script>
-				document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
-			</script>
-			<?php
+			$this->login();
 		}
 	}
 
@@ -357,29 +327,20 @@ class User extends Controller {
 			    <p>vagy másold a fenti web címet a böngésző cím sorába!</p>
 				<p> </p>
 				</div>';
-				$result = $this->mailer
-					->setSubject('Elfelejtett jelszó')
-					->setBody($mailBody)
-					->setTo([$recs[0]->email])
-					->setFrom([MAIL_FROM_ADDRESS])
-					->setCc([])
-					->setBcc([])
-					->send();			
+				
+				$this->mailer->setFrom(MAIL_FROM_ADDRESS);
+				$this->mailer->addAddress($recs[0]->email);     //Add a recipient
+				$this->mailer->isHTML(true);                                  //Set email format to HTML
+				$this->mailer->Subject = 'Elfelejett jelszo';
+				$this->mailer->Body    = $mailBody;
+				$result = $this->mailer->send();
 
 			}
 			$this->session->set('successMsg','EMAIL_SENDED');
-			?>
-			<script>
-				document.location=HREF('user.login',{successMsg:'EMAIL_SENDED'});		
-			</script>
-			<?php
+			$this->login();
 		} else {
 			$this->session->set('errorMsg',$error);
-			?>
-			<script>
-				document.location=HREF('user.login',{errorMsg:'<?php echo $error; ?>'});		
-			</script>
-			<?php
+			$this->login();
 		}
 	}
 
@@ -429,7 +390,7 @@ class User extends Controller {
 			}
 			view('profile',[
 				"record" => $record,
-				"key" => $this->newFlowKey(),
+				"flowKey" => $this->newFlowKey(),
 				"loged" => $this->session->input('loged'),
 				"logedAdmin" => isAdmin(),
 				"errorMsg" => $errorMsg,
@@ -491,19 +452,11 @@ class User extends Controller {
 				$user = $this->model->getById($this->loged);
 				$this->session->set('logedAvatar',$user->avatar);
 			}
-			?>
-			<script>
-				document.location=HREF("<?php echo $backtask; ?>",{successMsg:'SAVED'});		
-			</script>
-			<?php
+			$this->profile();
 		} else {
 			$this->session->set('successMsg','');
 			$this->session->set('errorMsg',$error);
-			?>
-			<script>
-				document.location=HREF('user.profile',{id: <?php echo $record->id; ?> ,errorMsg:"<?php echo $error; ?>"});		
-			</script>
-			<?php
+			$this->profile();
 		}	
 	}
 
