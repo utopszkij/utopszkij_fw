@@ -3,11 +3,11 @@
     use \RATWEB\DB\Query;
     use \RATWEB\DB\Record;
 
-    class DemoModel extends Model  {
+    class ProbaModel extends Model  {
 
         function __construct() {
             parent::__construct();
-            $this->setTable('demo');
+            $this->setTable('proba');
             $this->errorMsg = ''; 
         }
 
@@ -16,7 +16,8 @@
          */
         public function emptyRecord(): Record {
             $result = new Record();
-                    $result->id = "";
+                    $result->id = 0;
+        $result->parent = 0;
         $result->name = "";
 
             return $result;

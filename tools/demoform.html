@@ -8,21 +8,7 @@
         enctype="multipart/form-data"  style="display:none">
         <input type="hidden" v-model="flowKey" name="flowKey" />
         <input type="hidden" value="demo.save" name="task" />			
-		
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("ID") }}</label>:
-							<input type="number" name="id" v-model="record.id" disabled="disabled" />
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("NAME") }}</label>:
-							<input type="text" name="name" v-model="record.name"  required="required" />
-						</div>
-					</div>
-					
+		//formFields
         <div class="row formBUttons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="submit" class="btn btn-success">
@@ -49,21 +35,7 @@
     </form>    
 
     <div id="demoShow" class="form">
-		
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("ID") }}</label>:
-							<var v-html="record.id"></var>
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("NAME") }}</label>:
-							<var v-html="record.name"></var>
-						</div>
-					</div>
-					
+		//showFields
         <div class="row formBUttons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="button" 

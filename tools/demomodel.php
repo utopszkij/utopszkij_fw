@@ -16,9 +16,7 @@
          */
         public function emptyRecord(): Record {
             $result = new Record();
-                    $result->id = "";
-        $result->name = "";
-
+            //emptyRecord
             return $result;
         }
 

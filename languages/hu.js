@@ -111,5 +111,58 @@ tokens = {
 	"PARENT":"Tulajdonos",
 	"PARENT_ERROR":"Hibás tulajdonos adat!",
 	
+    /* proba */
+    "PROBA":"proba",
+    "PROBAS":"probas",
+      "ID":"id",
+      "PARENT":"parent",
+      "NAME":"name",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+
+    /* demo */
+    "DEMO":"demo",
+    "DEMOS":"demos",
+      "ID":"id",
+      "NAME":"name",
+
     "END":"Vége"
 };
