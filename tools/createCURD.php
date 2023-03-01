@@ -10,6 +10,7 @@ class TableProcessor {
 	public $tableName = '';
 	public $name = '';
 	public $tableExists = false;
+	public $fields = [];
 	
 	function __construct(string $name, string $tableName) {
 		$this->name = $name;
@@ -19,14 +20,16 @@ class TableProcessor {
 		$recs = $q->all();
 		if (count($recs) > 0) {
 			$this->tableExists = true;
+			$q = new \RATWEB\DB\Query('dbverzio');
+			$q->setSql('show columns from `'.$this->tableName.'`');
+			$this->fields = $q->all();
+			
 		} 
 	}
 	
 	public function emptyRecord(): string {
 		if ($this->tableExists) {
-			$q = new \RATWEB\DB\Query('dbverzio');
-			$q->setSql('show columns from `'.$this->tableName.'`');
-			$fields = $q->all();
+			$fields = $this->fields;
 			$result = '';
 			foreach ($fields as $field) {
 				if ($field->Type == 'int') {
@@ -61,9 +64,7 @@ class TableProcessor {
 	public function formFields() : string {
 		$result = '';
 		if ($this->tableExists) {
-			$q = new \RATWEB\DB\Query('dbverzio');
-			$q->setSql('show columns from `'.$this->tableName.'`');
-			$fields = $q->all();
+			$fields = $this->fields;
 			foreach ($fields as $field) {
 				if ($field->Field == 'id') {
 					$result .= '
@@ -180,9 +181,7 @@ class TableProcessor {
 	public function showFields() : string {
 		$result = '';
 		if ($this->tableExists) {
-			$q = new \RATWEB\DB\Query('dbverzio');
-			$q->setSql('show columns from `'.$this->tableName.'`');
-			$fields = $q->all();
+			$fields = $this->fields;
 			foreach ($fields as $field) {
 					$result .= '
 					<div class="row">
@@ -219,7 +218,7 @@ class TableProcessor {
 			$q->setSql('show columns from `'.$this->tableName.'`');
 			$fields = $q->all();
 			foreach ($fields as $field) {
-				$result .= '      "'.strtoupper($field->Field).'":"'.$field->Field.'",'."\n";
+				$result .= '  "'.strtoupper($field->Field).'":"'.$field->Field.'",'."\n";
 			}
 		}	
 		return $result;
@@ -268,9 +267,10 @@ echo 'model created'."\n";
 // viewerek
 $lines = file(__DIR__.'/demobrowser.html');
 $str = implode("",$lines);
+$str = str_replace('DEMO',strtoupper($name),$str);
+$str = str_replace('DEMOS',strtoupper($name).'S',$str);
 $str = str_replace('demo',$name,$str);
 $str = str_replace('Demo',ucfirst($name),$str);
-$str = str_replace('DEMO',strtoupper($name),$str);
 $fp = fopen('includes/views/'.$name.'browser.html','w+');
 fwrite($fp,$str);
 fclose($fp);
@@ -278,13 +278,16 @@ echo 'browser viewer created'."\n";
 
 $lines = file(__DIR__.'/demoform.html');
 $str = implode("",$lines);
+$str = str_replace('DEMO',strtoupper($name),$str);
+$str = str_replace('DEMOS',strtoupper($name).'S',$str);
 $str = str_replace('demo',$name,$str);
 $str = str_replace('Demo',ucfirst($name),$str);
-$str = str_replace('DEMO',strtoupper($name),$str);
 
 $str = str_replace('//formFields',$tp->formFields(),$str);
 $str = str_replace('//showFields',$tp->showFields(),$str);
-
+if (count($tp->fields) > 1) {
+	$str = str_replace('//focus','document.querySelector("input[name=\"'.$tp->fields[1]->Field.'\"]").focus();',$str);
+}
 $fp = fopen('includes/views/'.$name.'form.html','w+');
 fwrite($fp,$str);
 fclose($fp);
@@ -295,8 +298,8 @@ $lines = file('languages/hu.js');
 $str = implode("",$lines);
 $str = str_replace('"END":"Vége"',
 '/* '.$name.' */'."\n".
-'    "'.strtoupper($name).'":"'.$name.'",'."\n".
-'    "'.strtoupper($name.'s').'":"'.$name.'s",'."\n".
+'  "'.strtoupper($name).'":"'.$name.'",'."\n".
+'  "'.strtoupper($name.'s').'":"'.$name.'s",'."\n".
 $tp->lngTokens().
 ''."\n".
 '    "END":"Vége"',$str);

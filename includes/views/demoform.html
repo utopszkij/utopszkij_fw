@@ -4,6 +4,7 @@
 </div>
 
 <div id="demo">
+	<h2>{{ lng('DEMO') }}</h2>
     <form id="demoForm" action="index.php" method="post" class="form" 
         enctype="multipart/form-data"  style="display:none">
         <input type="hidden" v-model="flowKey" name="flowKey" />
@@ -23,7 +24,7 @@
 						</div>
 					</div>
 					
-        <div class="row formBUttons" v-if="logedAdmin">
+        <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="submit" class="btn btn-success">
                     <em class="fas fa-check"></em>&nbsp;{{ lng('SAVE') }}
@@ -39,7 +40,7 @@
                 </button>
             </div>
         </div>
-        <div class="row formBUttons" v-if="!logedAdmin">
+        <div class="row formButtons" v-if="!logedAdmin">
             <div class="col-12">
                 <a v-bind:href="previous" class="btn btn-secondary">
                     <em class="fas fa-reply"></em>&nbsp;{{ lng('BACK') }}
@@ -64,7 +65,7 @@
 						</div>
 					</div>
 					
-        <div class="row formBUttons" v-if="logedAdmin">
+        <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="button" 
                    v-on:click="editClick()"
@@ -78,14 +79,14 @@
                 </button>
             </div>
         </div>
-        <div class="row formBUttons" v-if="!logedAdmin">
+        <div class="row formButtons" v-if="!logedAdmin">
             <div class="col-12">
                 <a v-bind:href="previous" class="btn btn-secondary">
                     <em class="fas fa-reply"></em>&nbsp;{{ lng('BACK') }}
                 </a>
             </div>
         </div>
-    </form>    
+    </div>    
     
     
 </div>
@@ -108,8 +109,9 @@
             })
         },
         editClick() {
-			document.getElementById('demoForm').style='display:"block"';
-			document.getElementById('demoShow').style='display:"none"';
+			document.getElementById('demoForm').style='display:block';
+			document.getElementById('demoShow').style='display:none';
+			document.querySelector("input[name=\"name\"]").focus();
 		}    
     }
 </script>

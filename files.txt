@@ -4,18 +4,18 @@
 -rwxrwxrwx  1 root      root       1303 2023-02-18 config.php
 -rwxrwxrwx  1 root      root       1205 2022-07-28 config_test.php
 drwxrwxrwx  3 root      root       4096 2022-08-11 doc
--rwxrwxrwx  1 root      root          0 2023-02-28 files.txt
+-rwxrwxrwx  1 root      root          0 2023-03-01 files.txt
 drwxrwxrwx  3 root      root       4096 2022-11-11 images
 drwxrwxrwx  6 root      root       4096 2023-02-26 includes
 -rwxrwxrwx  1 utopszkij utopszkij  5257 2022-11-13 index.js
 -rwxrwxrwx  1 utopszkij utopszkij  1667 2023-02-19 index.php
-drwxrwxrwx  2 root      root       4096 2023-02-20 languages
+drwxrwxrwx  2 root      root       4096 2023-03-01 languages
 -rwxrwxrwx  1 root      root      35149 2022-07-21 LICENSE
 -rwxrwxrwx  1 root      root       5371 2023-02-27 readme.md
 drwxrwxrwx  3 utopszkij utopszkij  4096 2023-01-27 styles
 drwxrwxrwx  2 root      root       4096 2022-07-27 tests
-drwxrwxrwx  2 root      root       4096 2023-02-19 tools
-drwxrwxrwx 13 root      root       4096 2023-02-28 vendor
+drwxrwxrwx  2 root      root       4096 2023-03-01 tools
+drwxrwxrwx 14 root      root       4096 2023-03-01 vendor
 
 ./doc:
 összesen 40
@@ -345,14 +345,15 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2022-11-03 extras
 drwxrwxrwx 2 root      root      4096 2023-02-28 models
 -rwxrwxr-x 1 utopszkij utopszkij 5528 2023-02-24 uploader.php
 -rwxrwxrwx 1 utopszkij utopszkij 3438 2022-11-06 urlprocess.php
-drwxrwxrwx 2 root      root      4096 2023-02-28 views
+drwxrwxrwx 2 root      root      4096 2023-03-01 views
 
 ./includes/controllers:
-összesen 56
--rwxrwxr-x 1 utopszkij utopszkij  2998 2023-02-28 demo.php
+összesen 60
+-rwxrwxr-x 1 utopszkij utopszkij  2998 2023-03-01 demo.php
 -rwxrwxrwx 1 root      root       1763 2023-02-18 group.php
 -rwxrwxrwx 1 utopszkij utopszkij  2480 2023-02-26 home.php
 -rwxrwxrwx 1 root      root       2272 2023-02-25 old_home.php
+-rw-rw-r-- 1 utopszkij utopszkij  3012 2023-02-28 proba.php
 -rwxrwxrwx 1 utopszkij utopszkij  1186 2023-02-18 tag.php
 -rwxrwxrwx 1 root      root      13455 2023-02-19 upgrade.php
 -rwxrwxrwx 1 root      root      16705 2023-02-23 user.php
@@ -367,17 +368,18 @@ drwxrwxrwx 2 root      root      4096 2023-02-28 views
 -rwxrwxrwx 1 utopszkij utopszkij 2705 2022-11-03 recept.html
 
 ./includes/models:
-összesen 28
--rwxrwxr-x 1 utopszkij utopszkij 2143 2023-02-28 demomodel.php
+összesen 32
+-rwxrwxr-x 1 utopszkij utopszkij 2270 2023-03-01 demomodel.php
 -rwxrwxrwx 1 root      root      1609 2022-07-22 groupmodel.php
+-rw-rw-r-- 1 utopszkij utopszkij 2300 2023-02-28 probamodel.php
 -rwxrwxrwx 1 utopszkij utopszkij 1665 2022-10-27 statisticmodel.php
 -rwxrwxrwx 1 utopszkij utopszkij 2920 2023-02-19 tagmodel.php
 -rwxrwxrwx 1 root      root      9559 2023-02-22 usermodel.php
 
 ./includes/views:
-összesen 184
--rw-rw-r-- 1 utopszkij utopszkij  3321 2023-02-28 demobrowser.html
--rw-rw-r-- 1 utopszkij utopszkij  2295 2023-02-19 demoform.html
+összesen 192
+-rw-rw-r-- 1 utopszkij utopszkij  3365 2023-03-01 demobrowser.html
+-rw-rw-r-- 1 utopszkij utopszkij  3691 2023-03-01 demoform.html
 -rwxrwxrwx 1 root      root       1234 2022-11-11 description_hu.html
 -rwxrwxrwx 1 root      root       2685 2022-11-13 footer.html
 -rwxrwxrwx 1 root      root       2234 2023-02-19 groupbrowser.html
@@ -390,6 +392,8 @@ drwxrwxrwx 2 root      root      4096 2023-02-28 views
 -rwxrwxrwx 1 root      root      27499 2023-02-26 policy2_hu.html
 -rwxrwxrwx 1 root      root       8474 2023-02-26 policy3_hu.html
 -rwxrwxrwx 1 root      root      19770 2023-02-26 policy_hu.html
+-rw-rw-r-- 1 utopszkij utopszkij  3330 2023-02-28 probabrowser.html
+-rw-rw-r-- 1 utopszkij utopszkij  2210 2023-02-28 probaform.html
 -rwxrwxrwx 1 root      root       7498 2023-02-23 profile.html
 -rwxrwxrwx 1 root      root        327 2022-07-27 protest_hu.html
 -rwxrwxrwx 1 root      root       3724 2023-02-23 regist.html
@@ -401,8 +405,8 @@ drwxrwxrwx 2 root      root      4096 2023-02-28 views
 -rwxrwxrwx 1 root      root       4667 2022-07-20 userform.html
 
 ./languages:
-összesen 4
--rwxrwxrwx 1 root root 4068 2023-02-20 hu.js
+összesen 8
+-rwxrwxrwx 1 root root 4283 2023-03-01 hu.js
 
 ./styles:
 összesen 4
@@ -425,8 +429,12 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2023-02-20 default
 -rwxrwxrwx 1 root root 9548 2022-07-30 userTest.php
 
 ./tools:
-összesen 32
--rwxrwxr-x 1 utopszkij utopszkij 1948 2023-02-28 createCURD.php
+összesen 56
+-rwxrwxr-x 1 utopszkij utopszkij 9384 2023-03-01 createCURD.php
+-rw-rw-r-- 1 utopszkij utopszkij 3365 2023-03-01 demobrowser.html
+-rw-rw-r-- 1 utopszkij utopszkij 2940 2023-03-01 demoform.html
+-rwxrwxr-x 1 utopszkij utopszkij 2229 2023-02-28 demomodel.php
+-rwxrwxr-x 1 utopszkij utopszkij 2998 2023-02-28 demo.php
 -rwxrwxrwx 1 root      root        76 2022-07-20 documentor.sh
 -rwxrwxrwx 1 root      root        58 2022-07-06 files.sh
 -rwxrwxrwx 1 root      root       143 2022-07-29 git.sh
@@ -436,7 +444,7 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2023-02-20 default
 -rwxrwxrwx 1 root      root       325 2022-07-07 viewtest.sh
 
 ./vendor:
-összesen 112
+összesen 116
 -rwxrwxrwx  1 root      root        178 2022-07-26 autoload.php
 drwxrwxrwx  2 utopszkij utopszkij  4096 2022-11-26 axios
 drwxrwxrwx  4 root      root       4096 2022-07-27 bootstrap
@@ -453,6 +461,7 @@ drwxrwxrwx 10 root      root       4096 2022-07-27 fontawesome
 -rwxrwxrwx  1 root      root         30 2022-05-23 index.php
 drwxrwxrwx  2 utopszkij utopszkij  4096 2019-11-16 jquery
 -rwxrwxrwx  1 root      root       2818 2023-01-27 model.php
+drwxrwxr-x  4 utopszkij utopszkij  4096 2023-02-21 phpmailer
 drwxrwxrwx  2 utopszkij utopszkij  4096 2022-11-26 swiper
 -rwxrwxrwx  1 root      root       3295 2023-01-21 view.php
 -rwxrwxrwx  1 root      root      10495 2022-07-19 viewTester.js
@@ -3179,6 +3188,83 @@ drwxrwxrwx 2 root root 36864 2022-07-27 solid
 ./vendor/jquery:
 összesen 84
 -rwxrwxrwx 1 utopszkij utopszkij 85578 2019-11-16 jquery-2.2.4.min.js
+
+./vendor/phpmailer:
+összesen 88
+-rw-rw-r-- 1 utopszkij utopszkij  2092 2022-12-08 COMMITMENT
+-rw-rw-r-- 1 utopszkij utopszkij  2675 2022-12-08 composer.json
+-rw-rw-r-- 1 utopszkij utopszkij  6226 2022-12-08 get_oauth_token.php
+drwxrwxr-x 2 utopszkij utopszkij  4096 2022-12-08 language
+-rw-rw-r-- 1 utopszkij utopszkij 26529 2022-12-08 LICENSE
+-rw-rw-r-- 1 utopszkij utopszkij 16429 2022-12-08 README.md
+-rw-rw-r-- 1 utopszkij utopszkij  7584 2022-12-08 SECURITY.md
+drwxrwxr-x 2 utopszkij utopszkij  4096 2022-12-08 src
+-rw-rw-r-- 1 utopszkij utopszkij  1859 2023-02-21 test.php
+-rw-rw-r-- 1 utopszkij utopszkij     5 2022-12-08 VERSION
+
+./vendor/phpmailer/language:
+összesen 208
+-rw-rw-r-- 1 utopszkij utopszkij 1584 2022-12-08 phpmailer.lang-af.php
+-rw-rw-r-- 1 utopszkij utopszkij 2024 2022-12-08 phpmailer.lang-ar.php
+-rw-rw-r-- 1 utopszkij utopszkij 1749 2022-12-08 phpmailer.lang-az.php
+-rw-rw-r-- 1 utopszkij utopszkij 1745 2022-12-08 phpmailer.lang-ba.php
+-rw-rw-r-- 1 utopszkij utopszkij 2178 2022-12-08 phpmailer.lang-be.php
+-rw-rw-r-- 1 utopszkij utopszkij 2196 2022-12-08 phpmailer.lang-bg.php
+-rw-rw-r-- 1 utopszkij utopszkij 1730 2022-12-08 phpmailer.lang-ca.php
+-rw-rw-r-- 1 utopszkij utopszkij 1798 2022-12-08 phpmailer.lang-cs.php
+-rw-rw-r-- 1 utopszkij utopszkij 2084 2022-12-08 phpmailer.lang-da.php
+-rw-rw-r-- 1 utopszkij utopszkij 1886 2022-12-08 phpmailer.lang-de.php
+-rw-rw-r-- 1 utopszkij utopszkij 3307 2022-12-08 phpmailer.lang-el.php
+-rw-rw-r-- 1 utopszkij utopszkij 1665 2022-12-08 phpmailer.lang-eo.php
+-rw-rw-r-- 1 utopszkij utopszkij 2047 2022-12-08 phpmailer.lang-es.php
+-rw-rw-r-- 1 utopszkij utopszkij 1744 2022-12-08 phpmailer.lang-et.php
+-rw-rw-r-- 1 utopszkij utopszkij 2079 2022-12-08 phpmailer.lang-fa.php
+-rw-rw-r-- 1 utopszkij utopszkij 1731 2022-12-08 phpmailer.lang-fi.php
+-rw-rw-r-- 1 utopszkij utopszkij 1637 2022-12-08 phpmailer.lang-fo.php
+-rw-rw-r-- 1 utopszkij utopszkij 2852 2022-12-08 phpmailer.lang-fr.php
+-rw-rw-r-- 1 utopszkij utopszkij 1742 2022-12-08 phpmailer.lang-gl.php
+-rw-rw-r-- 1 utopszkij utopszkij 1812 2022-12-08 phpmailer.lang-he.php
+-rw-rw-r-- 1 utopszkij utopszkij 2591 2022-12-08 phpmailer.lang-hi.php
+-rw-rw-r-- 1 utopszkij utopszkij 1754 2022-12-08 phpmailer.lang-hr.php
+-rw-rw-r-- 1 utopszkij utopszkij 1717 2022-12-08 phpmailer.lang-hu.php
+-rw-rw-r-- 1 utopszkij utopszkij 2185 2022-12-08 phpmailer.lang-hy.php
+-rw-rw-r-- 1 utopszkij utopszkij 1997 2022-12-08 phpmailer.lang-id.php
+-rw-rw-r-- 1 utopszkij utopszkij 1819 2022-12-08 phpmailer.lang-it.php
+-rw-rw-r-- 1 utopszkij utopszkij 2029 2022-12-08 phpmailer.lang-ja.php
+-rw-rw-r-- 1 utopszkij utopszkij 2884 2022-12-08 phpmailer.lang-ka.php
+-rw-rw-r-- 1 utopszkij utopszkij 1771 2022-12-08 phpmailer.lang-ko.php
+-rw-rw-r-- 1 utopszkij utopszkij 1627 2022-12-08 phpmailer.lang-lt.php
+-rw-rw-r-- 1 utopszkij utopszkij 1643 2022-12-08 phpmailer.lang-lv.php
+-rw-rw-r-- 1 utopszkij utopszkij 1782 2022-12-08 phpmailer.lang-mg.php
+-rw-rw-r-- 1 utopszkij utopszkij 2186 2022-12-08 phpmailer.lang-mn.php
+-rw-rw-r-- 1 utopszkij utopszkij 1734 2022-12-08 phpmailer.lang-ms.php
+-rw-rw-r-- 1 utopszkij utopszkij 1555 2022-12-08 phpmailer.lang-nb.php
+-rw-rw-r-- 1 utopszkij utopszkij 2365 2022-12-08 phpmailer.lang-nl.php
+-rw-rw-r-- 1 utopszkij utopszkij 1894 2022-12-08 phpmailer.lang-pl.php
+-rw-rw-r-- 1 utopszkij utopszkij 2719 2022-12-08 phpmailer.lang-pt_br.php
+-rw-rw-r-- 1 utopszkij utopszkij 1889 2022-12-08 phpmailer.lang-pt.php
+-rw-rw-r-- 1 utopszkij utopszkij 2448 2022-12-08 phpmailer.lang-ro.php
+-rw-rw-r-- 1 utopszkij utopszkij 2247 2022-12-08 phpmailer.lang-ru.php
+-rw-rw-r-- 1 utopszkij utopszkij 1909 2022-12-08 phpmailer.lang-sk.php
+-rw-rw-r-- 1 utopszkij utopszkij 2577 2022-12-08 phpmailer.lang-sl.php
+-rw-rw-r-- 1 utopszkij utopszkij 1814 2022-12-08 phpmailer.lang-sr_latn.php
+-rw-rw-r-- 1 utopszkij utopszkij 2301 2022-12-08 phpmailer.lang-sr.php
+-rw-rw-r-- 1 utopszkij utopszkij 1610 2022-12-08 phpmailer.lang-sv.php
+-rw-rw-r-- 1 utopszkij utopszkij 1721 2022-12-08 phpmailer.lang-tl.php
+-rw-rw-r-- 1 utopszkij utopszkij 1772 2022-12-08 phpmailer.lang-tr.php
+-rw-rw-r-- 1 utopszkij utopszkij 2282 2022-12-08 phpmailer.lang-uk.php
+-rw-rw-r-- 1 utopszkij utopszkij 1793 2022-12-08 phpmailer.lang-vi.php
+-rw-rw-r-- 1 utopszkij utopszkij 1656 2022-12-08 phpmailer.lang-zh_cn.php
+-rw-rw-r-- 1 utopszkij utopszkij 1669 2022-12-08 phpmailer.lang-zh.php
+
+./vendor/phpmailer/src:
+összesen 248
+-rw-rw-r-- 1 utopszkij utopszkij   1240 2022-12-08 Exception.php
+-rw-rw-r-- 1 utopszkij utopszkij   3774 2022-12-08 OAuth.php
+-rw-rw-r-- 1 utopszkij utopszkij   1522 2022-12-08 OAuthTokenProvider.php
+-rw-rw-r-- 1 utopszkij utopszkij 179419 2022-12-08 PHPMailer.php
+-rw-rw-r-- 1 utopszkij utopszkij  12259 2022-12-08 POP3.php
+-rw-rw-r-- 1 utopszkij utopszkij  47406 2022-12-08 SMTP.php
 
 ./vendor/swiper:
 összesen 1100

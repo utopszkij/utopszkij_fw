@@ -118,51 +118,12 @@ tokens = {
       "PARENT":"parent",
       "NAME":"name",
 
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
 
     /* demo */
     "DEMO":"demo",
     "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-      "ID":"id",
-      "NAME":"name",
+    "ID":"id",
+    "NAME":"name",
 
     "END":"Vége"
 };
