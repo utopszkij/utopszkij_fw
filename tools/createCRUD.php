@@ -226,9 +226,18 @@ class TableProcessor {
 }
 
 
-if ((count($argv) < 2) | (!file_exists('includes/controllers/demo.php'))) {
-	echo 'use:   
-	php tools/createCURD.php modulName tableName'."\n";
+if (count($argv) < 2)  {
+	echo '
+	CRUD module creator 
+	create controller, model, browser viewer, form viewer, update {lng}.js
+	required {documentRoot}/config.php
+	use:   
+	1. create table in other tools.
+	2. type in command line:
+	cd {documentRoot}
+	php tools/createCRUD.php {controllerName} {tableName}
+	(if not define tableName then default: {controllerName}+"s")
+	';
 	exit();
 }
 $name = strtolower($argv[1]);
@@ -294,7 +303,7 @@ fclose($fp);
 echo 'form viewer created'."\n";
 
 // languages
-$lines = file('languages/hu.js');
+$lines = file('languages/'.LNG.'.js');
 $str = implode("",$lines);
 $str = str_replace('"END":"Vége"',
 '/* '.$name.' */'."\n".
@@ -303,7 +312,7 @@ $str = str_replace('"END":"Vége"',
 $tp->lngTokens().
 ''."\n".
 '    "END":"Vége"',$str);
-$fp = fopen('languages/hu.js','w+');
+$fp = fopen('languages/'.LNG.'.js','w+');
 fwrite($fp,$str);
 fclose($fp);
 echo 'languages file updated, check it!'."\n";

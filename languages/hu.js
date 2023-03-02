@@ -125,5 +125,9 @@ tokens = {
     "ID":"id",
     "NAME":"name",
 
+    /* proba3 */
+  "PROBA3":"proba3",
+  "PROBA3S":"proba3s",
+
     "END":"Vége"
 };

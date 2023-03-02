@@ -133,10 +133,10 @@ cd reporoot
 
 - index.php -ban verzió szám emelés
 - controllers/upgrade.php -ban adatbázist modosítás
-- controllers/{newModeulNaev}.php létrehozása
-- models/{newModeulNaev}model.php létrehozása
-- views/{newModeulNaev}browser.php létrehozása
-- views/{newModeulNaev}form.php létrehozása
+- controllers/{newModelNev}.php létrehozása
+- models/{newModulNev}model.php létrehozása
+- views/{newModulNev}browser.php létrehozása
+- views/{newModeulNev}form.php létrehozása
 - languages/{lng}.js modosítása
 - főmenüben (vagy máshol) a modult inditó link elhelyezése
 - program inditása böngészöből
@@ -145,11 +145,15 @@ Lásd a "demo" modult: controllers/demo.php, models/demomodel.php,
 views/demobrowser.php, views/demoform.php, languages/hu.js
 controllers/upgrade.php -ben a v1.1.0 tartozik ehhez.
  
-vagy parancssorból varázslóval:
+vagy  varázslóval:
 
+1. tábla létrehozása (pl phpmyadmin segitségével)
+2. parancssorból:
 cd {documentroot}
-
-php ./tools/createCURD {compName}
+php ./tools/createCRUD.php {componentName} {tableName}
+3. létrehozott, modosított fájlok (controller, model, 2 viewer, lng file)
+ellenörzése, javítása
+4. főmenüben (vagy máshol) a modult inditó link elhelyezése
 
 
 ## verzió v1.0.3

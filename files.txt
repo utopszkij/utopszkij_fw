@@ -4,17 +4,17 @@
 -rwxrwxrwx  1 root      root       1303 2023-02-18 config.php
 -rwxrwxrwx  1 root      root       1205 2022-07-28 config_test.php
 drwxrwxrwx  3 root      root       4096 2022-08-11 doc
--rwxrwxrwx  1 root      root          0 2023-03-01 files.txt
+-rwxrwxrwx  1 root      root          0 2023-03-02 files.txt
 drwxrwxrwx  3 root      root       4096 2022-11-11 images
 drwxrwxrwx  6 root      root       4096 2023-02-26 includes
 -rwxrwxrwx  1 utopszkij utopszkij  5257 2022-11-13 index.js
 -rwxrwxrwx  1 utopszkij utopszkij  1667 2023-02-19 index.php
 drwxrwxrwx  2 root      root       4096 2023-03-01 languages
 -rwxrwxrwx  1 root      root      35149 2022-07-21 LICENSE
--rwxrwxrwx  1 root      root       5371 2023-02-27 readme.md
+-rwxrwxrwx  1 root      root       5612 2023-03-02 readme.md
 drwxrwxrwx  3 utopszkij utopszkij  4096 2023-01-27 styles
 drwxrwxrwx  2 root      root       4096 2022-07-27 tests
-drwxrwxrwx  2 root      root       4096 2023-03-01 tools
+drwxrwxrwx  2 root      root       4096 2023-03-02 tools
 drwxrwxrwx 14 root      root       4096 2023-03-01 vendor
 
 ./doc:
@@ -339,21 +339,19 @@ drwxrwxrwx 2 root      root         4096 2022-07-27 users
 
 ./includes:
 összesen 32
-drwxrwxrwx 2 root      root      4096 2023-02-28 controllers
+drwxrwxrwx 2 root      root      4096 2023-03-02 controllers
 drwxrwxrwx 2 utopszkij utopszkij 4096 2022-11-03 extras
 -rw-rw-r-- 1 utopszkij utopszkij 3508 2023-02-26 markdowntohtml.php
-drwxrwxrwx 2 root      root      4096 2023-02-28 models
+drwxrwxrwx 2 root      root      4096 2023-03-02 models
 -rwxrwxr-x 1 utopszkij utopszkij 5528 2023-02-24 uploader.php
 -rwxrwxrwx 1 utopszkij utopszkij 3438 2022-11-06 urlprocess.php
-drwxrwxrwx 2 root      root      4096 2023-03-01 views
+drwxrwxrwx 2 root      root      4096 2023-03-02 views
 
 ./includes/controllers:
-összesen 60
+összesen 52
 -rwxrwxr-x 1 utopszkij utopszkij  2998 2023-03-01 demo.php
 -rwxrwxrwx 1 root      root       1763 2023-02-18 group.php
 -rwxrwxrwx 1 utopszkij utopszkij  2480 2023-02-26 home.php
--rwxrwxrwx 1 root      root       2272 2023-02-25 old_home.php
--rw-rw-r-- 1 utopszkij utopszkij  3012 2023-02-28 proba.php
 -rwxrwxrwx 1 utopszkij utopszkij  1186 2023-02-18 tag.php
 -rwxrwxrwx 1 root      root      13455 2023-02-19 upgrade.php
 -rwxrwxrwx 1 root      root      16705 2023-02-23 user.php
@@ -368,16 +366,15 @@ drwxrwxrwx 2 root      root      4096 2023-03-01 views
 -rwxrwxrwx 1 utopszkij utopszkij 2705 2022-11-03 recept.html
 
 ./includes/models:
-összesen 32
+összesen 28
 -rwxrwxr-x 1 utopszkij utopszkij 2270 2023-03-01 demomodel.php
 -rwxrwxrwx 1 root      root      1609 2022-07-22 groupmodel.php
--rw-rw-r-- 1 utopszkij utopszkij 2300 2023-02-28 probamodel.php
 -rwxrwxrwx 1 utopszkij utopszkij 1665 2022-10-27 statisticmodel.php
 -rwxrwxrwx 1 utopszkij utopszkij 2920 2023-02-19 tagmodel.php
 -rwxrwxrwx 1 root      root      9559 2023-02-22 usermodel.php
 
 ./includes/views:
-összesen 192
+összesen 184
 -rw-rw-r-- 1 utopszkij utopszkij  3365 2023-03-01 demobrowser.html
 -rw-rw-r-- 1 utopszkij utopszkij  3691 2023-03-01 demoform.html
 -rwxrwxrwx 1 root      root       1234 2022-11-11 description_hu.html
@@ -392,8 +389,6 @@ drwxrwxrwx 2 root      root      4096 2023-03-01 views
 -rwxrwxrwx 1 root      root      27499 2023-02-26 policy2_hu.html
 -rwxrwxrwx 1 root      root       8474 2023-02-26 policy3_hu.html
 -rwxrwxrwx 1 root      root      19770 2023-02-26 policy_hu.html
--rw-rw-r-- 1 utopszkij utopszkij  3330 2023-02-28 probabrowser.html
--rw-rw-r-- 1 utopszkij utopszkij  2210 2023-02-28 probaform.html
 -rwxrwxrwx 1 root      root       7498 2023-02-23 profile.html
 -rwxrwxrwx 1 root      root        327 2022-07-27 protest_hu.html
 -rwxrwxrwx 1 root      root       3724 2023-02-23 regist.html
@@ -406,7 +401,7 @@ drwxrwxrwx 2 root      root      4096 2023-03-01 views
 
 ./languages:
 összesen 8
--rwxrwxrwx 1 root root 4283 2023-03-01 hu.js
+-rwxrwxrwx 1 root root 4345 2023-03-02 hu.js
 
 ./styles:
 összesen 4
@@ -430,7 +425,7 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2023-02-20 default
 
 ./tools:
 összesen 56
--rwxrwxr-x 1 utopszkij utopszkij 9384 2023-03-01 createCURD.php
+-rwxrwxr-x 1 utopszkij utopszkij 9621 2023-03-02 createCRUD.php
 -rw-rw-r-- 1 utopszkij utopszkij 3365 2023-03-01 demobrowser.html
 -rw-rw-r-- 1 utopszkij utopszkij 2940 2023-03-01 demoform.html
 -rwxrwxr-x 1 utopszkij utopszkij 2229 2023-02-28 demomodel.php
