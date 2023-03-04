@@ -36,6 +36,24 @@
     </form>    
 
     <div id="demoShow" class="form">
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="button" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                <button type="button" 
+                   v-on:click="delClick()"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+		<!-- 
+            FIGYELEM! a ckeditorral kezelt mezőknél itt egy "2" karaktert kell a mezőnév végére illeszteni 
+            pl: {{ record.description2 }}
+        -->
 		//showFields
         <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
@@ -69,8 +87,10 @@
     methods = {
 		afterMount() {
 			if (this.record != undefined) {
-				if (this.record.id == 0) {
-					this.editClick();
+				if ((this.record.id == 0) | (this.record.displayMode == 'edit')) {
+                    document.getElementById('demoForm').style='display:block';
+        			document.getElementById('demoShow').style='display:none';
+		        	//focus
 				}
 			}
 		},
@@ -81,9 +101,7 @@
             })
         },
         editClick() {
-			document.getElementById('demoForm').style='display:block';
-			document.getElementById('demoShow').style='display:none';
-			//focus
+            document.location = HREF('demo.editform',{id:this.record.id});
 		}    
     }
 </script>

@@ -3,11 +3,13 @@
     use \RATWEB\DB\Query;
     use \RATWEB\DB\Record;
 
-    class DemoModel extends Model  {
+	include_once 'includes/urlprocess.php';
+
+    class BlogModel extends Model  {
 
         function __construct() {
             parent::__construct();
-            $this->setTable('demo');
+            $this->setTable('blogs');
             $this->errorMsg = ''; 
         }
 
@@ -16,8 +18,11 @@
          */
         public function emptyRecord(): Record {
             $result = new Record();
-                    $result->id = "";
-        $result->name = "";
+                    $result->id = 0;
+        $result->title = "";
+        $result->body = "";
+        $result->created_by = $_SESSION["loged"];
+        $result->created_at = "2023-03-03";
 
             return $result;
         }
@@ -75,6 +80,6 @@
             $this->filterToQuery($db,$filter);
             return $db->count();
         }
-
+        
 }    
 ?>

@@ -99,35 +99,11 @@ tokens = {
     "ADMIN_CANNOT_UPDATE":"admin nem módosítható",
     "ADMIN_CANNOT_DELETE":"admin nem törölhető",
 
-	/* demo CURD modul */
+	/* demo */
 	"DEMO":"Példa",
 	"DEMOS":"Példa adatok",
 	"NAME_REQUERED":"Nevet meg kell adni!",
 	"NOT_ITEMS":"Nincs adat",
-	
-	/* Tags */
-	"TAG":"Cimke",
-	"TAGS":"Cimkék",
-	"PARENT":"Tulajdonos",
-	"PARENT_ERROR":"Hibás tulajdonos adat!",
-	
-    /* proba */
-    "PROBA":"proba",
-    "PROBAS":"probas",
-      "ID":"id",
-      "PARENT":"parent",
-      "NAME":"name",
-
-
-    /* demo */
-    "DEMO":"demo",
-    "DEMOS":"demos",
-    "ID":"id",
-    "NAME":"name",
-
-    /* proba3 */
-  "PROBA3":"proba3",
-  "PROBA3S":"proba3s",
 
     "END":"Vége"
 };

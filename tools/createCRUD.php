@@ -23,7 +23,6 @@ class TableProcessor {
 			$q = new \RATWEB\DB\Query('dbverzio');
 			$q->setSql('show columns from `'.$this->tableName.'`');
 			$this->fields = $q->all();
-			
 		} 
 	}
 	
@@ -32,7 +31,9 @@ class TableProcessor {
 			$fields = $this->fields;
 			$result = '';
 			foreach ($fields as $field) {
-				if ($field->Type == 'int') {
+				if ($field->Field == 'created_by') {
+					$result .= '        $result->'.$field->Field.' = $_SESSION["loged"];'."\n";
+				} else 	if ($field->Type == 'int') {
 					$result .= '        $result->'.$field->Field.' = 0;'."\n";
 				} else if ($field->Type == 'number') {
 					$result .= '        $result->'.$field->Field.' = 0;'."\n";
@@ -43,9 +44,9 @@ class TableProcessor {
 				} else if ($field->Type == 'text') {
 					$result .= '        $result->'.$field->Field.' = "";'."\n";
 				} else if ($field->Type == 'date') {
-					$result .= '        $result->'.$field->Field.' = "'.data('Y-m-d').'";'."\n";
+					$result .= '        $result->'.$field->Field.' = "'.date('Y-m-d').'";'."\n";
 				} else if ($field->Type == 'datetime') {
-					$result .= '        $result->'.$field->Field.' = "'.data('Y-m-d H:i:s').'";'."\n";
+					$result .= '        $result->'.$field->Field.' = "'.date('Y-m-d H:i:s').'";'."\n";
 				} else if ($field->Type == 'bool') {
 					$result .= '        $result->'.$field->Field.' = 0";'."\n";
 				} else {
@@ -72,15 +73,24 @@ class TableProcessor {
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
 							<input type="number" name="'.$field->Field.'" v-model="record.'.$field->Field.'" disabled="disabled" />
+							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" />
 						</div>
 					</div>
+					';
+				} else if ($field->Field == 'created_by') {
+					$result .= '
+							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" />
+					';
+				} else if ($field->Field == 'created_at') {
+					$result .= '
+							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" />
 					';
 				} else if ($field->Type == 'int') {
 					$result .= '
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="number" name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="number" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
 						</div>
 					</div>
 					';
@@ -89,7 +99,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="number" name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="number" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
 						</div>
 					</div>
 					';
@@ -98,7 +108,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="text" name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
 						</div>
 					</div>
 					';
@@ -107,7 +117,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="text" name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
 						</div>
 					</div>
 					';
@@ -116,7 +126,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<textarea cols="60" rows="5" name="'.$field->Field.'" v-html="record.'.$field->Field.'" required="required"></textarea>
+							<textarea cols="60" rows="5" name="'.$field->Field.'" id="'.$field->Field.'" v-html="record.'.$field->Field.'"></textarea>
 						</div>
 					</div>
 					';
@@ -125,7 +135,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="date" name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="date" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
 						</div>
 					</div>
 					';
@@ -134,7 +144,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="datetime" name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="datetime" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
 						</div>
 					</div>
 					';
@@ -143,7 +153,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<select name="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required">
+							<select name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required">
 								<option value="1">{{ lng(\"YES\") }}</option>
 								<option value="0">{{ lng(\"NO\") }}</option>
 							</select>
@@ -155,7 +165,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="text" name="'.$field->Field.'" v-model="record.'.$field->Field.'"  required="required" />
+							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'"  required="required" />
 						</div>
 					</div>
 					';
@@ -166,11 +176,12 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("ID") }}</label>:
-							<input type="number" name="id" v-model="record.id" disabled="disabled" />
+							<input type="number" name="id" id="id" v-model="record.id" disabled="disabled" />
+							<input type="hidden" name="id" v-model="record.id" />
 						</div>
 						<div class="col-12">
 							<label>{{ lng("NAME") }}</label>:
-							<input type="text" name="name" v-model="record.name" required="required" />
+							<input type="text" name="name" id="name" v-model="record.name" required="required" />
 						</div>
 					</div>
 					';
@@ -264,9 +275,10 @@ $lines = file(__DIR__.'/demomodel.php');
 $str = implode("",$lines);
 $str = str_replace('demo',$name,$str);
 $str = str_replace('Demo',ucfirst($name),$str);
-$str = str_replace('table = "'.$name.';','table = "'.$name.'s";',$str);
+$str = str_replace('table = "'.$name.'";','table = "'.$tp->tableName.'";',$str);
 
 $str = str_replace('//emptyRecord',$tp->emptyRecord(),$str);
+$str = str_replace("setTable('".$name."')","setTable('".$tp->tableName."')",$str);
 
 $fp = fopen('includes/models/'.$name.'model.php','w+');
 fwrite($fp,$str);

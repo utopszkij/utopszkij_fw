@@ -40,6 +40,12 @@
 		var rewrite = <?php echo (int)REWRITE; ?>;
         var siteurl = "<?php echo SITEURL; ?>"; 
 	</script>	
+
+	<!-- ckeditor -->
+	<script src="vendor/ckeditor/ckeditor.js"></script>
+	<script src="vendor/ckeditor/translations/hu.js"></script>
+	<script src="vendor/ckeditor/upload.js"></script>
+
 	<script src="index.js"></script>
 </head>	 
 <body>
@@ -81,6 +87,7 @@
 						'loged' => $_SESSION['loged'],
 						'logedAvatar' => $_SESSION['logedAvatar'],
 						'logedName' => $_SESSION['logedName'],
+						'logedGroup' => $_SESSION['logedGroup'],
 						'isAdmin' => isAdmin(),
 						'lastVerzio' => Upgrade::versionAdjust($lastVerzio),
 						'fileVerzio' => Upgrade::versionAdjust($fileVerzio)

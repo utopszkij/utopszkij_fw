@@ -2,16 +2,16 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
-include_once __DIR__.'/../models/demomodel.php';
+include_once __DIR__.'/../models/blogmodel.php';
 
 /**
- * demo controller 
- * igényelt model (includes/models/demomodel.php))
+ * blog controller 
+ * igényelt model (includes/models/blogmodel.php))
  *      methodusok: emptyRecord(), save($record), 
  *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
  *      getTotal($filter)
- * igényelt viewerek includes/views/demobrowser, includes/views/demoform 
- *      a demoform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
+ * igényelt viewerek includes/views/blogbrowser, includes/views/blogform 
+ *      a blogform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
  *      a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is!
  *      a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü
  *             input vagy select elemeket tartalmazzon 
@@ -22,18 +22,18 @@ include_once __DIR__.'/../models/demomodel.php';
  * A taskok public function -ként legyenek definiálva 
  *   standart taskok: items, edit, new, save, delete.
  */
-class Demo extends Controller {
+class Blog extends Controller {
 
 	function __construct() {
 		parent::__construct();
-		// $this->model = new DemoModel();
-        $this->name = "demo";
-        $this->browserURL = 'index.php?task=demo.items';
-        $this->addURL = 'index.php?task=demo.new';
-        $this->editURL = 'index.php?task=demo.edit';
-        $this->browserTask = 'demo.items';
-        $this->model = new DemoModel();
-        $this->ckeditorFields = []; // filedName lista
+		// $this->model = new BlogModel();
+        $this->name = "blog";
+        $this->browserURL = 'index.php?task=blog.items';
+        $this->addURL = 'index.php?task=blog.new';
+        $this->editURL = 'index.php?task=blog.edit';
+        $this->browserTask = 'blog.items';
+        $this->model = new BlogModel();
+        $this->ckeditorFields = ['body'];
 	}
 
     /**
@@ -64,8 +64,8 @@ class Demo extends Controller {
      */    
     protected function validator($record): string {
 		$result = '';
-		if ($record->name == '') {
-			$result = 'NAME_REQUERED';
+		if ($record->title == '') {
+			$result = 'TITLE_REQUERED';
 		}
         return $result;
     }

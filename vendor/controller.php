@@ -13,6 +13,8 @@ define('INTEGER','INTEGER');
 define('NOFILTER','NOFILTER');
 define('RAW','RAW');
 
+include_once 'includes/urlprocess.php';
+
 /**
  * GET/ POST kezelő objektum
  */
@@ -159,6 +161,7 @@ class Controller {
     protected $addURL;
     protected $editURL;
     protected $browserTask;
+    protected $ckeditorFields = [];
 
     function __construct() {
         $this->request = new Request();
@@ -179,6 +182,7 @@ class Controller {
         // $this->browserURL = '...';
         // $this->formURL = '...';
         // $this->browserTask = '...';
+        // $this->ckeditorFields = ['fieldname',...]
     }
 
     /**
@@ -340,10 +344,12 @@ class Controller {
      * meglévő item edit/show képernyő
      * a viewernek a record, loged, loagedAdmin alapján vagy editor vagy show
      * képernyőt kell megjelenitenie
+     * GET: id, displaymode
      */
     public function edit() {
         $id = $this->request->input('id',0);
         $record = $this->model->getById($id);
+        $record->displayMode = $this->request->input('displaymode','show');
         if (!$this->accessRight('edit',$record) & !$this->accessRight('show',$record)) {
             $this->session->set('errorMsg','ACCESDENIED');
             $this->items();
@@ -351,6 +357,10 @@ class Controller {
         if ($this->session->isset('oldRecord')) {
             $record = $this->session->input('oldRecord');
         }
+        foreach ($this->ckeditorFields as $ckeditorField) {
+			$fn2 = $ckeditorField.'2';
+			$record->$fn2 = urlprocess($record->$ckeditorField);
+		}
         $this->browserURL = $this->request->input('browserUrl', $this->browserURL);
         view($this->name.'form',[
             "flowKey" => $this->newFlowKey(),
@@ -365,13 +375,36 @@ class Controller {
     }
 
     /**
+     * meglévő rekord megjelenitése
+     * GET: id
+     */
+    public function showform() {
+        $this->request->set('displaymode','show');
+        $this->edit();
+    }
+
+    /**
+     * meglévő rekord editor form megjelenitése
+     * GET: id
+     */
+    public function editform() {
+        $this->request->set('displaymode','edit');
+        $this->edit();
+    }
+    
+
+    /**
      * edit vagy new form tárolása
      */
     public function save($record = '') {
 		if ($record == '') {
 			$record = $this->model->emptyRecord();
 			foreach ($record as $fn => $fv) {
-				$record->$fn = $this->request->input($fn, $fv);
+				if (in_array($fn,$this->ckeditorFields)) {
+					$record->$fn = $this->request->input($fn, $fv, HTML);
+				} else {	
+					$record->$fn = $this->request->input($fn, $fv);
+				}	
 			}	
 		}
         if (!$this->checkFlowKey($this->browserURL)) {

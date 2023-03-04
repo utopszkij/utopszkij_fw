@@ -52,13 +52,12 @@
          * @param string $order 
          * @return array
          */
-        public function getItems(int $page, int $limit, string $filter, string $order): array {
+        public function getItems(int $page, int $limit, string $filter, string $order = 'id'): array {
 			if ($page <= 0) $page = 1;
-            $db = new Query($this->table,'d');
-            $db->select(['id','name'])
-                    ->offset((($page - 1) * $limit))
-                    ->limit($limit)
-                    ->orderBy('name');
+            $db = new Query($this->table);
+            $db->offset((($page - 1) * $limit))
+               ->limit($limit)
+               ->orderBy($order);
             $this->filterToQuery($db,$filter);        
             $result = $db->all();
             return $result;        

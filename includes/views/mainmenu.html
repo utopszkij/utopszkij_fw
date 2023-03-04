@@ -4,11 +4,14 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a v-if="logedAvatar != ''" class="nav-link navbar-toggler" 
+          <a class="nav-link navbar-toggler" v-if="loged > 0"
                   v-bind:href="HREF('user.profile',{id:loged})">
                   <img v-bind:src="'images/users/'+logedAvatar"
-                      style="height:34px; margin:0px; float:right" />
-                  <var v-bind:class="logedGroup">
+                      style="height:34px; margin:0px; float:right" v-if="logedAvatar != ''"/>
+                  <img v-if="logedAvatar == ''"
+                      src="images/users/noimage.png"
+                      style="height:34px; margin:0px;" />
+                  <var>
                       {{ logedName }}
                   </var>
           </a>
@@ -52,7 +55,7 @@
                   <li class="nav-item" v-if="loged > 0">
                       <a class="nav-link" 
                           v-bind:href="HREF('user.profile',{id:loged, backtask:'home.show'})">
-                          <var v-bind:class="logedGroup">
+                          <var>
                               {{ logedName }}
                               <img v-if="logedAvatar != ''"
                                    v-bind:src="'images/users/'+logedAvatar"

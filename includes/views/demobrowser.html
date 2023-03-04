@@ -32,16 +32,19 @@
 			</tr>
 			<tr v-for="item in items">
 				<td>{{ item.id }}</td>
-				<td> <a v-bind:href="HREF('demo.edit',{id:item.id, backtask:'demo.items'})">
+				<td> <a v-bind:href="HREF('demo.showform',{id:item.id, backtask:'demo.items'})">
 						{{ item.name }}
 					 </a>
 				</td>    
 				<td>
-					<a class="btn btn-primary" v-if="logedAdmin" v-bind:href="HREF('demo.edit',{id:item.id, backtask:'demo.items'})">
-						<em class="fas fa-eye" v-bind:title="lng('EDIT')"></em><span>{{ lng('SHOW') }}</span>
+					<a class="btn btn-primary"  v-bind:href="HREF('demo.showform',{id:item.id, backtask:'demo.items'})">
+						<em class="fas fa-eye" v-bind:title="lng('SHOW')"></em>
+					</a>
+					<a class="btn btn-primary"  v-if="logedAdmin"v-bind:href="HREF('demo.editform',{id:item.id, backtask:'demo.items'})">
+						<em class="fas fa-edit" v-bind:title="lng('EDIT')"></em>
 					</a>
 					<button type="button" class="btn btn-danger" v-if="logedAdmin" v-on:click="delClick(item.id)">
-						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em><span>{{ lng('DELETE') }}</span>
+						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em>
 					</button>
 				</td> 
 			</tr>

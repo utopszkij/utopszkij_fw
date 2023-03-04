@@ -14,13 +14,14 @@
 						<div class="col-12">
 							<label>{{ lng("ID") }}</label>:
 							<input type="number" name="id" v-model="record.id" disabled="disabled" />
+							<input type="hidden" name="id" v-model="record.id" />
 						</div>
 					</div>
 					
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("NAME") }}</label>:
-							<input type="text" name="name" v-model="record.name"  required="required" />
+							<input type="text" name="name" id="name" v-model="record.name"  required="required" />
 						</div>
 					</div>
 					
@@ -50,6 +51,24 @@
     </form>    
 
     <div id="demoShow" class="form">
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="button" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                <button type="button" 
+                   v-on:click="delClick()"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+		<!-- 
+            FIGYELEM! a ckeditorral kezelt mezőknél itt egy "2" karaktert kell a mezőnév végére illeszteni 
+            pl: {{ record.description2 }}
+        -->
 		
 					<div class="row">
 						<div class="col-12">
@@ -97,8 +116,10 @@
     methods = {
 		afterMount() {
 			if (this.record != undefined) {
-				if (this.record.id == 0) {
-					this.editClick();
+				if ((this.record.id == 0) | (this.record.displayMode == 'edit')) {
+                    document.getElementById('demoForm').style='display:block';
+        			document.getElementById('demoShow').style='display:none';
+		        	document.querySelector("input[name=\"name\"]").focus();
 				}
 			}
 		},
@@ -109,9 +130,7 @@
             })
         },
         editClick() {
-			document.getElementById('demoForm').style='display:block';
-			document.getElementById('demoShow').style='display:none';
-			document.querySelector("input[name=\"name\"]").focus();
+            document.location = HREF('demo.editform',{id:this.record.id});
 		}    
     }
 </script>

@@ -1,4 +1,4 @@
-<div id="demos">
+<div id="blogs">
     <div v-if="errorMsg != ''" class="alert alert-danger">
         <div v-html="lng(errorMsg)"></div>
     </div>
@@ -6,12 +6,12 @@
         <div v-html="lng(successMsg)"></div>
     </div>
     
-    <h2 class="ribbon-banner"><span>{{ lng('DEMOS') }}</span></h2>
+    <h2 class="ribbon-banner"><span>{{ lng('BLOGS') }}</span></h2>
     <div class="row">
 		<div class="col-12">
 			<h4>{{ lng('SEARCH') }}</h4>
 			<form class="filterForm" id="filterForm" method="post" action="index.php">
-				<input type="hidden" name="task" value="demo.items" />
+				<input type="hidden" name="task" value="blog.items" />
 				<input type="hidden" name="page" value="1" />
 				<label>{{ lng('NAME') }}</label>
 				<input type="text" name="filter_name" id="filter_name"/>
@@ -32,19 +32,16 @@
 			</tr>
 			<tr v-for="item in items">
 				<td>{{ item.id }}</td>
-				<td> <a v-bind:href="HREF('demo.showform',{id:item.id, backtask:'demo.items'})">
+				<td> <a v-bind:href="HREF('blog.edit',{id:item.id, backtask:'blog.items'})">
 						{{ item.name }}
 					 </a>
 				</td>    
 				<td>
-					<a class="btn btn-primary"  v-bind:href="HREF('demo.showform',{id:item.id, backtask:'demo.items'})">
-						<em class="fas fa-eye" v-bind:title="lng('SHOW')"></em>
-					</a>
-					<a class="btn btn-primary"  v-if="logedAdmin"v-bind:href="HREF('demo.editform',{id:item.id, backtask:'demo.items'})">
-						<em class="fas fa-edit" v-bind:title="lng('EDIT')"></em>
+					<a class="btn btn-primary" v-if="logedAdmin" v-bind:href="HREF('blog.edit',{id:item.id, backtask:'blog.items'})">
+						<em class="fas fa-eye" v-bind:title="lng('EDIT')"></em><span>{{ lng('SHOW') }}</span>
 					</a>
 					<button type="button" class="btn btn-danger" v-if="logedAdmin" v-on:click="delClick(item.id)">
-						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em>
+						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em><span>{{ lng('DELETE') }}</span>
 					</button>
 				</td> 
 			</tr>
@@ -56,7 +53,7 @@
     </div>
     <div class="row" v-if="logedAdmin">
 		<div class="col-12">
-			<a class="btn btn-primary" href="index.php?task=demo.new">
+			<a class="btn btn-primary" href="index.php?task=blog.new">
 				<em class="fas fa-plus"></em><span>{{ lng('ADD') }}</span></a>
 		</div>
     </div>
@@ -91,7 +88,7 @@
         delClick(id) {
             popupConfirm(lng('SUREDELETE'), 
             function() {
-                location=HREF('demo.delete',{'id':id, key:app.flowKey}); 
+                location=HREF('blog.delete',{'id':id, key:app.flowKey}); 
             })
         },
         delSearchClick() {

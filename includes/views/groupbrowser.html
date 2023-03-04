@@ -11,10 +11,10 @@
             <h2>{{ lng('GROUPS') }}</h2>
         </div>
         <div class="col-12">
-			<table class="col-12" style="width:auto" v-if="items.length > 0">
+			<table class="col-12" style="width:100%" v-if="items.length > 0">
 				<tr><th style="width:30px">ID</th>
-					<th style="width:60px">{{ lng('NAME') }}</th>
-					<th></th>
+					<th>{{ lng('NAMEE') }}</th>
+					<th style="width:300px"></th>
 				</tr>
 				<tr v-for="item in items" style="border-style:solid; border-width:1px;">
 					<td>{{ item.id }}</td>
