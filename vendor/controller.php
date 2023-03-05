@@ -337,6 +337,28 @@ class Controller {
             "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg','')
         ]);
+        foreach ($this->ckeditorFields as $ckeditorField) {
+            echo '<script type="text/JavaScript">
+            if (window.editor == undefined) {
+                ClassicEditor
+                .create( document.querySelector( "textarea#'.$ckeditorField.'" ), {
+                    toolbar: [ "heading", "|", "bold" , "italic", "link", "bulletedList", "numberedList",
+                       "imageUpload","insertTable","sourceEditing","mediaEmbed","undo","redo"],
+                    language: "hu",
+                    extraPlugins: [ MyCustomUploadAdapterPlugin ],
+                    mediaEmbed: { extraProviders: window.myExtraProviders 	}
+                } )
+                .then( editor => {
+                    window.editor = editor;
+                } )
+                .catch( err => {
+                    console.log("ckeditor error");
+                    console.log( err.stack );
+                } );
+            }            
+            </script>
+            ';
+        }
         $this->session->delete('errorMsg');
     }
 
@@ -362,7 +384,12 @@ class Controller {
 			$record->$fn2 = urlprocess($record->$ckeditorField);
 		}
         $this->browserURL = $this->request->input('browserUrl', $this->browserURL);
-        view($this->name.'form',[
+        if ($record->displayMode == 'edit') {
+            $viewName = $this->name.'form';
+        } else {
+            $viewName = $this->name.'show';
+        }
+        view($viewName,[
             "flowKey" => $this->newFlowKey(),
             "record" => $record,
             "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
@@ -397,6 +424,7 @@ class Controller {
      * edit vagy new form tárolása
      */
     public function save($record = '') {
+
 		if ($record == '') {
 			$record = $this->model->emptyRecord();
 			foreach ($record as $fn => $fv) {
@@ -407,6 +435,9 @@ class Controller {
 				}	
 			}	
 		}
+
+        // echo ' AAAAA '.JSON_encode($record); exit();
+
         if (!$this->checkFlowKey($this->browserURL)) {
             $this->session->set('flowKey','used');
             $this->session->set('errorMsg','FLOWKEY_ERROR');

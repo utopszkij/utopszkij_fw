@@ -5,22 +5,35 @@
 
 <div id="demo">
 	<h2>{{ lng('DEMO') }}</h2>
-    <form id="demoForm" action="index.php" method="post" class="form" 
-        enctype="multipart/form-data"  style="display:blocl">
-        <input type="hidden" v-model="flowKey" name="flowKey" />
-        <input type="hidden" value="demo.save" name="task" />			
-		//formFields
+    <div id="demoShow" class="form">
         <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
-                <button type="submit" class="btn btn-success">
-                    <em class="fas fa-check"></em>&nbsp;{{ lng('SAVE') }}
-                </button>&nbsp;
-                <a v-bind:href="previous" class="btn btn-secondary">
-                    <em class="fas fa-reply"></em>&nbsp;{{ lng('CANCEL') }}
-                </a>&nbsp;
+                <button type="button" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
                 <button type="button" 
                    v-on:click="delClick()"
-                   v-if="record.id > 0"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+		<!-- 
+            FIGYELEM! a ckeditorral kezelt mezőknél itt egy "2" karaktert kell a mezőnév végére illeszteni 
+            pl: {{ record.description2 }}
+        -->
+		//showFields
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="button" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                <button type="button" 
+                   v-on:click="delClick()"
                    class="btn btn-danger">
                     <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
                 </button>
@@ -33,7 +46,9 @@
                 </a>
             </div>
         </div>
-    </form>    
+    </div>    
+    
+    
 </div>
 
 
@@ -41,9 +56,6 @@
 <script>
     methods = {
 		afterMount() {
-			if (this.record != undefined) {
-		        	//focus
-			}
 		},
         delClick() {
             popupConfirm(lng('SUREDELETE'), 

@@ -105,5 +105,24 @@ tokens = {
 	"NAME_REQUERED":"Nevet meg kell adni!",
 	"NOT_ITEMS":"Nincs adat",
 
+    /* demo */
+  "DEMO":"demo",
+  "DEMOS":"demos",
+  "ID":"id",
+  "NAME":"name",
+
+    /* demo */
+  "DEMO":"demo",
+  "DEMOS":"demos",
+  "ID":"id",
+  "NAME":"name",
+
+    /* demo */
+  "DEMO":"demo",
+  "DEMOS":"demos",
+  "ID":"id",
+  "NAME":"name",
+  "DESCRIPTION":"description",
+
     "END":"Vége"
 };

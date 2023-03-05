@@ -102,6 +102,7 @@ class Upgrade {
 			$table = new Table('demo');
 			$table->id();
 			$table->string('name');
+			$table->text('description');
 			$table->createInDB();
 			if ($table->error != '') {
 				echo $table->error.'<br>';

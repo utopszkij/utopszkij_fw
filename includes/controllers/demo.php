@@ -33,7 +33,7 @@ class Demo extends Controller {
         $this->editURL = 'index.php?task=demo.edit';
         $this->browserTask = 'demo.items';
         $this->model = new DemoModel();
-        $this->ckeditorFields = []; // filedName lista
+        $this->ckeditorFields = ['description']; // filedName lista
 	}
 
     /**

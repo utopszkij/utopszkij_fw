@@ -35,6 +35,8 @@ class TableProcessor {
 					$result .= '        $result->'.$field->Field.' = $_SESSION["loged"];'."\n";
 				} else 	if ($field->Type == 'int') {
 					$result .= '        $result->'.$field->Field.' = 0;'."\n";
+				} else 	if ($field->Type == 'bigint') {
+					$result .= '        $result->'.$field->Field.' = 0;'."\n";
 				} else if ($field->Type == 'number') {
 					$result .= '        $result->'.$field->Field.' = 0;'."\n";
 				} else if ($field->Type == 'char') {
@@ -303,7 +305,6 @@ $str = str_replace('DEMO',strtoupper($name),$str);
 $str = str_replace('DEMOS',strtoupper($name).'S',$str);
 $str = str_replace('demo',$name,$str);
 $str = str_replace('Demo',ucfirst($name),$str);
-
 $str = str_replace('//formFields',$tp->formFields(),$str);
 $str = str_replace('//showFields',$tp->showFields(),$str);
 if (count($tp->fields) > 1) {
@@ -313,6 +314,24 @@ $fp = fopen('includes/views/'.$name.'form.html','w+');
 fwrite($fp,$str);
 fclose($fp);
 echo 'form viewer created'."\n";
+
+$lines = file(__DIR__.'/demoshow.html');
+$str = implode("",$lines);
+$str = str_replace('DEMO',strtoupper($name),$str);
+$str = str_replace('DEMOS',strtoupper($name).'S',$str);
+$str = str_replace('demo',$name,$str);
+$str = str_replace('Demo',ucfirst($name),$str);
+$str = str_replace('//formFields',$tp->formFields(),$str);
+$str = str_replace('//showFields',$tp->showFields(),$str);
+if (count($tp->fields) > 1) {
+	$str = str_replace('//focus','document.querySelector("input[name=\"'.$tp->fields[1]->Field.'\"]").focus();',$str);
+}
+$fp = fopen('includes/views/'.$name.'show.html','w+');
+fwrite($fp,$str);
+fclose($fp);
+echo 'show viewer created'."\n";
+
+
 
 // languages
 $lines = file('languages/'.LNG.'.js');

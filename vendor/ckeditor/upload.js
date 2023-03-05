@@ -81,3 +81,27 @@
 			return new MyUploadAdapter( loader );
 		};
 	}
+
+	myExtraProviders = [
+		{
+				name: 'tiktok',
+				url: /^tiktok\.com\/(.+)/,
+				html: match => `video: https://tiktok.com/${ match[ 1 ] }`
+			},
+			{
+				name: 'fb_watch',
+				url: /^fb\.watch\/(.+)/,
+				html: match => `fb.watch video`
+			},
+			{
+				name: 'facebook',
+				url: /^facebook\.com\/(.+)/,
+				html: match => `facebook video`
+			},
+			{
+				name: 'other',
+				url: /(.+)/,
+				html: match => `other video`
+			}
+			
+	];

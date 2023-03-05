@@ -19,6 +19,8 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 - facebook megosztás támogatása,
 - egszerű telepíthetőség, nem szükséges konzol hozzáférés,
 - php és viewer.html unittest rendszer,
+- ckeditor támogatás,
+- több megjelenitésverzió támogatása,
 - verzió követés a github main branch -ról.
 
 ## Dokumentáció
@@ -69,6 +71,7 @@ Könyvtár szerkezet a futtató web szerveren:
   [images]
      kép fájlok (alkönyvtárak is lehetnek)
   [includes]
+    includ fájlok
     [controllers]
       kontrollerek php fájlok
     [models]
@@ -78,7 +81,8 @@ Könyvtár szerkezet a futtató web szerveren:
   [vendor]
     keretrendszer fájlok és harmadik féltől származó fájlok (több alkönyvtárat is tartalmaz)
   [styles]
-    megjelenést befolyásoló fájlok (css-ek stb)  
+    [default]
+      megjelenést befolyásoló fájlok (css-ek stb)  
   index.php  - fő program
   config.php - konfigurációs adatok
   files.txt  - a telepített fájlok felsorolása, az upgrade folyamat használja
@@ -151,8 +155,9 @@ vagy  varázslóval:
 2. parancssorból:
 cd {documentroot}
 php ./tools/createCRUD.php {componentName} {tableName}
-3. létrehozott, modosított fájlok (controller, model, 2 viewer, lng file)
-ellenörzése, javítása
+3. létrehozott, modosított fájlok (controller, model, 3 viewer, lng file)
+ellenörzése, javítása (ckeditor mezőknél a controller __construct -ban és a
+{componentName}show.html -ben kell javítani )
 4. főmenüben (vagy máshol) a modult inditó link elhelyezése
 
 
