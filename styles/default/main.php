@@ -7,8 +7,9 @@
 	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <!-- bootstrap -->	
-	 <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+
+	<!-- bootstrap -->	
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 	<!-- vue -->
     <script src="vendor/vue/vue.global.js"></script>
@@ -18,8 +19,7 @@
 	<script src="vendor/fontawesome/js/all.min.js"></script>
 	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
-	<link rel="stylesheet" href="admin.css?t=<?php echo $fileVerzio; ?>">
-	<link rel="stylesheet" href="<?php echo SITEURL; ?>/styles/default/style.css?t=<?php echo $fileVerzio; ?>">
+	<link rel="stylesheet" href="<?php echo SITEURL; ?>/styles/default/style.css?t=<?php echo $fileVerzio.date('Ymdhis'); ?>"
 	<!-- multi language -->
 	<?php
 		if (defined('LNG')) {
@@ -49,6 +49,7 @@
 	<script src="index.js"></script>
 </head>	 
 <body>
+	<div id="fixBg"></div>
 	<div id="popup">
 		<div style="text-align:right">
 			<button type="button" onclick="popupClose()" 
@@ -96,7 +97,7 @@
 			</div>
 		</div>
 		
-		<div class="page">
+		<div class="page" id="page_<?php echo $compName.'_'.$task; ?>">
 			<?php
 				$comp->$task ();			
 			?>
@@ -114,12 +115,12 @@
 	<script src="vendor/jquery/jquery-2.2.4.min.js"></script>
 	<script>
 		if (document.cookie.search('cookieEnabled=2') >= 0) {
-			document.write('<p id="cookieEnabled">Csoki kezelés engedélyezve van. Letiltásához kattints ide:'+
+			document.write('<p id="cookieEnabled">Süti kezelés engedélyezve van. Letiltásához kattints ide:'+
 			'<a href="index.php" onclick="setCookie(\'cookieEnabled\',0,100);">Letilt</a></p>');
 		} else if (document.location.href.search('adatkezeles') < 0) {
-			popupConfirm('Ennek a web oldalnak a használatához un. "munkamenet csokik" használtata szükséges.'+
+			popupConfirm('Ennek a web oldalnak a használatához un. "munkamenet sütik" használtata szükséges.'+
 			'<br />Lásd: <a href="index.php?task=adatkezeles">Adatkezelési leírás</a>'+
-			'<br />Kérjük engedélyezd a csokik kezelését!',
+			'<br />Kérjük engedélyezd a sütik kezelését!',
 			function() {
 				setCookie('cookieEnabled',2,100);
 				document.location='index.php';
@@ -158,8 +159,12 @@
 			window.scrollFunction(); window.scrollFunction()
 			if (window.scrollY < 20) {
 				document.getElementById('scrolltotop').style.display = 'none';
+				$('#fomenu').css('backgroundColor','transparent');
+				$('.nav-link').css('color','#f6f6f6');
 			} else {
 				document.getElementById('scrolltotop').style.display = 'block';
+				$('#fomenu').css('backgroundColor','white');
+				$('.nav-link').css('color','black');
 			}
 		};
 		window.setTimeout('window.scrollFunction()',1000);

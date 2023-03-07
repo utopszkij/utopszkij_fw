@@ -48,7 +48,8 @@ tokens = {
     "PROTEST":"Visszaélés jelzése",
     "LICENCE":"Licensz",
     "SOURCE":"Forrás program",
-    "COPYRIGHT":"Minden jog fenntartva",
+    "COPYRIGHT":"Szabadon felhasználható",
+    "SHARE":"Megosztás",
 
     "EMAIL_SENDED":"E-mail elküldve",
 

@@ -49,6 +49,7 @@ if (isset($_COOKIE['screen_height'])) {
 
 $task = $fw->task;
 $comp = $fw->comp;
+$compName = $fw->compName;
 $title = SITETITLE;
 if (method_exists($comp, 'getTitle')) {
 	$title = $comp->getTitle($task);

@@ -22,7 +22,7 @@
                 <em class="fas fa-home"></em>&nbsp;{{ lng('HOME') }}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" v-bind:href="HREF('home.description',{})">
+                <a class="nav-link" href="index.php#about">
                 <em class="fas fa-book"></em>&nbsp;{{ lng('DESCRIPTION') }}</a>
               </li>
               <li class="nav-item">
@@ -43,7 +43,6 @@
                             {{ lng('USERS') }}
                           </a>
                           <a class="dropdown-item" v-bind:href="HREF('group.items',{})">{{ lng('GROUPS') }}</a>
-                          <a class="dropdown-item" v-bind:href="HREF('tag.items',{})">{{ lng('TAGS') }}</a>
                       </div>
               </li>	
             </ul>

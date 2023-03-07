@@ -22,6 +22,7 @@
 
 		/** a filter str alapján bőviti a Query -t
 		 * rendszerint át kell definiálni a mező tipusoktól függően
+		 * 'like' vagy '=' -s keresés
 		 * @param Query
 		 * @param string $filter 'name|value...'
 		 */ 

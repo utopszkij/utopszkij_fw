@@ -5,7 +5,7 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 ![logo](https://szakacskonyv.nfx.hu/fw/images/utopszkij_fw.png)
 
 ## WEB SITE 
-[https://szakacskonyv.nfx.hu/fw](https://szakacskonyv.nfx.hu/fw)
+[https://utopszkij-fw.nfx.hu](https://utopszkij-fw.nfx.hu)
 
 ## Tulajdonságok
 
