@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['installedversions_0',['InstalledVersions',['../class_composer_1_1_installed_versions.html',1,'Composer']]]
+  ['group_0',['Group',['../class_group.html',1,'']]],
+  ['groupmodel_1',['GroupModel',['../class_group_model.html',1,'']]],
+  ['grouptest_2',['GroupTest',['../class_group_test.html',1,'']]]
 ];

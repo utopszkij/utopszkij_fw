@@ -99,6 +99,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9ac65699929006636e513a9cd43f215b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cb75cbb16467eb1768837d126dc535b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#a5cb75cbb16467eb1768837d126dc535b">edit</a> ()</td></tr>
 <tr class="separator:a5cb75cbb16467eb1768837d126dc535b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aace16e357277628007a08cbb32d7dcb2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#aace16e357277628007a08cbb32d7dcb2">showform</a> ()</td></tr>
+<tr class="separator:aace16e357277628007a08cbb32d7dcb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec59df41a4310f6052bc02d0d73009aa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#aec59df41a4310f6052bc02d0d73009aa">editform</a> ()</td></tr>
+<tr class="separator:aec59df41a4310f6052bc02d0d73009aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bc2526ef94ce5e2fd574a48775e5772"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#a1bc2526ef94ce5e2fd574a48775e5772">save</a> ($record='')</td></tr>
 <tr class="separator:a1bc2526ef94ce5e2fd574a48775e5772"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13bdffdd926f26b825ea57066334ff01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#a13bdffdd926f26b825ea57066334ff01">delete</a> ()</td></tr>
@@ -114,6 +118,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a03ee42b33a00a8d0fb5a0fb5c1521731"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd7c7ee7f7f8fddd3479190355647168"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#afd7c7ee7f7f8fddd3479190355647168">validator</a> ($record)</td></tr>
 <tr class="separator:afd7c7ee7f7f8fddd3479190355647168"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c648540aa2db68a56c83cf80aa367a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#a1c648540aa2db68a56c83cf80aa367a5">filterParse</a> (string $s)</td></tr>
+<tr class="separator:a1c648540aa2db68a56c83cf80aa367a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc5b5f7a62b9ac2c7272f021638a0e2c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#acc5b5f7a62b9ac2c7272f021638a0e2c">filterToStr</a> (array $a)</td></tr>
+<tr class="separator:acc5b5f7a62b9ac2c7272f021638a0e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea3f6dd95902369c47973f1a10d3a964"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_controller.html#aea3f6dd95902369c47973f1a10d3a964">mustLogin</a> (string $current)</td></tr>
 <tr class="separator:aea3f6dd95902369c47973f1a10d3a964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -158,6 +166,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a084c3a88cada9e7fb43b81d04e101825"><td class="memItemLeft" align="right" valign="top"><a id="a084c3a88cada9e7fb43b81d04e101825" name="a084c3a88cada9e7fb43b81d04e101825"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>$browserTask</b></td></tr>
 <tr class="separator:a084c3a88cada9e7fb43b81d04e101825"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a748f7b0d5ac32977bb6b7c15115b31"><td class="memItemLeft" align="right" valign="top"><a id="a2a748f7b0d5ac32977bb6b7c15115b31" name="a2a748f7b0d5ac32977bb6b7c15115b31"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>$ckeditorFields</b> = []</td></tr>
+<tr class="separator:a2a748f7b0d5ac32977bb6b7c15115b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >controller abstract model a __construct mindig átdefiniálandó a validator($record), accessRight($action,$record) szinte mindig átdefiniálandó igényelt model methodusok: emptyRecord(), save($record), getById($id), deleteById($id), getItems($page,$limit,$filter,$order), getTotal($filter) igényelt viewerek {name}browser, {name}form a {name}form legyen alkalmas show funkcióra is record,loged,logedAdmin alapján a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is! a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü kontrolokoat tartalmazzon (beleértve az id -t is) igényelt session adatok: loged,logedName, logedGroup</p>
@@ -205,7 +216,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_demo.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Demo</a>, <a class="el" href="class_group.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Group</a>, and <a class="el" href="class_tag.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Tag</a>.</p>
+<p>Reimplemented in <a class="el" href="class_blog.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Blog</a>, <a class="el" href="class_demo.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Demo</a>, <a class="el" href="class_group.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Group</a>, <a class="el" href="class_tag.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Tag</a>, <a class="el" href="class_blog.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Blog</a>, and <a class="el" href="class_demo.html#a03ee42b33a00a8d0fb5a0fb5c1521731">Demo</a>.</p>
 
 </div>
 </div>
@@ -266,7 +277,91 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >meglévő item edit/show képernyő a viewernek a record, loged, loagedAdmin alapján vagy editor vagy show képernyőt kell megjelenitenie </p>
+<p >meglévő item edit/show képernyő a viewernek a record, loged, loagedAdmin alapján vagy editor vagy show képernyőt kell megjelenitenie GET: id, displaymode </p>
+
+</div>
+</div>
+<a id="aec59df41a4310f6052bc02d0d73009aa" name="aec59df41a4310f6052bc02d0d73009aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec59df41a4310f6052bc02d0d73009aa">&#9670;&nbsp;</a></span>editform()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">editform </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >meglévő rekord editor form megjelenitése GET: id </p>
+
+</div>
+</div>
+<a id="a1c648540aa2db68a56c83cf80aa367a5" name="a1c648540aa2db68a56c83cf80aa367a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c648540aa2db68a56c83cf80aa367a5">&#9670;&nbsp;</a></span>filterParse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">filterParse </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>$s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >filter string to array </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramtype">string</td><td class="paramname">$s</td><td>'name|value....' </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>array </dd></dl>
+
+</div>
+</div>
+<a id="acc5b5f7a62b9ac2c7272f021638a0e2c" name="acc5b5f7a62b9ac2c7272f021638a0e2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc5b5f7a62b9ac2c7272f021638a0e2c">&#9670;&nbsp;</a></span>filterToStr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">filterToStr </td>
+          <td>(</td>
+          <td class="paramtype">array&#160;</td>
+          <td class="paramname"><em>$a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >filter array to string </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramtype">array</td><td class="paramname">$a</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string 'name|value....' </dd></dl>
 
 </div>
 </div>
@@ -285,7 +380,9 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >browser </p>
+<p >browser GET| POST: page,order,filter,limit </p>
+
+<p>Reimplemented in <a class="el" href="class_blog.html#a59cba515b6cfb5dfaddf48c4f7b1b62d">Blog</a>, <a class="el" href="class_demo.html#a59cba515b6cfb5dfaddf48c4f7b1b62d">Demo</a>, <a class="el" href="class_blog.html#a59cba515b6cfb5dfaddf48c4f7b1b62d">Blog</a>, and <a class="el" href="class_demo.html#a59cba515b6cfb5dfaddf48c4f7b1b62d">Demo</a>.</p>
 
 </div>
 </div>
@@ -376,6 +473,24 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aace16e357277628007a08cbb32d7dcb2" name="aace16e357277628007a08cbb32d7dcb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aace16e357277628007a08cbb32d7dcb2">&#9670;&nbsp;</a></span>showform()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">showform </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >meglévő rekord megjelenitése GET: id </p>
+
+</div>
+</div>
 <a id="afd7c7ee7f7f8fddd3479190355647168" name="afd7c7ee7f7f8fddd3479190355647168"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd7c7ee7f7f8fddd3479190355647168">&#9670;&nbsp;</a></span>validator()</h2>
 
@@ -407,7 +522,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>string üres ha minden OK, egyébként hibaüzenet </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_demo.html#afd7c7ee7f7f8fddd3479190355647168">Demo</a>, <a class="el" href="class_group.html#afd7c7ee7f7f8fddd3479190355647168">Group</a>, and <a class="el" href="class_tag.html#afd7c7ee7f7f8fddd3479190355647168">Tag</a>.</p>
+<p>Reimplemented in <a class="el" href="class_blog.html#afd7c7ee7f7f8fddd3479190355647168">Blog</a>, <a class="el" href="class_demo.html#afd7c7ee7f7f8fddd3479190355647168">Demo</a>, <a class="el" href="class_group.html#afd7c7ee7f7f8fddd3479190355647168">Group</a>, <a class="el" href="class_tag.html#afd7c7ee7f7f8fddd3479190355647168">Tag</a>, <a class="el" href="class_blog.html#afd7c7ee7f7f8fddd3479190355647168">Blog</a>, and <a class="el" href="class_demo.html#afd7c7ee7f7f8fddd3479190355647168">Demo</a>.</p>
 
 </div>
 </div>

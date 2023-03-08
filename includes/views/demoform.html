@@ -66,6 +66,7 @@
 			if (this.record != undefined) {
 		        	document.querySelector("input[name=\"name\"]").focus();
 			}
+			window.ckeditorInit('textarea#description');
 		},
         delClick() {
             popupConfirm(lng('SUREDELETE'), 

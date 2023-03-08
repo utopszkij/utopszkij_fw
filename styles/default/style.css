@@ -27,7 +27,11 @@ table.col-12 {margin:1% 1% 1% 1%}
 .popupSuccess {background-color:rgb(80, 156, 96); color:rgb(24, 16, 16)}
 .popupSimple {background-color:silver; color:black;} 
 
+.page {padding:10px 10px 10px 10px}
+
 #page_home_show {background-color:transparent; padding:0px;}
+#page_Home_swdoc {margin-top:40px}
+
 #description h2, 
 #description h3 {color:CF5331}
 #description .btn {border-width:2px; padding:15px; border-radius:30px; width:200px}
@@ -35,7 +39,8 @@ table.col-12 {margin:1% 1% 1% 1%}
 #description .download {background-color:#212529; color:white; padding:10% 0px 10% 0px; margin: 0px 0px 0px 0px}
 #description .message {background-color:white; padding:1% 1% 6% 1%; margin:0px 0px 0px 0px; color:#303030}
 
-#services {background-color:white; margin:0px 0px 0px 0px}
+#services {background-color:white; margin:0px 0px 0px 0px; padding:30px 10px 30px 10px}
+#services a {text-decoration:none}
 #services h2 {color: #404040}
 #services img {height:42px}
 

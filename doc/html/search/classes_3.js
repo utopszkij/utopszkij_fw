@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['group_0',['Group',['../class_group.html',1,'']]],
-  ['groupmodel_1',['GroupModel',['../class_group_model.html',1,'']]],
-  ['grouptest_2',['GroupTest',['../class_group_test.html',1,'']]]
+  ['exception_0',['Exception',['../class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_exception.html',1,'PHPMailer::PHPMailer']]]
 ];

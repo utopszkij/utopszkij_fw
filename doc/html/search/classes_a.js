@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['table_0',['Table',['../class_r_a_t_w_e_b_1_1_d_b_1_1_table.html',1,'RATWEB::DB']]],
-  ['tag_1',['Tag',['../class_tag.html',1,'']]],
-  ['tagmodel_2',['TagModel',['../class_tag_model.html',1,'']]]
+  ['phpmailer_0',['PHPMailer',['../class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_h_p_mailer.html',1,'PHPMailer::PHPMailer']]],
+  ['pop3_1',['POP3',['../class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_o_p3.html',1,'PHPMailer::PHPMailer']]]
 ];

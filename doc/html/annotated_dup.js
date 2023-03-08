@@ -7,6 +7,16 @@ var annotated_dup =
       ] ],
       [ "InstalledVersions", "class_composer_1_1_installed_versions.html", null ]
     ] ],
+    [ "PHPMailer", "namespace_p_h_p_mailer.html", [
+      [ "PHPMailer", "namespace_p_h_p_mailer_1_1_p_h_p_mailer.html", [
+        [ "Exception", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_exception.html", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_exception" ],
+        [ "OAuth", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_o_auth.html", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_o_auth" ],
+        [ "OAuthTokenProvider", "interface_p_h_p_mailer_1_1_p_h_p_mailer_1_1_o_auth_token_provider.html", "interface_p_h_p_mailer_1_1_p_h_p_mailer_1_1_o_auth_token_provider" ],
+        [ "PHPMailer", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_h_p_mailer.html", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_h_p_mailer" ],
+        [ "POP3", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_o_p3.html", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_o_p3" ],
+        [ "SMTP", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_s_m_t_p.html", "class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_s_m_t_p" ]
+      ] ]
+    ] ],
     [ "RATWEB", "namespace_r_a_t_w_e_b.html", [
       [ "DB", null, [
         [ "Field", "class_r_a_t_w_e_b_1_1_d_b_1_1_field.html", null ],
@@ -24,6 +34,8 @@ var annotated_dup =
         [ "MailerInterface", "interfaceyidas_1_1socket_mailer_1_1_mailer_interface.html", null ]
       ] ]
     ] ],
+    [ "Blog", "class_blog.html", "class_blog" ],
+    [ "BlogModel", "class_blog_model.html", "class_blog_model" ],
     [ "ComposerAutoloaderInit7b5c437b3bd47a96ef2ff43b81335080", "class_composer_autoloader_init7b5c437b3bd47a96ef2ff43b81335080.html", null ],
     [ "Controller", "class_controller.html", "class_controller" ],
     [ "Demo", "class_demo.html", "class_demo" ],
@@ -36,6 +48,7 @@ var annotated_dup =
     [ "Request", "class_request.html", "class_request" ],
     [ "Session", "class_session.html", "class_session" ],
     [ "StatisticModel", "class_statistic_model.html", "class_statistic_model" ],
+    [ "TableProcessor", "class_table_processor.html", null ],
     [ "Tag", "class_tag.html", "class_tag" ],
     [ "TagModel", "class_tag_model.html", "class_tag_model" ],
     [ "Upgrade", "class_upgrade.html", "class_upgrade" ],
