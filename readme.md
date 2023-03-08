@@ -38,9 +38,9 @@ Aki ezzel a módszerrel nem ért egyet az az index.php -t modosítva használhat
 
 GNU v3
 
-## A keretrendszer segitségével felépített müködő demo:
+## Egy a keretrendszer segitségével felépített müködő program:
 
-[https://szakacskonyv.nfx.hu](https://szakacskonyv.nfx.hu)
+[https://befalom.hu](https://befalom.hu)
 
 ## Információk informatikusok számára      
 
