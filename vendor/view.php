@@ -33,10 +33,14 @@
  * @return void
  */
 
-
 function view(string $name,array $params, string $appName = 'app') {
     $scriptExist = false;
-    if (file_exists(__DIR__.'/../includes/views/'.$name.'_'.LNG.'.html')) {
+    
+    if (file_exists(__DIR__.'/../styles/'.STYLE.'/'.$name.'_'.LNG.'.html')) {
+        $lines = file(__DIR__.'/../styles/'.STYLE.'/'.$name.'_'.LNG.'.html');
+    } else if (file_exists(__DIR__.'/../styles/'.STYLE.'/'.$name.'.html')) {
+        $lines = file(__DIR__.'/../styles/'.STYLE.'/'.$name.'.html');
+    } else  if (file_exists(__DIR__.'/../includes/views/'.$name.'_'.LNG.'.html')) {
         $lines = file(__DIR__.'/../includes/views/'.$name.'_'.LNG.'.html');
     } else if (file_exists(__DIR__.'/../includes/views/'.$name.'.html')) {
         $lines = file(__DIR__.'/../includes/views/'.$name.'.html');
@@ -50,7 +54,7 @@ function view(string $name,array $params, string $appName = 'app') {
             echoScript($appName);
         } else if (trim($line) == '</script>') {
             echoEndScript($params,$appName);
-        } else if (substr(trim($line),0,8) == 'include ') {
+        } else if (substr(trim($line),0,7) == 'include') {
             $lines2 = file(__DIR__.'/../includes/views/'.trim(substr(trim($line),7,100)).'.html');
             echo implode("\n",$lines2);
         } else {
@@ -81,9 +85,10 @@ function echoEndScript(array $params, string $appName) {
             echo '				
             innerWidth : window.innerWidth,
             HREF: window.HREF,
+            location: encodeURI(window.location),
             lng: window.lng,
-			location: window.location,
-            siteurl: "'.SITEURL.'"
+            siteurl: window.siteurl,
+            sid:"'.session_id().'"
             };
         },
         mounted() {

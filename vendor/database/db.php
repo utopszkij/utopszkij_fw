@@ -281,16 +281,26 @@ class Query {
    	   		$this->exec('SET character_set_connection=utf8');
       		$this->exec('SET character_set_client=utf8');		
 		}
-		if ($s === '') {
+		if (is_array($s)) {
+			$w = [];
+			foreach ($s as $s1) {
+				$w[] = '"'.$mysqli->real_escape_string((string)$s1).'"';	
+			}
+			$result = '('.implode(',',$w).')';
+		} else if ($s === '') {
 			$result = '""';
+		} else if (strpos(' '.$s,'`') > 0) {
+			$result = $s;	
 		} else if (is_numeric($s)) {
 			$result = $s;
 		} else if (is_bool($s)) {
 			$result = $s;
+		} else if ($s == 'NULL') {
+			$result = $s;	
 		} else if (substr((string)$s,0,1) == '"') {
-			$result = $s;
-		} else if (substr((string)$s,0,1) == '`') {
-			$result = $s;
+			$s = trim(str_replace('--','__',$s));
+			$s = substr($s,1,strlen($s)-2); // eltávolítja a kezdő és záró " -t
+			$result = '"'.$mysqli->real_escape_string((string)$s).'"';	
 		} else {
 			$result = '"'.$mysqli->real_escape_string((string)$s).'"';	
 		}
@@ -681,7 +691,8 @@ class Query {
 			$result .= 'GROUP BY '.implode(',', $this->groupBy)."\n";		
 		}
 		if ($this->order != '') {
-			$result .= 'ORDER BY '.sqlName($this->order);
+			// $result .= 'ORDER BY '.sqlName($this->order);
+			$result .= 'ORDER BY '.$this->order;
 			if (($this->order != '') & ($this->orderDir != '')) {
 				$result .= ' '.$this->orderDir;
 			}
@@ -697,6 +708,7 @@ class Query {
 		$this->sql = $s;	
 	}
 }
+
 
 /**
 * tábla kreálás, droppolás
@@ -846,7 +858,7 @@ class Table {
 		$this->fields[] = $result;
 		return $this->fields[count($this->fields) - 1];
 	}
-	public function dateTtime(string $name) {
+	public function dateTime(string $name) {
 		$result = new Field();
 		$result->type = 'datetime';
 		$result->name = $name;
@@ -979,6 +991,7 @@ class Table {
 	}
 
 }
+
 
 
 ?>

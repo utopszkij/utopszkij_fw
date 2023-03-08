@@ -5,7 +5,7 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 ![logo](https://szakacskonyv.nfx.hu/fw/images/utopszkij_fw.png)
 
 ## WEB SITE 
-[https://szakacskonyv.nfx.hu/fw](https://szakacskonyv.nfx.hu/fw)
+[https://utopszkij-fw.nfx.hu](https://utopszkij-fw.nfx.hu)
 
 ## Tulajdonságok
 
@@ -19,6 +19,8 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 - facebook megosztás támogatása,
 - egszerű telepíthetőség, nem szükséges konzol hozzáférés,
 - php és viewer.html unittest rendszer,
+- ckeditor támogatás,
+- több megjelenitésverzió támogatása,
 - verzió követés a github main branch -ról.
 
 ## Dokumentáció
@@ -69,6 +71,7 @@ Könyvtár szerkezet a futtató web szerveren:
   [images]
      kép fájlok (alkönyvtárak is lehetnek)
   [includes]
+    includ fájlok
     [controllers]
       kontrollerek php fájlok
     [models]
@@ -77,15 +80,17 @@ Könyvtár szerkezet a futtató web szerveren:
       viewer templates  spec. html fájlok. vue elemeket tartalmaznak
   [vendor]
     keretrendszer fájlok és harmadik féltől származó fájlok (több alkönyvtárat is tartalmaz)
+  [styles]
+    [default]
+      megjelenést befolyásoló fájlok (css-ek stb)  
   index.php  - fő program
   config.php - konfigurációs adatok
-  style.css  - megjelenés
   files.txt  - a telepített fájlok felsorolása, az upgrade folyamat használja
 
 ```  
 index.php paraméter nélküli hívással a "home.show" taskal indul a program.
 
-index.php?task=upgrade1&version=vx.x&branch=xxxx hívással a github megadott branch -et használva  
+index.php?task=upgrade.upgrade1&version=vx.x&branch=xxxx hívással a github megadott branch -et használva  
 is tesztelhető/használható az upgrade folyamat.
 
 ## unit test
@@ -125,6 +130,37 @@ Ezután linux terminálban:
 cd reporoot
 ./tools/documentor.sh
 ```
+
+## ÚJ CRUD modul létrehozása
+
+(CRUD: Create - read - update - delete)
+
+- index.php -ban verzió szám emelés
+- controllers/upgrade.php -ban adatbázist modosítás
+- controllers/{newModelNev}.php létrehozása
+- models/{newModulNev}model.php létrehozása
+- views/{newModulNev}browser.php létrehozása
+- views/{newModeulNev}form.php létrehozása
+- languages/{lng}.js modosítása
+- főmenüben (vagy máshol) a modult inditó link elhelyezése
+- program inditása böngészöből
+
+Lásd a "demo" modult: controllers/demo.php, models/demomodel.php,
+views/demobrowser.php, views/demoform.php, languages/hu.js
+controllers/upgrade.php -ben a v1.1.0 tartozik ehhez.
+ 
+vagy  varázslóval:
+
+1. tábla létrehozása (pl phpmyadmin segitségével)
+2. parancssorból:
+cd {documentroot}
+php ./tools/createCRUD.php {componentName} {tableName}
+3. létrehozott, modosított fájlok (controller, model, 3 viewer, lng file)
+ellenörzése, javítása (ckeditor mezőknél a controller __construct -ban és a
+{componentName}show.html -ben kell javítani )
+4. főmenüben (vagy máshol) a modult inditó link elhelyezése
+
+
 ## verzió v1.0.3
 table lock, unlock, tranzakció kezelés a database interface-be
 ### *************************************

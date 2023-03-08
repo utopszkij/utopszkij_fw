@@ -3,6 +3,7 @@
  * MVC controller
  * Request
  * Session
+ * 
  */
 
 define('NOSQLINJECTION','NOSQLINJECTION');
@@ -11,6 +12,8 @@ define('NUMBER','NUMBER');
 define('INTEGER','INTEGER');
 define('NOFILTER','NOFILTER');
 define('RAW','RAW');
+
+include_once 'includes/urlprocess.php';
 
 /**
  * GET/ POST kezelő objektum
@@ -47,6 +50,10 @@ class Request {
             case INTEGER:
                 $result = (int)$result;
                 break;    
+            case HTML:       
+                // no sql incejction
+                $result = str_replace('--','__',$result);
+                break;
         }    
         return $result;
     }
@@ -127,18 +134,18 @@ class Session {
  * controller abstract model
  * a __construct mindig átdefiniálandó
  * a validator($record), accessRight($action,$record) szinte mindig átdefiniálandó
- * az items, new, edit, save, delete pedig egyedi nevü rutinokban hívandó pl:
- *    public function valamik() {
- *          $this->items()
- *    }
  * igényelt model methodusok: emptyRecord(), save($record), 
- *      getById($id), delteById($id), getItems($page,$limit,$filter,$order), 
+ *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
  *      getTotal($filter)
- * igényel viewerek {name}browser, {name}form 
+ * igényelt viewerek {name}browser, {name}form 
  *      a {name}form legyen alkalmas show funkcióra is record,loged,logedAdmin alapján
+ *      a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is!
+ *      a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü
+ *             kontrolokoat tartalmazzon (beleértve az id -t is)
+ * igényelt session adatok: loged,logedName, logedGroup
  * 
- * A taskok public function -ként legyenek definiálva.
- * FIGYELEM az összes komponensben nézve egyedinek kell a task neveknek lenniük!
+ * A taskok public function -ként legyenek definiálva 
+ *   standart taskok: items, edit, new, save, delete.
  */
 class Controller {
     protected $request;
@@ -154,6 +161,7 @@ class Controller {
     protected $addURL;
     protected $editURL;
     protected $browserTask;
+    protected $ckeditorFields = [];
 
     function __construct() {
         $this->request = new Request();
@@ -161,54 +169,20 @@ class Controller {
         $this->loged = $this->session->input('loged',0,INTEGER);
         $this->logedName = $this->session->input('logedName','Látogató');
         $this->logedAdmin = isAdmin();
-        $this->logedAvatar = $this->session->input('logedAvatar');
+        $this->logedGroup = $this->session->input('logedGroup');
+        $this->logedAvatar = $this->session->input('logedGroup');
+        if ($this->request->input('errorMsg','',HTML) != '') {
+			$this->session->set('errorMsg',$this->request->input('errorMsg','',HTML));
+		}
+        if ($this->request->input('successMsg','',HTML) != '') {
+			$this->session->set('successMsg',$this->request->input('successMsg','',HTML));
+		}
         // $this->model = new ValamiModel();
         // $this->name = 'xxx';
         // $this->browserURL = '...';
-        // $this->addURL = '...';
+        // $this->formURL = '...';
         // $this->browserTask = '...';
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-	/**
-	 * új munkafolyamat ellenörző kulcs képzése és tárolása sessionba
-	 */ 
-    public function newKey() {
-        $key = base64_encode(rand(100000,990000));
-        $this->session->set('key',$key);
-        return $key;
-    }
-
-	/**
-	 * munkafolyamat ellenörző kulcs vizsgálata
-	 */ 
-    public function checkKey() {
-        if (($this->session->input('key') == 'used') |
-            ($this->request->input('key') == $this->session->input('oldKey')))  {
-			// user böngésző refresh -t használt	
-            $this->session->set('oldKey', $this->session->input('key','none'));
-            $this->session->set('key','used');
-			echo '<script>
-			location="'.$url.'";
-			</script>
-            </body></html>';
-            exit();
-            return true;
-        }
-        $result = ($this->request->input('key') == $this->session->input('key')); 
-        $this->session->set('oldKey', $this->session->input('key','none'));
-        $this->session->set('key','used');
-        return $result;
-   }
-
-    /**
-     * bejelentkezett user admin?
-     */
-    public function isAdmin() {
-        Fw::isAdmin();
+        // $this->ckeditorFields = ['fieldname',...]
     }
 
     /**
@@ -229,28 +203,77 @@ class Controller {
     protected function validator($record): string {
         return '';
     }
+    
+    /**
+     * filter string to array
+     * @param string $s 'name|value....'
+     * @return array
+     */ 
+    protected function filterParse(string $s):array {
+		$result = [];
+		if ($s != '') {
+			$w = explode('|',$s);
+			$i = 0;
+			while ($i < count($w)) {
+				$fn = $w[$i];
+				$fv = $w[$i+1];
+				$i = $i + 2;
+				$result[$fn] = $fv;
+			}
+		} 
+		return $result;
+	}
+	
+	/**
+	 * filter array to string
+	 * @param array $a
+	 * @return string 'name|value....'
+	 */ 
+	protected function filterToStr(array $a): string {
+		$result = '';
+		if (count($a) > 0) {
+			$w = [];
+			foreach ($a as $fn => $fv) {
+				$w[] = $fn;
+				$w[] = $fv;
+			}
+			$result = implode('|',$w);
+		}
+		return $result;
+	}
 
     /**
      * browser
+     * GET| POST: page,order,filter,limit
      */
-    protected function items($order = 1) {
+    public function items($order = 1) {
         // paraméter olvasása get vagy sessionból
         $page = $this->session->input($this->name.'page',1);
         $page = $this->request->input('page',$page);
         $limit = round((int)$_SESSION['screen_height'] / 80);
         $limit = $this->session->input($this->name.'limit',$limit);
         $limit = $this->request->input('limit',$limit);
-        $filter = $this->session->input($this->name.'filter','');
-        $filter = $this->request->input('filter',$filter);
         $order = $this->session->input($this->name.'order',$order);
         $order = $this->request->input('order',$order);
-        $total = $this->model->getTotal($filter);
-        $this->session->delete($this->neme.'_oldRecord');
 
-        if ($page < 1) {
-            $page = 1;
-        }
-        // paginátor számára adat képzés (összes lap tömbbe)
+		// filter kezelés	
+        $sFilter = $this->session->input($this->name.'filter',''); // 'name|value...'
+        $sFilterArray = $this->filterParse($sFilter); // [name => value,...]
+        $rFilter = $this->request->input('filter'); // 'name|value...'
+        $rFilterArray = $this->filterParse($rFilter); // [name => value,...]
+        if ($rFilter == 'all') {
+			$sFilterArray = [];
+			$filter = '';
+		} else {
+			$rFilterArray = $this->filterParse($rFilter); // [name => value,...]
+			foreach ($rFilterArray as $fn => $fv) {
+				$sFilterArray[$fn] = $fv;
+			}
+			$filter = $this->filterToStr($sFilterArray); // 'name|value...'
+		}
+        
+		// adatok a paginátor számára
+        $total = $this->model->getTotal($filter);
         $pages = [];
         $p = 1;
         while ((($p - 1) * $limit) < $total) {
@@ -258,15 +281,22 @@ class Controller {
             $p++;
         }
         $p = $p - 1;
+
+        // hibás paraméter kezelés
         if ($page > $p) { 
             $page = $p; 
         }
+        if ($page < 1) {
+            $page = 1;
+        }
+
         // paraméter tárolás sessionba
         $this->session->set($this->name.'page',$page);
         $this->session->set($this->name.'limit',$limit);
         $this->session->set($this->name.'filter',$filter);
         $this->session->set($this->name.'order',$order);
-        // rekordok  olvasása az adatbázisból
+        
+        // rekordok olvasása az adatbázisból
         $items = $this->model->getItems($page,$limit,$filter,$order);
 
         // megjelenítés
@@ -279,10 +309,9 @@ class Controller {
             "filter" => $filter,
             "loged" => $this->loged,
             "logedName" => $this->loged,
-            "logedAdmin" => $this->logedAdmin,
+            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
             "previous" => SITEURL,
-            "addURL" => $this->addURL,
-            "editURL" => $this->editURL,
+            "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg',''),
             "successMsg" => $this->session->input('successMsg','')
         ]);
@@ -294,33 +323,48 @@ class Controller {
     /**
      * Új item felvivő képernyő
      */
-    protected function new() {
+    public function new() {
         $item = $this->model->emptyRecord();
         if (!$this->accessRight('new',$item)) {
             $this->session->set('errorMsg','ACCESDENIED');
-            echo '<script>
-            location="'.$this->browserURL.'";
-            </script>
-            ';
+            $this->items();
         }
-        if ($this->session->isset($this->name.'_oldRecord')) {
-            $old = JSON_decode($this->session->input($this->name.'_oldRecord'));
-            if (!isset($old->id)) {
-                $item = $old;
-            }
-            if ($old->id == 0) {
-                $item = $old;
-            }
+        if ($this->session->isset('oldRecord')) {
+            $item = $this->session->input('oldRecord');
         }
+        $this->browserURL = $this->request->input('browserUrl', $this->browserURL);
         view($this->name.'form',[
-            "key" => $this->newKey(),
+            "flowKey" => $this->newFlowKey(),
             "record" => $item,
             "loged" => $this->loged,
             "logedName" => $this->loged,
-            "logedAdmin" => $this->logedAdmin,
+            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
             "previous" => $this->browserURL,
+            "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg','')
         ]);
+        foreach ($this->ckeditorFields as $ckeditorField) {
+            echo '<script type="text/JavaScript">
+            if (window.editor == undefined) {
+                ClassicEditor
+                .create( document.querySelector( "textarea#'.$ckeditorField.'" ), {
+                    toolbar: [ "heading", "|", "bold" , "italic", "link", "bulletedList", "numberedList",
+                       "imageUpload","insertTable","sourceEditing","mediaEmbed","undo","redo"],
+                    language: "hu",
+                    extraPlugins: [ MyCustomUploadAdapterPlugin ],
+                    mediaEmbed: { extraProviders: window.myExtraProviders 	}
+                } )
+                .then( editor => {
+                    window.editor = editor;
+                } )
+                .catch( err => {
+                    console.log("ckeditor error");
+                    console.log( err.stack );
+                } );
+            }            
+            </script>
+            ';
+        }
         $this->session->delete('errorMsg');
     }
 
@@ -328,115 +372,139 @@ class Controller {
      * meglévő item edit/show képernyő
      * a viewernek a record, loged, loagedAdmin alapján vagy editor vagy show
      * képernyőt kell megjelenitenie
+     * GET: id, displaymode
      */
-    protected function edit() {
+    public function edit() {
         $id = $this->request->input('id',0);
         $record = $this->model->getById($id);
+        $record->displayMode = $this->request->input('displaymode','show');
         if (!$this->accessRight('edit',$record) & !$this->accessRight('show',$record)) {
-            $this->session->set('errorMsg','ACCESSDENIED');
-            echo '<script>
-            location="'.$this->browserURL.'";
-            </script>
-            ';
+            $this->session->set('errorMsg','ACCESDENIED');
+            $this->items();
         }
-        if ($this->session->isset($this->name.'_oldRecord')) {
-            $old = JSON_decode($this->session->input($this->name.'_oldRecord'));
-            if ($old->id == $record->id) {
-                $record = $old;
-            }
+        if ($this->session->isset('oldRecord')) {
+            $record = $this->session->input('oldRecord');
         }
-        view($this->name.'form',[
-            "key" => $this->newKey(),
+        foreach ($this->ckeditorFields as $ckeditorField) {
+			$fn2 = $ckeditorField.'2';
+			$record->$fn2 = urlprocess($record->$ckeditorField);
+		}
+        $this->browserURL = $this->request->input('browserUrl', $this->browserURL);
+        if ($record->displayMode == 'edit') {
+            $viewName = $this->name.'form';
+        } else {
+            $viewName = $this->name.'show';
+        }
+        view($viewName,[
+            "flowKey" => $this->newFlowKey(),
             "record" => $record,
-            "logedAdmin" => $this->logedAdmin,
+            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
             "loged" => $this->loged,
             "previous" => $this->browserURL,
+            "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg',''),
         ]);
         $this->session->delete('errorMsg');
     }
 
     /**
+     * meglévő rekord megjelenitése
+     * GET: id
+     */
+    public function showform() {
+        $this->request->set('displaymode','show');
+        $this->edit();
+    }
+
+    /**
+     * meglévő rekord editor form megjelenitése
+     * GET: id
+     */
+    public function editform() {
+        $this->request->set('displaymode','edit');
+        $this->edit();
+    }
+    
+
+    /**
      * edit vagy new form tárolása
      */
-    protected function save($record) {
-        $this->session->set($this->name.'_oldRecord',JSON_encode($record));
-        if ($this->checkKey()) {
-			if ($record->id == 0) {
-				if (!$this->accessRight('new',$record)) {
-					$this->session->set('errorMsg','ACCESSDENIED');
-					echo '<script>
-					location="'.$this->browserURL.'";
-					</script>
-					';
-				}
-			} else {
-				if (!$this->accessRight('edit',$record)) {
-					$this->session->set('errorMsg','ACCESSDENIED');
-					echo '<script>
-					location="'.$this->browserURL.'";
-					</script>
-					';
-				}
-			}   
-			$error = $this->validator($record);
-			if ($error != '') {
-				$this->session->set('errorMsg',$error);
-				if ($record->id == 0) {
-					echo '<script>
-					location="'.$this->addURL.'";
-					</script>
-					';
-				} else {
-					echo '<script>
-					location="'.$this->editURL.'";
-					</script>
-					';
-				}    
-			} else {
-				$this->session->delete($this->name.'_oldRecord');
-				$this->model->save($record);
-				if ($this->model->errorMsg == '') {
-					$this->session->delete('errorMsg');
-					$this->session->set('successMsg','SAVED');
-					echo '<script>
-						location="'.$this->browserURL.'";
-					</script>
-					';
-				} else {
-					echo $this->model->errorMsg; exit();
-				}
-			}
-		} else {
-			echo 'Munkafolyamat ellenörző kulcs hibás. Lehet, hogy túl hosszú várakozás miatt lejárt a munkamenet.'; exit();
+    public function save($record = '') {
+
+		if ($record == '') {
+			$record = $this->model->emptyRecord();
+			foreach ($record as $fn => $fv) {
+				if (in_array($fn,$this->ckeditorFields)) {
+					$record->$fn = $this->request->input($fn, $fv, HTML);
+				} else {	
+					$record->$fn = $this->request->input($fn, $fv);
+				}	
+			}	
 		}
+
+        // echo ' AAAAA '.JSON_encode($record); exit();
+
+        if (!$this->checkFlowKey($this->browserURL)) {
+            $this->session->set('flowKey','used');
+            $this->session->set('errorMsg','FLOWKEY_ERROR');
+            $this->items();
+            return;
+        }
+        $this->session->set('flowKey','used');
+        $this->session->set('oldRecord',$record);
+        $this->browserURL = $this->request->input('browserUrl',$this->browserURL);
+        if ($record->id == 0) {
+            if (!$this->accessRight('new',$record)) {
+                $this->session->set('errorMsg','ACCESDENIED');
+                $this->items();
+            }
+        } else {
+            if (!$this->accessRight('edit',$record)) {
+                $this->session->set('errorMsg','ACCESDENIED');
+                $this->items();
+            }
+        }   
+        $error = $this->validator($record);
+        if ($error != '') {
+            $this->session->set('errorMsg',$error);
+            if ($record->id == 0) {
+				$this->new();
+				return;
+            } else {
+				$this->edit();
+				return;
+            } 
+        } else {
+            $this->session->delete('oldRecord');
+            $this->model->save($record);
+            if ($this->model->errorMsg == '') {
+                $this->session->delete('errorMsg');
+                $this->session->set('successMsg','SAVED');
+                $this->items();
+            } else {
+                echo $this->model->errorMsg; exit();
+            }
+        }
     }
 
     /**
      * meglévő item törlése
      */
-    protected function delete() {
+    public function delete() {
         $id = $this->request->input('id',0);
         $item = $this->model->getById($id);
+        $this->browserURL = $this->request->input('browserUrl',$this->browserURL);
         if (!$this->accessRight('delete',$item)) {
             $this->session->set('errorMsg','ACCESDENIED');
-            echo '<script>
-            location="'.$this->browserTask.'";
-            </script>
-            ';
-            return;
+            $this->items();
         }
         $this->model->delById($id);
         if ($this->model->errorMsg == '') {
             $this->session->set('successMsg','DELETED');
-            echo '<script>
-            location="'.$this->browserURL.'";
-            </script>
-            ';
+            $this->items();
         } else {
             echo $this->model->errorMsg; exit();
         }
-
     }
 
     /**
@@ -451,39 +519,49 @@ class Controller {
 			</script>';
 			return;
 		}
-    }   
+    }  
     
     /**
-     * email küldés
-	 * szükséges: require __DIR__ . '/../../vendor/autoload.php';
-	 *            use \yidas\socketMailer\Mailer;
-     * @param string $to címzett email címe
-     * @param string $subject levét tárgya
-     * @param string $bodyhtml kód
+     * "folyamat integritás" kezelés új flowKey -t képez, tárol sessionba 
+     * ezt el kell helyezni a formokban 
+     * controllerben:
+     * view('...',['flowKey'] => $this->newFlowKey(), ....])
+     * form html -ben:
+     * <input type="hidden" name="flowKey" v-model="flowKey" />
+     * @return string;
      */
-    protected function mailer(string $to, string $subject, string $body):bool {
-        if (DEFINED('UNITTEST')) {
-            if (UNITTEST == 1) {
-                return true;
-            }    
+    public function newFlowKey(): string {
+        $key = random_int(100000,999999).time();
+        $this->session->set('flowKey',$key);
+        return $key;
+    }
+
+    /**
+     * flowKey ellenörzés, tárolás sessionba oldFlowKey -be, és átirás 'used' -re.
+     * Ha 'used' van a sessionban vagy
+     *    a requestben érkező flowKey == sessionban lévő oldFlowKey
+     *    ez azt jelenti browser refrest csinált a user
+     *   ilyenkor hibajelzés nélkül a $url -re ugrik.
+     * @param string $url
+     * @return bool
+     */
+    public function checkFlowKey(string $url): bool {
+        if (($this->session->input('flowKey') == 'used') |
+            ($this->request->input('flowKey') == $this->session->input('oldFlowKey')))  {
+				// a user a refresh gombbal újaküldte a formot
+				$this->session->set('oldFlowKey', $this->session->input('flowKey','none'));
+				$this->session->set('flowKey','used');
+				echo '<script>
+				location="'.$url.'";
+				</script>
+				</body></html>';
+				exit();
+				return true;
         }
-		$mailer = new \yidas\socketMailer\Mailer([
-			'host' => MAIL_HOST,
-			'username' => MAIL_USERNAME,
-			'password' => MAIL_PASSWORD,
-			'port' => MAIL_PORT,
-			'encryption' => 'ssl',
-		]);
-		$result = $mailer
-			->setSubject($subject)
-			->setBody($body)
-			->setTo([$to])
-			->setFrom([MAIL_FROM_ADDRESS => ''])
-			->send();
-		if ($result != 1) {
-			echo 'ERROR IN SEND MAIL INTO '.$to; exit();
-		}	
-		return ($result == 1);
+        $result = ($this->request->input('flowKey') == $this->session->input('flowKey')); 
+        $this->session->set('oldFlowKey', $this->session->input('flowKey','none'));
+        $this->session->set('flowKey','used');
+        return $result;
     }
 
 }
