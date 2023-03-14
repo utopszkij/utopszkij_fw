@@ -2,22 +2,33 @@ html {font-size:18px}
 #fixBg {background-image:url('../../images/bg-masthead.jpg'); background-size:100%; background-repeat: no-repeat;
   background-color:#161616;
   padding:0px; max-width:2000px; position:fixed; left:0px; top:0px; width:100%; height:2000px; z-index:1}
-#container {position: absolute; top:0px; left:0px; width:100%; max-width: 2000px; height:auto;  z-index:2; margin:0px; padding:0px}  
-.page {text-align:left; padding:10px; min-height:800px;
+#container {position: absolute; top:0px; left:0px; width:100%; max-width: 2000px; height:auto;  z-index:2; margin:0px; padding:0px} 
+
+.light .page {text-align:left; padding:10px; min-height:800px;
   background-color:#f0f0f0; color:#404040; border-radius:0px; margin:30px 0px 0px 0px;}
+.light .link,
+.light a {cursor:pointer; color:#0d6efd; font-style:normal; text-decoration:none}
+
+
+.dark .page {text-align:left; padding:10px; min-height:800px;
+    background-color:black; color:white; border-radius:0px; margin:30px 0px 0px 0px;}
+.dark .link,
+.dark a {cursor:pointer; color:yellow; font-style:normal; text-decoration:none}
+  
 .warning {background-color:red; color:yellow; padding:1%;}
 .warning a {color:yellow;}
-.form-control {display:inline-block; width:auto}
+.form-control {display:inline-block; width:auto; max-width:95%; overflow: hidden;}
 label {display:inline-block; width: 30%; text-align:right}
 form .row {margin:1% 0px 1% 0px}
-.link {cursor:pointer; color:#0d6efd; font-style:normal; text-decoration:underline}
 .btn {margin:1px 1px 1px 1px; padding: 5px 15px 5px 15px; height:auto; width:auto; border-radius:20px;}
-.btn-primary {background-color:#F4623A; border-color:#F4623A}
+.btn-primary {background-color:#F4623A; color: #404040; border-color:#F4623A}
 .btn-primary:hover {background-color:#CF5331; border-color:#CF5331}
+.light .btn-secondary {color: #f0f0f0}
+.dark .btn-secondary {color: #f0f0f0}
 table.col-12 {margin:1% 1% 1% 1%}
 
 #header {display:none}
-#fomenu {background-color:transparent; font-weght:bold;
+#fomenu {background-color:transparent; font-weight:bold;
    position:fixed; z-index:3; top:0px; left:0px; width:100%; color:#f4f4f4}
    
 #popup {position:fixed; z-index:99; top:100px; left:100px; display:none;
@@ -37,16 +48,18 @@ table.col-12 {margin:1% 1% 1% 1%}
 #description .btn {border-width:2px; padding:15px; border-radius:30px; width:200px}
 #description .about {background-color:#F4623A; color:white; border-radius:0px; padding:40px 20px 20px 20px; margin:0px 0px 0px 0px}
 #description .download {background-color:#212529; color:white; padding:10% 0px 10% 0px; margin: 0px 0px 0px 0px}
-#description .message {background-color:white; padding:1% 1% 6% 1%; margin:0px 0px 0px 0px; color:#303030}
+.light #description .message {background-color:white; color:#404040; padding:1% 1% 6% 1%; margin:0px 0px 0px 0px;} 
+.dark #description .message {background-color:black; color:white; padding:1% 1% 6% 1%; margin:0px 0px 0px 0px;}
 
-#services {background-color:white; margin:0px 0px 0px 0px; padding:30px 10px 30px 10px}
+.light #services {background-color:white; color:black; margin:0px 0px 0px 0px; padding:30px 10px 30px 10px}
+.dark #services {background-color:black; color:white; margin:0px 0px 0px 0px; padding:30px 10px 30px 10px}
 #services a {text-decoration:none}
-#services h2 {color: #404040}
+#__services h2 {color: #404040}
 #services img {height:42px}
 
 #portfolio h3 {background-color:#F4623A; color:white; margin:0px 0px 0px 0px;}
 #portfolio .container-fluid, #portfolio .container-sm, #portfolio .container-md, #portfolio .container-lg, #portfolio .container-xl, #portfolio .container-xxl {
-  max-width: 1920px; margin:0px 0px 0px 0px; background-color:white;
+  max-width: 1920px; margin:0px 0px 0px 0px; background-color:white; color:#404040
 }
 #portfolio .container-fluid .portfolio-box, #portfolio .container-sm .portfolio-box, #portfolio .container-md .portfolio-box, #portfolio .container-lg .portfolio-box, #portfolio .container-xl .portfolio-box, #portfolio .container-xxl .portfolio-box {
   position: relative;
@@ -83,7 +96,7 @@ table.col-12 {margin:1% 1% 1% 1%}
 
 .paginator {display:inline-block; list-style: none;}
 .paginator li {margin-right:0px;}
-.paginator a {display:inline-block; text-decoration:none; color:black; 
+.paginator a {display:inline-block; text-decoration:none;  
   margin:0px; width:100%; height:100%} 
 .paginatorItem {display:inline-block; border-style:solid; border-width:1px; 
   width:32px; height:32px; text-align:center; margin:0px 2px 0px 0px; padding:0px;}
@@ -108,7 +121,8 @@ table.col-12 {margin:1% 1% 1% 1%}
 .browserTable td {padding:5px; margin:2px; 
   border-style:solid; border-width:1px; border-color:silver;}
 
-pre {line-height:15px; overflow:hidden; background-color:#f4e6e6; padding:5px;}
+.light pre {line-height:15px; overflow:hidden; background-color:#f4e6e6; color:#404040; padding:5px;}
+.dark pre {line-height:15px; overflow:hidden; background-color:#52250c; color:#b69595; padding:5px;}
 pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:14px;}
 
 .grafikonTable {width:100%}
@@ -122,6 +136,8 @@ pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:1
 #footer {background-color:black; color:white; padding:10px;}
 #footer a {text-decoration:none; color:white}
 #footer .btn:hover {color:black}
+.light #cookieEnabled {color: #f0f0f0}
+.dark #cookieEnabled {color: white}
 
 @media screen and (max-width: 992px) {
 }
