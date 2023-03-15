@@ -4,6 +4,10 @@
  * Egyszerüsített markdown --> html konvertel
  * 
  * Értelmezett markdown elemek:
+ * # text			<h1>text</h1>
+ * ## text			<h2>text</h2>
+ * ### text			<h3>text</h3>
+ * #### text        <h4>text</h4
  * ***...* 			<hr />
  * **text**			<strong>text</strong>
  * __text__			<strong>text</strong>
@@ -20,7 +24,12 @@
  * empty_line 		<br />
  */ 
 
-function markdownToHtml($text) {
+/**
+ * markdownToHtml
+ * @param string $text
+ * @return string
+ */
+function markdownToHtml(string $text): string {
 
 	$text = preg_replace('/\*\*\*\*+/i', '<hr />', $text);
 
@@ -84,6 +93,16 @@ function markdownToHtml($text) {
 
 	$text = str_replace("\n\n",'<br />'."\n",$text);
 	return $text;
+}
+
+/** htm from .md file
+ * @param string $fileName
+ * @return string
+ */
+function markdownFileToHtml(string $fileName): string {
+	$text = file_get_contents($fileName);
+	$html = markdownToHtml($text);
+	return $html;
 }
 
 // Test
