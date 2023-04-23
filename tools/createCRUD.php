@@ -1,8 +1,8 @@
 <?php
 /**
 * CURD modul kreálása
+* szükséges fájlok: domeo.php, demomodel.php, demobrowser.html, demoform.html, demoshow.html
 */
-
 include 'config.php';
 include 'vendor/database/db.php';
 
@@ -81,18 +81,18 @@ class TableProcessor {
 					';
 				} else if ($field->Field == 'created_by') {
 					$result .= '
-							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" />
+							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" class="form-control '.$field->Field.'" />
 					';
 				} else if ($field->Field == 'created_at') {
 					$result .= '
-							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" />
+							<input type="hidden" name="'.$field->Field.'" v-model="record.'.$field->Field.'" class="form-control '.$field->Field.'" />
 					';
 				} else if ($field->Type == 'int') {
 					$result .= '
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="number" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="number" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -101,7 +101,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="number" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="number" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -110,7 +110,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -119,7 +119,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -128,7 +128,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<textarea cols="60" rows="5" name="'.$field->Field.'" id="'.$field->Field.'" v-html="record.'.$field->Field.'"></textarea>
+							<textarea cols="60" rows="5" name="'.$field->Field.'" id="'.$field->Field.'" v-html="record.'.$field->Field.'" class="form-control '.$field->Field.'"></textarea>
 						</div>
 					</div>
 					';
@@ -137,7 +137,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="date" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="date" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -146,7 +146,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="datetime" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" />
+							<input type="datetime" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -155,7 +155,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<select name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required">
+							<select name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'" required="required" class="form-control '.$field->Field.'">
 								<option value="1">{{ lng(\"YES\") }}</option>
 								<option value="0">{{ lng(\"NO\") }}</option>
 							</select>
@@ -167,7 +167,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'"  required="required" />
+							<input type="text" name="'.$field->Field.'" id="'.$field->Field.'" v-model="record.'.$field->Field.'"  required="required" class="form-control '.$field->Field.'" />
 						</div>
 					</div>
 					';
@@ -200,7 +200,7 @@ class TableProcessor {
 					<div class="row">
 						<div class="col-12">
 							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<var v-html="record.'.$field->Field.'"></var>
+							<var v-html="record.'.$field->Field.'" class="'.$field->Field.'"></var>
 						</div>
 					</div>
 					';
@@ -223,6 +223,43 @@ class TableProcessor {
 		}			
 		return $result;
 	} 
+
+	public function tableTh() : string {
+		$result = '';
+		if ($this->tableExists) {
+			$fields = $this->fields;
+			foreach ($fields as $field) {
+				$result .= '
+				<th  class="'.$field->Field.'">{{ lng("'.strtoupper($field->Field).'") }}</th>
+				';
+			}
+		} else {
+			$result .= '
+			<th>{{ lng("ID") }}</th>
+			<th>{{ lng("NAME") }}</th>
+			';
+		}
+		return $result;
+	}
+
+	public function tableTr() : string {
+		$result = '';
+		if ($this->tableExists) {
+			$fields = $this->fields;
+			foreach ($fields as $field) {
+				$result .= '
+				<td class="'.$field->Field.'">{{ item.'.$field->Field.' }}</td>
+				';
+			}
+		} else {
+			$result .= '
+			<td>{{ item.id }}</td>
+			<td>{{ item.name }}</td>
+			';
+		}
+		return $result;
+	}
+
 
 	public function lngTokens(): string {
 		$result = '';
@@ -294,6 +331,8 @@ $str = str_replace('DEMO',strtoupper($name),$str);
 $str = str_replace('DEMOS',strtoupper($name).'S',$str);
 $str = str_replace('demo',$name,$str);
 $str = str_replace('Demo',ucfirst($name),$str);
+$str = str_replace('//tableTh',$tp->tableTh(),$str);
+$str = str_replace('//tableTr',$tp->tableTr(),$str);
 $fp = fopen('includes/views/'.$name.'browser.html','w+');
 fwrite($fp,$str);
 fclose($fp);

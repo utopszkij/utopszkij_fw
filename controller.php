@@ -177,16 +177,13 @@ class Controller {
         if ($this->request->input('successMsg','',HTML) != '') {
 			$this->session->set('successMsg',$this->request->input('successMsg','',HTML));
 		}
+
         // $this->model = new ValamiModel();
         // $this->name = 'xxx';
         // $this->browserURL = '...';
         // $this->formURL = '...';
         // $this->browserTask = '...';
         // $this->ckeditorFields = ['fieldname',...]
-    }
-
-    public function logedAdmin(): bool {
-        return isAdmin();
     }
 
     /**
@@ -313,7 +310,7 @@ class Controller {
             "filter" => $filter,
             "loged" => $this->loged,
             "logedName" => $this->loged,
-            "logedAdmin" => $this->logedAdmin(),
+            "logedAdmin" => (strpos(' '.$this->logedGroup,'admin') > 0),
             "previous" => SITEURL,
             "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg',''),
@@ -342,7 +339,7 @@ class Controller {
             "record" => $item,
             "loged" => $this->loged,
             "logedName" => $this->loged,
-            "logedAdmin" => $this->logedAdmin(),
+            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
             "previous" => $this->browserURL,
             "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg','')
@@ -403,7 +400,7 @@ class Controller {
         
         view($viewName,["flowKey" => $this->newFlowKey(),
             "record" => $record,
-            "logedAdmin" => $this->logedAdmin(),
+            "logedAdmin" => (strpos(' '.$this->logedGroup,'admin') > 0),
             "loged" => $this->loged,
             "previous" => $this->browserURL,
             "browserUrl" => $this->browserURL,
@@ -417,31 +414,8 @@ class Controller {
      * GET: id
      */
     public function showform() {
-        $id = $this->request->input('id',0, INTEGER);
-        $record = $this->model->getById((int)  $id);
-        $record->displayMode = 'show';
-        if (!$this->accessRight('show',$record)) {
-            $this->session->set('errorMsg','ACCESDENIED');
-            $this->items();
-        }
-        if ($this->session->isset('oldRecord')) {
-            $record = $this->session->input('oldRecord');
-        }
-        foreach ($this->ckeditorFields as $ckeditorField) {
-			$fn2 = $ckeditorField.'2';
-			$record->$fn2 = urlprocess($record->$ckeditorField);
-		}
-        $this->browserURL = $this->request->input('browserUrl', $this->browserURL);
-        $viewName = $this->name.'show';
-        view($viewName,["flowKey" => $this->newFlowKey(),
-            "record" => $record,
-            "logedAdmin" => $this->logedAdmin(),
-            "loged" => $this->loged,
-            "previous" => $this->browserURL,
-            "browserUrl" => $this->browserURL,
-            "errorMsg" => $this->session->input('errorMsg',''),
-        ]);
-        $this->session->delete('errorMsg');
+        $this->request->set('displaymode','show');
+        $this->edit();
     }
 
     /**

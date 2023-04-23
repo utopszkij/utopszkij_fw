@@ -3,13 +3,28 @@
     <div v-html="lng(errorMsg)"></div>
 </div>
 
-<div id="demo">
-	<h2>{{ lng('DEMO') }}</h2>
-    <form id="demoForm" v-bind:action="HREF('demo.save',{})" method="post" class="form" 
+<div id="author">
+	<h2>{{ lng('AUTHOR') }}</h2>
+    <form id="authorForm" v-bind:action="HREF('author.save',{})" method="post" class="form" 
         enctype="multipart/form-data"  style="display:blocl">
         <input type="hidden" v-model="flowKey" name="flowKey" />
-        <input type="hidden" value="demo.save" name="task" />			
-		//formFields
+        <input type="hidden" value="author.save" name="task" />			
+		
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("ID") }}</label>:
+							<input type="number" name="id" v-model="record.id" disabled="disabled" />
+							<input type="hidden" name="id" v-model="record.id" />
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("AUTHOR_NAME") }}</label>:
+							<input type="text" name="author_name" id="author_name" v-model="record.author_name"  required="required" class="form-control author_name" />
+						</div>
+					</div>
+					
         <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="submit" class="btn btn-success">
@@ -42,18 +57,18 @@
     methods = {
 		afterMount() {
 			if (this.record != undefined) {
-		        	//focus
+		        	document.querySelector("input[name=\"author_name\"]").focus();
 			}
             // window.ckeditorInit('#description');
 		},
         delClick() {
             popupConfirm(lng('SUREDELETE'), 
             function() {
-                location=HREF('demo.delete',{id:app.record.id, key:app.flowKey}); 
+                location=HREF('author.delete',{id:app.record.id, key:app.flowKey}); 
             })
         },
         editClick() {
-            document.location = HREF('demo.editform',{id:this.record.id});
+            document.location = HREF('author.editform',{id:this.record.id});
 		}    
     }
 </script>

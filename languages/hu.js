@@ -125,5 +125,61 @@ tokens = {
   "NAME":"name",
   "DESCRIPTION":"description",
 
+    /* proba */
+  "PROBA":"proba",
+  "PROBAS":"probas",
+  "ID":"id",
+  "USERNAME":"username",
+  "PASSWORD":"password",
+  "REALNAME":"realname",
+  "EMAIL":"email",
+  "AVATAR":"avatar",
+  "EMAIL_VERIFYED":"email_verifyed",
+  "ENABLED":"enabled",
+  "DELETED":"deleted",
+
+    /* proba */
+  "PROBA":"proba",
+  "PROBAS":"probas",
+  "ID":"id",
+  "USERNAME":"username",
+  "PASSWORD":"password",
+  "REALNAME":"realname",
+  "EMAIL":"email",
+  "AVATAR":"avatar",
+  "EMAIL_VERIFYED":"email_verifyed",
+  "ENABLED":"enabled",
+  "DELETED":"deleted",
+
+    /* book */
+  "BOOK":"könyv",
+  "BOOKS":"könyvek",
+  "ID":"id",
+  "TITLE":"cím",
+  "STORAGE":"tároló hely",
+  "BOOK_URL":"online url",
+  "IMAGE_URL":"kép url",
+  "YEAR":"kiadás éve",
+  "VOLUMES":"kötetek száma",
+  "IMAGE_UPLOAD":"kép feltöltése",
+
+    /* author */
+  "AUTHOR":"szerző",
+  "AUTHORS":"szerzők",
+  "ID":"id",
+  "AUTHOR_NAME":"Név",
+
+    /* storage */
+  "STORAGE":"tároló hely",
+  "STORAGES":"tároló helyek",
+  "ID":"id",
+  "STORAGE_NAME":"megnevezés",
+
+    /* category */
+  "CATEGORY":"kategória",
+  "CATEGORIES":"kategóriák",
+  "ID":"id",
+  "CATEGORY_NAME":"megnevezés",
+
     "END":"Vége"
 };

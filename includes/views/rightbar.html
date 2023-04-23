@@ -1,0 +1,77 @@
+                <div class="col-lg-4" id="rightbar">
+
+                    <!-- Ads Start 
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Egyebek</h4>
+                        </div>
+                        <div class="bg-white text-center border border-top-0 p-3">
+                            <img class="img-fluid" v-bind:src="siteurl+'/img/mary/20160522_103902.jpg'" alt="">
+                        </div>
+                    </div>
+                    Ads End -->
+
+                    <!-- Popular News Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Szin minták</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: auto">
+                                <img class="img-fluid" v-bind:src="siteurl+'/img/szinmintak/1.jpg'" alt="">
+                            </div>
+                            <div style="z-index:2; margin:-60px 0px 0px 20px; color:white">
+								<strong>1.szin minta</strong>
+							</div>	
+
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: auto">
+                                <img class="img-fluid" v-bind:src="siteurl+'/img/szinmintak/2.jpg'" alt="">
+                            </div>
+                            <div style="z-index:2; margin:-60px 0px 0px 20px; color:white">
+								<strong>2.szin minta</strong>
+							</div>	
+
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: auto">
+                                <img class="img-fluid" v-bind:src="siteurl+'/img/szinmintak/3.jpg'" alt="">
+                            </div>
+                            <div style="z-index:2; margin:-60px 0px 0px 20px; color:white">
+								<strong>3.szin minta</strong>
+							</div>	
+
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: auto">
+                                <img class="img-fluid" v-bind:src="siteurl+'/img/szinmintak/4.jpg'" alt="">
+                            </div>
+                            <div style="z-index:2; margin:-60px 0px 0px 20px; color:white">
+								<strong>4.szin minta</strong>
+							</div>	
+							
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: auto">
+                                <img class="img-fluid" v-bind:src="siteurl+'/img/szinmintak/5.jpg'" alt="">
+                            </div>
+                            <div style="z-index:2; margin:-60px 0px 0px 20px; color:white">
+								<strong>5.szin minta</strong>
+							</div>	
+
+							
+
+                        </div>
+                    </div>
+                    <!-- Popular News End -->
+
+                    <!-- Tags Start -->
+                    <div class="mb-3" v-if="tags != undefined">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Kategóriák</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <div class="d-flex flex-wrap m-n1">
+                                <a v-for="tag in tags" 
+                                    v-bind:href="HREF('product.list',{'tag':tag.name})" 
+                                    class="btn btn-sm btn-outline-secondary m-1">
+                                    {{ tag.name }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tags End -->
+                </div>

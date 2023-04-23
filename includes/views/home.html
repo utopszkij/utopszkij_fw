@@ -1,0 +1,204 @@
+	<div id="home">
+		<!-- Main News Slider Start -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-7 px-0">
+					<div class="owl-carousel main-carousel position-relative">
+						<div class="position-relative overflow-hidden" style="height: 500px;">
+							<img class="img-fluid h-100" src="img/keramiak/333607376_946865102996109_6214069161187253525_n.jpg" style="object-fit: cover;">
+							<div class="overlay">
+								<div class="mb-2">
+									<var class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2">Készült</var>
+									<var class="text-white">2023</a>
+								</div>
+								<var class="h2 m-0 text-white text-uppercase font-weight-bold"></var>
+							</div>
+						</div>
+						<div class="position-relative overflow-hidden" style="height: 500px;">
+							<img class="img-fluid h-100" src="img/keramiak/335939702_929915761662827_3141071446405950857_n.jpg" style="object-fit: cover;">
+							<div class="overlay">
+								<div class="mb-2">
+									<var class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2">Készült</var>
+									<var class="text-white">2023</var>
+								</div>
+								<var class="h2 m-0 text-white text-uppercase font-weight-bold"></var>
+							</div>
+						</div>
+						<div class="position-relative overflow-hidden" style="height: 500px;">
+							<img class="img-fluid h-100" src="img/keramiak/335930420_877102773379824_3905011606853666011_n.jpg" style="object-fit: cover;">
+							<div class="overlay">
+								<div class="mb-2">
+									<var class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2">Készült</var>
+									<var class="text-white">2023</var>
+								</div>
+								<var class="h2 m-0 text-white text-uppercase font-weight-bold"></var>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-5 px-0">
+					<div class="row mx-0">
+						<div class="col-md-6 px-0">
+							<div class="position-relative overflow-hidden" style="height: 250px">
+								<img class="img-fluid w-100 h-100" src="img/Melinda/gyongyfuzes.jpg" style="object-fit: cover;">
+								<div class="overlay">
+									<div class="mb-2">
+										<a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+											href=""></a>
+										<var class="text-white"><small></small></var>
+									</div>
+									<a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href=""></a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 px-0">
+							<div class="position-relative overflow-hidden" 
+							    style="height: 250px; background-color:#FFCC00; color:white; text-align:center; padding:30px 20px 20px 20px;">
+							    <h2>Szerencsét hozó kreatív, egyedi kézműves tárgyak.</h2>
+								<!--
+								<img class="img-fluid w-100" src="img/Melinda/feri2.jpg" style="">
+								<div class="overlay">
+									<div class="mb-2">
+										<a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+											href=""></a>
+										<var class="text-white"><small></small></var>
+									</div>
+									<a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href=""></a>
+								</div>
+								-->
+								
+							</div>
+						</div>
+						<div class="col-md-6 px-0">
+							<div class="position-relative overflow-hidden" style="height: 250px">
+								<img class="img-fluid w-100 h-100" src="img/Melinda/alakok.jpg" style="object-fit: cover;">
+								<div class="overlay">
+									<div class="mb-2">
+										<a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+											href=""></a>
+										<a class="text-white" href=""><small></small></a>
+									</div>
+									<a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href=""></a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 px-0">
+							<div class="position-relative overflow-hidden" style="height: 250px">
+								<img class="img-fluid w-100 h-100" src="img/Melinda/alak.jpg" style="object-fit: cover;">
+								<div class="overlay">
+									<div class="mb-2">
+										<a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+											href=""></a>
+										<a class="text-white" href=""><small></small></a>
+									</div>
+									<a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href=""></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Main News Slider End -->
+
+		<!-- add new item link Start -->
+		<div class="container-fluid" v-if="admin">
+			<div class="container">
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<a class="btn btn-primary" v-bind:href="HREF('product.add',{})">Új felvitel</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Featured News Slider Start -->
+		<div class="container-fluid pt-5 mb-3 faitured" >
+			<div class="container">
+				<div class="section-title">
+					<h4 class="m-0 text-uppercase font-weight-bold">Kedvenceim</h4>
+				</div>
+				<div class="owl-carousel news-carousel carousel-item-4 position-relative">
+					<div class="position-relative overflow-hidden" style="height: 300px;" v-for="favorit in favorites" >
+						<a v-bind:href="HREF('product.show',{'id':favorit.img})">
+						<img class="img-fluid h-100" v-bind:id="favorit.img" style="object-fit: cover;">
+						<div class="overlay">
+							<div class="mb-2">
+								<var class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2">Készült</var>
+								<var class="text-white"><small>{{ favorit.date }}</small></var>
+							</div>
+							<var class="h6 m-0 text-white text-uppercase font-weight-semi-bold" v-html="clearDesc(favorit.desc)"></var>
+						</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Featured News Slider End -->
+		
+		<a name="news" />
+		<!-- News With Sidebar Start --> 
+		<div class="container-fluid news">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="row">
+							<div class="col-12">
+								<div class="section-title">
+									<h4 class="m-0 text-uppercase font-weight-bold">Legújabbak</h4>
+									<a class="text-secondary font-weight-medium text-decoration-none" 
+										v-bind:href="HREF('product.list',{'tag':'all','page':1})">
+										Összes
+									</a>
+								</div>
+							</div>
+							<div class="col-lg-6" v-for="newItem in news">
+									<a v-bind:href="HREF('product.show',{'id':newItem.img})">
+									<div class="position-relative mb-3">
+										<img class="img-fluid w-100" src="img/loader.gif"
+											v-bind:id="newItem.img" style="object-fit: cover;">
+										<div class="bg-white border border-top-0 p-4">
+											<div class="mb-2">
+												<var class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2">Készült</var>
+												<var class="text-body"><small>{{ newItem.date }}</small></var>
+											</div>
+											<p class="m-0" v-html="clearDesc(newItem.desc)"></p>
+										</div>
+										<div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+											{{ newItem.price }}
+										</div>
+									</div>
+									</a>
+							</div>
+						</div>
+						<div class="col-lg-8 text-right">
+								 <a class="text-secondary font-weight-medium text-decoration-none" 
+									v-bind:href="HREF('product.list',{'tag':'all','page':1})">
+									<em class="fas fa-hand-point-right"></em>Összes
+								</a>
+						</div>
+					</div>
+					include rightbar
+				</div>
+			</div>
+		</div>
+		<!-- News With Sidebar End -->
+	</div>	
+	
+	<script>
+	var methods = {
+		clearDesc(desc) {
+			desc = desc.replace(/\r/g,' <br />')+' ';
+			const regex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+			const matches = desc.match(regex);
+			if (matches) {
+				for (var i = 0; i < matches.length; i++) {
+					desc = desc.replace(matches[i],'');
+				}
+			}
+			if (desc.length > 60) {
+				desc = desc.substring(0,60)+'...';
+			}	
+			return desc;				
+		}	
+    };
+	</script>

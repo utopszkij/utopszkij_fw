@@ -56,7 +56,7 @@
     </div>
     <div class="row" v-if="logedAdmin">
 		<div class="col-12">
-			<a class="btn btn-primary" href="index.php?task=demo.new">
+			<a class="btn btn-primary" v-bind:href="HREF('demo.new',{})">
 				<em class="fas fa-plus"></em><span>{{ lng('ADD') }}</span></a>
 		</div>
     </div>

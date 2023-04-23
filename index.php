@@ -1,6 +1,9 @@
 <?php
-if (isset($_COOKIE['sid'])) {
-	session_id($_COOKIE['sid']);
+if (isset($_GET['sid'])) {
+	session_id($_GET['sid']);
+}
+if (isset($_POST['sid'])) {
+	session_id($_POST['sid']);
 }
 session_start();
 global $components;
@@ -60,6 +63,10 @@ if (in_array($fw->compName.'.'.$fw->task,
     ['apaTask'])) {
 	$comp->$task ();
     exit();
+}
+if (strpos(' '.$task,'api_') > 0) {
+	$comp->$task ();
+	exit();
 }
 
 include 'styles/'.STYLE.'/main.php';

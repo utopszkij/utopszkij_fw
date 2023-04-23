@@ -171,7 +171,9 @@ class Fw {
 	* @return bool
 	*/
 	public static function isAdmin() {
-		return (($_SESSION['logedGroup'] == 'admin') | ($_SESSION['logedName'] == ADMIN));
+		return (($_SESSION['logedGroup'] == 'admin') | 
+				($_SESSION['logedName'] == ADMIN) |
+				(strpos(' '.$_SESSION['logedGroup'],'admin') > 0));
 	}
 	
 	/**

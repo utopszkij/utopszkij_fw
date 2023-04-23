@@ -1,0 +1,53 @@
+<form id="orderForm" method="post" v-bind:action="HREF('order.send',{})">
+	<input type="hidden" name="items" v-bind:value="JSON.stringify(items)" />
+	<div class="row">
+		<div class="col-12">
+			<h2>Megrendelés</h2>
+		</div>
+	</div>
+	<div class="row" v-for="item in items">
+		<div class="col-2">
+			<img v-bind:src="item.img" style="width:100%; max-width:100px; margin-bottom:2px;" />
+		</div>
+		<div class="col-2">
+			{{ item.quantity }}
+		</div>
+		<div class="col-6">
+			{{ item.name }}
+		</div>
+		<div class="col-2">
+			{{ item.price }}Ft
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<label>Megrendelő neve:</label>
+			<input type="text" name="customerName" minlength="5" maxlength="80" size="60" class="form-control" focus />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<label>Megrendelő címe:</label>
+			<input type="text" name="customerAddress" minlength="5" maxlength="80" size="60" class="form-control" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<label>Megrendelő email:</label>
+			<input type="text" name="customerEmail" minlength="5" maxlength="80" size="60" class="form-control" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<label>Megrendelő telefonszáma:</label>
+			<input type="text" name="customerPhone" minlength="5" maxlength="12" size="60" class="form-control" />
+		</div>
+	</div>
+	<div class="row">&nbsp;</div>
+	<div class="row">
+		<div class="col-12 text-center">
+			<button type="submit" class="btn btn-primary">
+				<em class="fas fa-check"></em>Küld</button>
+		</div>
+	</div>
+</form>

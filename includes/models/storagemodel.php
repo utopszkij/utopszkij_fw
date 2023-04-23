@@ -3,11 +3,11 @@
     use \RATWEB\DB\Query;
     use \RATWEB\DB\Record;
 
-    class DemoModel extends Model  {
+    class StorageModel extends Model  {
 
         function __construct() {
             parent::__construct();
-            $this->setTable('demo');
+            $this->setTable('storages');
             $this->errorMsg = ''; 
         }
 
@@ -17,21 +17,18 @@
         public function emptyRecord(): Record {
             $result = new Record();
                     $result->id = 0;
-        $result->name = "";
-        $result->description = "";
+        $result->storage_name = "";
 
             return $result;
         }
 
 		/** a filter str alapján bőviti a Query -t
 		 * rendszerint át kell definiálni a mező tipusoktól függően
+		 * 'like' vagy '=' -s keresés
 		 * @param Query
 		 * @param string $filter 'name|value...'
 		 */ 
 		protected function filterToQuery(Query &$db, string $filter) {
-            if ($filter == 'all') {
-                return;
-            }
             if ($filter != '') {        
 				$filter = explode('|',$filter);        
 				$i=0;
@@ -60,10 +57,13 @@
          */
         public function getItems(int $page, int $limit, string $filter, string $order = 'id'): array {
 			if ($page <= 0) $page = 1;
-            $db = new Query($this->table);
-            $db->offset((($page - 1) * $limit))
-               ->limit($limit)
-               ->orderBy($order);
+            $db = new Query($this->table,'s');
+            $db->join('LEFT','books','b','b.storage','=','s.id')
+            ->select(['s.id','s.storage_name','count(b.id) as book_count'])
+            ->groupBy(['s.id','s.storage_name'])
+            ->offset((($page - 1) * $limit))
+            ->limit($limit)
+            ->orderBy('storage_name');
             $this->filterToQuery($db,$filter);        
             $result = $db->all();
             return $result;        
@@ -74,9 +74,11 @@
          * @return int
          */
         public function getTotal($filter = ''): int {
-            $db = new Query($this->table);
-            $db->select(['id']);
-            $this->filterToQuery($db,$filter);
+            $db = new Query($this->table,'s');
+            $db->join('LEFT','books','b','b.storage','=','s.id')
+            ->select(['s.id','s.storage_name','count(b.id) as book_count'])
+            ->groupBy(['s.id','s.storage_name']);
+            $this->filterToQuery($db,$filter);        
             return $db->count();
         }
 

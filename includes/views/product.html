@@ -1,0 +1,86 @@
+<div id="product">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+				<div class="col-12">
+					<div class="section-title">
+						<h4 class="m-0 text-uppercase font-weight-bold">Drágakő</h4>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-6">
+						<img class="img-fluid" id="productImg" 
+							v-bind:src="siteurl+'/img/'+productsName+'/'+product.img" 
+							style="width:80%; object-fit: cover;">
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<p>
+						<var class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2">Készült:</var>
+						<var class="text-body"><small>{{ product.date }}</small></var>
+					</p>
+					<p>
+						<span id="productName" v-html="process(product.desc)"></span>
+					</p>
+					<p>
+						<span id="productPrice">{{ product.price }}</span>
+					</p>
+					<p>
+				        <a href="#0" class="btn btn-secondary" onclick="addToBasket();">
+							<em class="fas fa-hand-point-right"></em><em class="fas fa-shopping-basket"></em> Kosárba
+						</a>
+					</p>
+					<p>&nbsp;</p>
+					<p v-if="admin">
+						<a v-bind:href="HREF('product.edit', {'id': product.img})" class="btn btn-secondary">
+							<em class="fas fa-edit"></em>Edit</a>&nbsp;
+						<a v-bind:href="HREF('product.delete',{'id': product.img})" class="btn btn-danger">
+							<em class="fas fa-eraser"></em>Delete</a>&nbsp;
+					</p>	
+				</div>
+            </div>    
+        </div>   
+    </div>            
+</div>
+
+<script>
+	var methods = {
+		process(desc) {
+			desc = desc.replace(/\r/g,' <br />')+' ';
+			const regex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+			const matches = desc.match(regex);
+			var width = 0;
+			var vatch = '';
+			var s = '';
+			var code = '';
+			if (window.innerWidth > 900) {
+				var width = window.innerWidth / 3;
+			} else {
+				var width = window.innerWidth * 0.9;
+			}	
+			
+			if (matches) {
+				for (var i = 0; i < matches.length; i++) {
+					match = matches[i];
+					if (match.indexOf('youtu.be') > 0) {
+						code = match.replace('https://www.youtu.be/','');
+						s = '<iframe width="'+width+'" height="'+((width/560)*315)+'" '+
+						'src="https://www.youtube.com/embed/'+code+'" '+
+						'title="YouTube video player" frameborder="0" '+
+						'allowfullscreen></iframe>';
+						desc = desc.replace(match,s);
+					} else if (match.toLowerCase().indexOf('.jpg') > 0) {
+						s = '<img src="'+match+'" style="'+width+'px" />';
+						desc = desc.replace(match,s);
+					} else if (match.toLowerCase().indexOf('.png') > 0) {
+						s = '<img src="'+match+'" style="'+width+'px" />';
+						desc = desc.replace(match,s);
+					} else {
+						s = '<a href="'+match+'">'+match+'<a>';
+						desc = desc.replace(match,s);
+					}
+				}
+			}
+			return desc;
+		},
+	};
+</script>
+    

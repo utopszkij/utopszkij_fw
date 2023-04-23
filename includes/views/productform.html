@@ -1,0 +1,63 @@
+<form method="post" v-bind:action="HREF('product.productsave',{})" enctype="multipart/form-data">
+	<input type="hidden" name="img" v-model="product.img" v-if="product.img != ''" />	
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+				<div class="col-12">
+					<div class="section-title">
+						<h4 class="m-0 text-uppercase font-weight-bold">Drágakő</h4>
+					</div>
+				</div>
+			</div>
+			<div class="row">	
+				<div class="col-12 text-left">
+						<img class="img-fluid w-50" v-bind:src="siteurl+'/img/'+productsName+'/'+product.img"
+							v-if="product.img != ''" style="object-fit: cover;">
+						<br /><label>Kép:</label>
+							<input type="file" name="newimg" v-if="product.img == ''" />
+							<var v-if="product.img != ''">{{ product.img }}</var>
+						<br /><label>Készült:</label><input type="text" name="date" mmaxlength="32" v-model="product.date" />
+						<br /><label>Leírás:</label>
+							<textarea name="desc" rows="5" cols="60" v-model="product.desc"></textarea>
+						<br />A leírás "https://www.youteu.be/..... " -video linkeket és külső kép url-eket is tartalmazhat 
+						<br /><label>Ár:</label><input type="text" name="price" maxlength="32" v-model="product.price" />
+						<br /><label>Kedvenc (min.5 legyen):</label> 
+							<select name="favorit" v-model="product.favorit">
+								<option value="?">Válassz!</option> 
+								<option value="I">Igen</option> 
+								<option value="N">Nem</option> 
+							</select>
+						<br /><label>Kategória:</label> 
+							<select name="tag" v-model="product.tag">
+								<option value="?">Válassz!</option>
+								<option v-for="tag in tags" v-bind:value="tag.name" v-html="tagOptionLabel(tag)">
+								</option>
+							</select>
+						<br /><br /><button type="submit" class="btn btn-primary">
+							<em class="fas fa-check"></em>Tárol</button>
+				</div>
+            </div>    
+        </div>   
+    </div>            
+</form>
+
+<script>
+	methods = {
+		selected(a,b) {
+			var result = '';
+			if (a == b) {
+				result = 'selected';
+			} else {
+				result = '';
+			}
+			return result;
+		},
+		tagOptionLabel(tag) {
+			var result = '';
+			for (var i = 0; i < tag.level; i++) {
+				result += '&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
+			return result+tag.name;
+		}
+	}
+</script>

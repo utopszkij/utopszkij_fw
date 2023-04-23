@@ -99,9 +99,6 @@
 			}
 		}
 
-		var rewrite = false;
-        var siteurl = "index.php"; 
-
 		/**
 		 * seo barát url képzéshez segéd rutin
 		 * @param string task
@@ -239,7 +236,6 @@
 		}
 		document.body.className = currentTheme;
 		setCookie("theme", currentTheme,100);
-		console.log('document onload','currentTheme',currentTheme);
 
 		window.scrollFunction();
 		// iframe elemek átméretezése a parent div mérethez

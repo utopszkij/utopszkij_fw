@@ -1,0 +1,111 @@
+<div id="categorys">
+    <div v-if="errorMsg != ''" class="alert alert-danger">
+        <div v-html="lng(errorMsg)"></div>
+    </div>
+    <div v-if="successMsg != ''" class="alert alert-success">
+        <div v-html="lng(successMsg)"></div>
+    </div>
+    
+    <h2 class="ribbon-banner"><span>{{ lng('CATEGORIES') }}</span></h2>
+    <div class="row">
+		<div class="col-12" style="display:none">
+			<h4>{{ lng('SEARCH') }}</h4>
+			<form class="filterForm" id="filterForm" method="post" action="index.php">
+				<input type="hidden" name="task" value="category.items" />
+				<input type="hidden" name="page" value="1" />
+				<label>{{ lng('NAME') }}</label>
+				<input type="text" name="filter_name" id="filter_name"/>
+				<button type="submit" class="btn btn-primary" v-bind:title="lng('SEARCH')">
+					<em class="fas fa-search"></em>
+				</button>
+				<button type="button" class="btn btn-secondary" v-on:click="delSearchClick()">
+					<em class="fas fa-times"></em>
+				</button>
+			</form>
+		</div>
+	</div>
+    <div class="row">
+		<table class="col-12 table table-bordered table-striped" style="width:100%" v-if="items.length > 0">
+			<tr><th style="width:30px">ID</th>
+				<th>{{ lng('NAME') }}</th>
+				<th></th>
+			</tr>
+			<tr v-for="item in items">
+				<td>{{ item.id }}</td>
+				<td> <a v-bind:href="HREF('category.showform',{id:item.id, backtask:'category.items'})">
+						{{ item.category_name }} ({{ item.book_count }})
+					 </a>
+				</td>    
+				<td>
+					<a class="btn btn-primary"  v-bind:href="HREF('category.showform',{id:item.id, backtask:'category.items'})">
+						<em class="fas fa-eye" v-bind:title="lng('SHOW')"></em>
+					</a>
+					<a class="btn btn-primary"  v-if="logedAdmin"v-bind:href="HREF('category.editform',{id:item.id, backtask:'category.items'})">
+						<em class="fas fa-edit" v-bind:title="lng('EDIT')"></em>
+					</a>
+					<button type="button" class="btn btn-danger" v-if="logedAdmin" v-on:click="delClick(item.id)">
+						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em>
+					</button>
+					<a class="btn btn-secondary" 
+					    v-bind:href="HREF('book.items',{'filter_author':'', 'filter_title':'', 'filter_storage':'', 'filter_category':item.id})">
+						<em class="fas fa-book"></em>{{ lng('BOOKS') }}
+					</a>
+					
+				</td> 
+			</tr>
+		</table>
+    </div>
+    <div class="alert alert-info col-12" v-if="items.length == 0">{{ lng('NOT_ITEMS') }}</div>
+    <div v-if="items.length > 0">
+		include paginator
+    </div>
+    <div class="row">
+		<div class="col-12">
+			<a class="btn btn-primary" v-bind:href="HREF('category.new',{})"  v-if="logedAdmin">
+				<em class="fas fa-plus"></em><span>{{ lng('ADD') }}</span></a>
+			&nbsp;
+			<a class="btn btn-secondary" v-bind:href="HREF('book.setup',{})">
+				<em class="fas fa-reply"></em><span>{{ lng('SETUP') }}</span></a>	
+		</div>
+    </div>
+</div>
+
+<script>
+    methods = {
+		afterMount() {
+			if (this.filter != undefined) {
+				// filter strintg (name|value....)  to filterForm
+				if (this.filter != '') {
+					var filter = this.filter.split('|');
+					var i = 0;
+					var fn = '';
+					while (i < filter.length) {
+						fn = filter[i];
+						document.getElementById('filter_'+fn).value = filter[i+1];
+						i = i + 2;
+					}
+				}
+			}
+		},
+        makePaginatorClass(p,page) {
+            var result = '';
+            if (p == page) {
+                result="actPaginatorItem";
+            } else {
+                result="paginatorItem"
+            }
+            return result;
+        },
+        delClick(id) {
+            popupConfirm(lng('SUREDELETE'), 
+            function() {
+                location=HREF('category.delete',{'id':id, key:app.flowKey}); 
+            })
+        },
+        delSearchClick() {
+			document.getElementById('filter_name').value = '';
+			document.getElementById('filterForm').submit();
+		}    
+        
+    }
+</script>

@@ -2,16 +2,16 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
-include_once __DIR__.'/../models/demomodel.php';
+include_once __DIR__.'/../models/authormodel.php';
 
 /**
- * demo controller 
- * igényelt model (includes/models/demomodel.php))
+ * author controller 
+ * igényelt model (includes/models/authormodel.php))
  *      methodusok: emptyRecord(), save($record), 
  *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
  *      getTotal($filter)
- * igényelt viewerek includes/views/demobrowser, includes/views/demoform 
- *      a demoform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
+ * igényelt viewerek includes/views/authorbrowser, includes/views/authorform 
+ *      a authorform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
  *      a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is!
  *      a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü
  *             input vagy select elemeket tartalmazzon 
@@ -22,17 +22,17 @@ include_once __DIR__.'/../models/demomodel.php';
  * A taskok public function -ként legyenek definiálva 
  *   standart taskok: items, edit, new, save, delete.
  */
-class Demo extends Controller {
+class Author extends Controller {
 
 	function __construct() {
 		parent::__construct();
-		// $this->model = new DemoModel();
-        $this->name = "demo";
-        $this->browserURL = SITEURL.'/index.php?task=demo.items';
-        $this->addURL = SITEURL.'/index.php?task=demo.new';
-        $this->editURL = SITEURL.'/index.php?task=demo.edit';
-        $this->browserTask = 'demo.items';
-        $this->model = new DemoModel();
+		// $this->model = new AuthorModel();
+        $this->name = "author";
+        $this->browserURL = SITEURL.'/index.php?task=author.items';
+        $this->addURL = SITEURL.'/index.php?task=author.new';
+        $this->editURL = SITEURL.'/index.php?task=author.edit';
+        $this->browserTask = 'author.items';
+        $this->model = new AuthorModel();
         $this->ckeditorFields = []; // filedName lista
 	}
 
@@ -64,7 +64,7 @@ class Demo extends Controller {
      */    
     protected function validator($record): string {
 		$result = '';
-		if ($record->name == '') {
+		if ($record->author_name == '') {
 			$result = 'NAME_REQUERED';
 		}
         return $result;

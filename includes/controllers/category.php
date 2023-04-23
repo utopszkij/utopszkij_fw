@@ -2,16 +2,16 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
-include_once __DIR__.'/../models/demomodel.php';
+include_once __DIR__.'/../models/categorymodel.php';
 
 /**
- * demo controller 
- * igényelt model (includes/models/demomodel.php))
+ * category controller 
+ * igényelt model (includes/models/categorymodel.php))
  *      methodusok: emptyRecord(), save($record), 
  *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
  *      getTotal($filter)
- * igényelt viewerek includes/views/demobrowser, includes/views/demoform 
- *      a demoform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
+ * igényelt viewerek includes/views/categorybrowser, includes/views/categoryform 
+ *      a categoryform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
  *      a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is!
  *      a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü
  *             input vagy select elemeket tartalmazzon 
@@ -22,17 +22,17 @@ include_once __DIR__.'/../models/demomodel.php';
  * A taskok public function -ként legyenek definiálva 
  *   standart taskok: items, edit, new, save, delete.
  */
-class Demo extends Controller {
+class Category extends Controller {
 
 	function __construct() {
 		parent::__construct();
-		// $this->model = new DemoModel();
-        $this->name = "demo";
-        $this->browserURL = SITEURL.'/index.php?task=demo.items';
-        $this->addURL = SITEURL.'/index.php?task=demo.new';
-        $this->editURL = SITEURL.'/index.php?task=demo.edit';
-        $this->browserTask = 'demo.items';
-        $this->model = new DemoModel();
+		// $this->model = new CategoryModel();
+        $this->name = "category";
+        $this->browserURL = SITEURL.'/index.php?task=category.items';
+        $this->addURL = SITEURL.'/index.php?task=category.new';
+        $this->editURL = SITEURL.'/index.php?task=category.edit';
+        $this->browserTask = 'category.items';
+        $this->model = new CategoryModel();
         $this->ckeditorFields = []; // filedName lista
 	}
 
@@ -64,7 +64,7 @@ class Demo extends Controller {
      */    
     protected function validator($record): string {
 		$result = '';
-		if ($record->name == '') {
+		if ($record->category_name == '') {
 			$result = 'NAME_REQUERED';
 		}
         return $result;

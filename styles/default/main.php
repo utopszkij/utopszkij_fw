@@ -3,6 +3,7 @@
   <meta>
     <meta charset="UTF-8">
 	<meta property="og:title"  content="<?php echo $title; ?>" />
+	<meta property="og:image" content="<?php echo SITEURL; ?>/images/konyvtar.jpg">
 	<base href="<?php echo SITEURL; ?>/">
 	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <title><?php echo $title; ?></title>
@@ -147,7 +148,6 @@
 		// sessionId csokiba
 		window.sessionId = "<?php echo session_id(); ?>";
 		setCookie("sid","<?php echo session_id(); ?>", 500);
-		
 	
 </script>
 </html>

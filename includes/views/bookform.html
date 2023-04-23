@@ -1,0 +1,176 @@
+
+<div v-if="errorMsg != ''" class="alert alert-danger">
+    <div v-html="lng(errorMsg)"></div>
+</div>
+
+<div id="book">
+	<h2>{{ lng('BOOK') }}</h2>
+    <form id="bookForm" v-bind:action="HREF('book.save',{})" method="post" class="form" 
+        enctype="multipart/form-data"  style="display:blocl">
+        <input type="hidden" v-model="flowKey" name="flowKey" />
+        <input type="hidden" value="book.save" name="task" />			
+		
+		<img v-if="record.image_url != ''" v-bind:src="record.image_url" style="width:230px; float:left; margin:5px;" />
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("ID") }}</label>:
+							<input type="number" name="id" v-model="record.id" disabled="disabled" />
+							<input type="hidden" name="id" v-model="record.id" />
+						</div>
+					</div>
+
+					<datalist id="authors">
+						<option v-for="author in authors" v-bind:value="author.author_name" />
+					</datalist>		
+
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng('AUTHORS') }}</label>								
+						</div>		
+					</div>
+					<div class="row" id="authorsRow">
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<label>&nbsp;</label>								
+							<button type="button" class="btn btn-secondary" v-on:click="authorAdd('')">
+								<em class="fas fa-plus"></em></button>
+						</div>		
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("TITLE") }}</label>:
+							<input type="text" name="title" id="title" size="80" 
+								v-model="record.title"  required="required" class="form-control title" />
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("STORAGE") }}</label>:
+							<select name="storage" id="storage" v-model="record.storage"  required="required" class="form-control storage">
+								<option v-for="storage in storages" v-bind:value="storage.id">
+									{{ storage.storage_name }}
+							</select>	
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("BOOK_URL") }}</label>:
+							<input type="text" name="book_url" id="book_url" size="80" 
+								v-model="record.book_url"  class="form-control book_url" />
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("IMAGE_URL") }}</label>:
+							<input type="text" name="image_url" id="image_url" size="80" 
+								v-model="record.image_url"  class="form-control image_url" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("IMAGE_UPLOAD") }}</label>:
+							<input type="file" name="image" id="image"  accept="image/*" capture="camera"
+								 class="form-control image" />
+						</div>
+					</div>
+					
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("YEAR") }}</label>:
+							<input type="text" name="year" id="year" v-model="record.year"  class="form-control year" />
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("VOLUMES") }}</label>:
+							<input type="number" name="volumes" id="volumes" v-model="record.volumes" required="required" class="form-control volumes" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<div v-for="category in categories" style="display:inline-block; width:auto;">
+								<input type="checkbox" v-bind:name="'category'+category.id"  
+								   v-bind:value="category.id" v-bind:checked="category.checked" />
+								{{ category.category_name }}&nbsp;&nbsp;
+							</div> 
+						</div>							
+					</div>
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">
+                    <em class="fas fa-check"></em>&nbsp;{{ lng('SAVE') }}
+                </button>&nbsp;
+                <a v-bind:href="previous" class="btn btn-secondary">
+                    <em class="fas fa-reply"></em>&nbsp;{{ lng('CANCEL') }}
+                </a>&nbsp;
+                <button type="button" 
+                   v-on:click="delClick()"
+                   v-if="record.id > 0"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+        <div class="row formButtons" v-if="!logedAdmin">
+            <div class="col-12">
+                <a v-bind:href="previous" class="btn btn-secondary">
+                    <em class="fas fa-reply"></em>&nbsp;{{ lng('BACK') }}
+                </a>
+            </div>
+        </div>
+    </form>    
+</div>
+
+
+
+<script>
+    methods = {
+		afterMount() {
+			if (this.record != undefined) {
+	        	document.querySelector("input[name=\"title\"]").focus();
+				this.authorCount = 0;
+				for (var i = 0; i < this.authors.length; i++) {
+					if (this.authors[i].checked) {
+						this.authorAdd(this.authors[i].author_name);
+						this.authorCount++;
+					}
+				}	
+				if (this.authorCount == 0) {
+					this.authorAdd('');
+				}
+				
+			}
+            // window.ckeditorInit('#description');
+			window.setTimeout('$("input#author0").focus();',1000);
+		},
+        delClick() {
+            popupConfirm(lng('SUREDELETE'), 
+            function() {
+                location=HREF('book.delete',{id:app.record.id, key:app.flowKey}); 
+            })
+        },
+        editClick() {
+            document.location = HREF('book.editform',{id:this.record.id});
+		},
+		authorAdd(name) {
+			var s = 
+			'<div class="col-12" id="authorDiv'+this.authorCount+'">'+
+			'	<label>&nbsp;</label>'+
+			'	<input type="text" name="author'+this.authorCount+'" id="author'+this.authorCount+'"'+
+			'     size="80" list="authors" class="form-control author" value="'+name+'"/>'+
+			'</div>';
+			$('#authorsRow').append(s);	
+			this.authorCount++;
+		}	    
+    }
+</script>
