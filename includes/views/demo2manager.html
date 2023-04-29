@@ -1,4 +1,4 @@
-<div id="demos">
+<div id="demo2s">
     <div id="loader" style="display:none">
         <img src="images/loader.gif" />
     </div>
@@ -9,14 +9,14 @@
         <div v-html="lng(successMsg)"></div>
     </div>
     
-    <h2>{{ lng('DEMOS') }}</h2>
+    <h2>{{ lng('DEMO2S') }}</h2>
     <div id="browser" class="browser" style="display:none">
         <div class="row">
             <!-- gyakran javítandó -->
             <div class="col-12">
                 <h4>{{ lng('SEARCH') }}</h4>
                 <form class="filterForm" id="filterForm" method="post" action="index.php">
-                    <input type="hidden" name="task" value="demo.items" />
+                    <input type="hidden" name="task" value="demo2.items" />
                     <input type="hidden" name="page" value="1" />
                     <label>{{ lng('NAME') }}</label>
                     <input type="text" name="filter_name" id="filter_name"/>
@@ -85,7 +85,7 @@
     </div><!-- browser -->
 
     <div id="show" style="display:none">
-        <div id="demoShow" class="show">
+        <div id="demo2Show" class="show">
             <div class="row formButtons" v-if="logedAdmin">
                 <div class="col-12">
                     <button type="button" 
@@ -164,10 +164,10 @@
     </div><!-- show -->
 
     <div id="form" style="display:none">
-        <h2>{{ lng('DEMO') }}</h2>
+        <h2>{{ lng('DEMO2') }}</h2>
         <h3 v-if="record.id == 0">{{ lng('ADD') }}</h3>
         <h3 v-if="record.id > 0">{{ lng('EDIT') }}</h3>
-        <form id="demoForm" class="form" 
+        <form id="demo2Form" class="form" 
             enctype="multipart/form-data">
             <div class="row formButtons" v-if="!logedAdmin">
                 <div class="col-12">
@@ -364,16 +364,16 @@
             if (this.order == undefined) { this.order = 'id'; }
             if (this.orderDir == undefined) { this.orderDir = 'ASC'; }
             if (this.filter == undefined) { this.filter = ''; }
-            this.selfUrl = HREF('demo.manager', {page:this.page});
+            this.selfUrl = HREF('demo2.manager', {page:this.page});
             this.adjustShareLinks();
             $('#loader').show();
-            window.axios.get(HREF('demo.api_getItems',
+            window.axios.get(HREF('demo2.api_getItems',
                 {page:this.page, limit:this.limit, order: this.order, orderdir: this.orderDir, filter:this.filter, sid: this.sid}))
             .then(function(response) {
                 $('#loader').hide();
                 app.items = response.data;
                 $('#loader').show();
-                window.axios.get(HREF('demo.api_getTotal',
+                window.axios.get(HREF('demo2.api_getTotal',
                     {filter:app.filter, sid: this.sid}))
                 .then(function(response) {
                     $('#loader').hide();
@@ -409,10 +409,10 @@
             this.listClick();
         },    
         showClick() {
-            this.selfUrl = HREF('demo.manager', {show:this.record.id});
+            this.selfUrl = HREF('demo2.manager', {show:this.record.id});
             this.adjustShareLinks();
             $('#loader').show();
-            window.axios.get(HREF('demo.api_getItem',{id:this.record.id}))
+            window.axios.get(HREF('demo2.api_getItem',{id:this.record.id}))
             .then(function(response) {
                 $('#loader').hide();
                 app.record = response.data;
@@ -432,15 +432,15 @@
             $('#browser').hide();
         },    
         editClick() {
-            this.selfUrl = HREF('demo.manager', {edit:this.record.id});
+            this.selfUrl = HREF('demo2.manager', {edit:this.record.id});
             this.adjustShareLinks();
             this.formClick();
         },
         newClick() {
-            this.selfUrl = HREF('demo.manager', {browser:1, filter:'all'});
+            this.selfUrl = HREF('demo2.manager', {browser:1, filter:'all'});
             this.adjustShareLinks();
             $('#loader').show();
-            window.axios.get(HREF('demo.api_emptyRecord',{sid: this.sid}))
+            window.axios.get(HREF('demo2.api_emptyRecord',{sid: this.sid}))
             .then(function(response) {
                 $('#loader').hide();
                 app.record = response.data;
@@ -456,7 +456,7 @@
             var param = this.record;
             param.sid = this.sid;
             $('#loader').show();
-            axios.post(HREF('demo.api_save',{}),
+            axios.post(HREF('demo2.api_save',{}),
                        param, 
                        { headers: {'Content-Type': 'multipart/form-data'}})
             .then(function(response) {
@@ -475,7 +475,7 @@
             function() {
                 $('#popup').hide();
                 $('#loader').show();
-                window.axios.get(HREF('demo.api_delete',{id:app.record.id, sid:app.sid}))
+                window.axios.get(HREF('demo2.api_delete',{id:app.record.id, sid:app.sid}))
                 .then(function(response) {
                     $('#loader').hide();
                     var result = response.data;

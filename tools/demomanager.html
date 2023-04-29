@@ -32,42 +32,10 @@
         <div class="row">
             <table class="col-12 table table-bordered table-striped" v-if="items.length > 0">
                 <tr>
-                    
-				<th  class="id" id="th_id" v-on:click="thClick('id')">
-					{{ lng("id") }}
-					<em class="fas fa-sort-down"></em>
-					<em class="fas fa-sort-up"></em>
-				</th>
-				
-				<th  class="name" id="th_name" v-on:click="thClick('name')">
-					{{ lng("name") }}
-					<em class="fas fa-sort-down"></em>
-					<em class="fas fa-sort-up"></em>
-				</th>
-				
-				<th  class="description" id="th_description" v-on:click="thClick('description')">
-					{{ lng("description") }}
-					<em class="fas fa-sort-down"></em>
-					<em class="fas fa-sort-up"></em>
-				</th>
-				
+                    //tableTh
                 </tr>
                 <tr v-for="item in items">
-                    <td class="id"><var v-html="item.id"></var></td><td class="name"><var v-html="item.name"></var></td><td class="description"><var v-html="item.description"></var></td>
-					<td>
-					<button type="button" class="btn btn-primary"  v-on:click="this.record = item; showClick()">
-						<em class="fas fa-eye" v-bind:title="lng('SHOW')"></em>
-					</button>
-					<button type="button" class="btn btn-primary"  v-if="logedAdmin" 
-						v-on:click="this.record = item; editClick()">
-						<em class="fas fa-edit" v-bind:title="lng('EDIT')"></em>
-					</button>
-					<button type="button" class="btn btn-danger" v-if="logedAdmin" 
-						v-on:click="this.record = item; delClick()">
-						<em class="fas fa-eraser" v-bind:title="lng('DELETE')"></em>
-					</button>
-					</td> 
-		
+                    //tableTr
                 </tr>
             </table>
         </div>
@@ -100,49 +68,7 @@
                     </button>
                 </div>
             </div>
-            
-					<div class="row id">
-						<div class="col-12">
-							<label>{{ lng("ID") }}:</label>
-							<var  v-html="record.id2" 
-								class="id"
-								v-if="ckeditorFields.indexOf('id') >= 0">
-							</var>
-							<var  v-bind:class="id" v-html="record.id" 
-								class="id"
-								v-if="ckeditorFields.indexOf('id') < 0">
-							</var>
-						</div>
-					</div>
-					
-					<div class="row name">
-						<div class="col-12">
-							<label>{{ lng("NAME") }}:</label>
-							<var  v-html="record.name2" 
-								class="name"
-								v-if="ckeditorFields.indexOf('name') >= 0">
-							</var>
-							<var  v-bind:class="name" v-html="record.name" 
-								class="name"
-								v-if="ckeditorFields.indexOf('name') < 0">
-							</var>
-						</div>
-					</div>
-					
-					<div class="row description">
-						<div class="col-12">
-							<label>{{ lng("DESCRIPTION") }}:</label>
-							<var  v-html="record.description2" 
-								class="description"
-								v-if="ckeditorFields.indexOf('description') >= 0">
-							</var>
-							<var  v-bind:class="description" v-html="record.description" 
-								class="description"
-								v-if="ckeditorFields.indexOf('description') < 0">
-							</var>
-						</div>
-					</div>
-					
+            //showFields
             <div class="row formButtons">
                 <div class="col-12">
                     <button type="button" v-if="logedAdmin"
@@ -192,29 +118,7 @@
                     </button>
                 </div>
             </div>
-            
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("ID") }}</label>:
-							<input type="number" name="id" v-model="record.id" disabled="disabled" />
-							<input type="hidden" name="id" v-model="record.id" />
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("NAME") }}</label>:
-							<input type="text" name="name" id="name" v-model="record.name"  required="required" class="form-control name" />
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("DESCRIPTION") }}</label>:
-							<textarea cols="60" rows="5" name="description" id="description" v-html="record.description" class="form-control description"></textarea>
-						</div>
-					</div>
-					
+            //formFields
             <div class="row formButtons" v-if="logedAdmin">
                 <div class="col-12">
                     <button type="button" class="btn btn-success" v-on:click="saveClick()">
@@ -306,32 +210,34 @@
                 k = k + 2; // mivel nincs az utolsó két elem; lehet több is
             } 
             var s=lng('TOTAL')+':'+this.total+'<br /><ul class="paginator">';
-            if (page > 1) {	
-                s += '<li><span class="paginatorItem"><var onclick="app.page = 1; app.listClick()" title="első">&lt;&lt;</var></span></li>';
-                s += '<li><span class="paginatorItem"><var onclick="app.page = '+(page - 1)+'; app.listClick()" title="elöző">&lt;</var></span></li>';
-            }
-            var p = 1;
-            while (p <= pageCount) {
-                if (p == page) {
-                    s += '<li><input id="goPage" type="text" value="'+p+'" size="2"'+
-                    ' onchange="app.page = $(\'#goPage\').val(); app.listClick();" /></li>';
-                    pointCounter = 0;
-                } else {
-                    if (((p >= (page - k)) & (p < page)) | 
-                        ((p <= (page + k)) & (p > page))) {	
-                        s += '<li><span class="paginatorItem" onclick="app.page = '+p+'; app.listClick()" title="'+p+'">'+p+'</span></li>';
+            if (pageCount > 1) {    
+                if (page > 1) {	
+                    s += '<li><span class="paginatorItem"><var onclick="app.page = 1; app.listClick()" title="első">&lt;&lt;</var></span></li>';
+                    s += '<li><span class="paginatorItem"><var onclick="app.page = '+(page - 1)+'; app.listClick()" title="elöző">&lt;</var></span></li>';
+                }
+                var p = 1;
+                while (p <= pageCount) {
+                    if (p == page) {
+                        s += '<li><input id="goPage" type="text" value="'+p+'" size="2"'+
+                        ' onchange="app.page = $(\'#goPage\').val(); app.listClick();" /></li>';
+                        pointCounter = 0;
                     } else {
-                        if (pointCounter == 0) {
-                            s += '<li class="kimarad">.</li>';
-                            pointCounter = pointCounter + 1;
-                        }
+                        if (((p >= (page - k)) & (p < page)) | 
+                            ((p <= (page + k)) & (p > page))) {	
+                            s += '<li><span class="paginatorItem" onclick="app.page = '+p+'; app.listClick()" title="'+p+'">'+p+'</span></li>';
+                        } else {
+                            if (pointCounter == 0) {
+                                s += '<li class="kimarad">.</li>';
+                                pointCounter = pointCounter + 1;
+                            }
+                        }	
                     }	
-                }	
-                p = p + 1;
-            }
-            if (page < pageCount) {
-                s += '<li><span class="paginatorItem"><var onclick="app.page = '+(page + 1)+'; app.listClick()" title="következő">&gt;</var></span></li>';
-                s += '<li><span class="paginatorItem"><var onclick="app.page = '+pageCount+'; app.listClick()" title="utolsó">&gt;&gt;</var></span></li>';
+                    p = p + 1;
+                }
+                if (page < pageCount) {
+                    s += '<li><span class="paginatorItem"><var onclick="app.page = '+(page + 1)+'; app.listClick()" title="következő">&gt;</var></span></li>';
+                    s += '<li><span class="paginatorItem"><var onclick="app.page = '+pageCount+'; app.listClick()" title="utolsó">&gt;&gt;</var></span></li>';
+                }
             }
             $('#paginator').html(s);
         },  
@@ -430,6 +336,8 @@
             $('#show').hide();
             $('#form').show();
             $('#browser').hide();
+            // rendszerint javítandó
+            $('#name').focus();
         },    
         editClick() {
             this.selfUrl = HREF('demo.manager', {edit:this.record.id});

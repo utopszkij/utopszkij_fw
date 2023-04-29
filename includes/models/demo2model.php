@@ -3,7 +3,7 @@
     use \RATWEB\DB\Query;
     use \RATWEB\DB\Record;
 
-    class DemoModel extends Model  {
+    class Demo2Model extends Model  {
 
         function __construct() {
             parent::__construct();

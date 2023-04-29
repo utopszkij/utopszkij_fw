@@ -2,13 +2,13 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
-include_once __DIR__.'/../models/demomodel.php';
+include_once __DIR__.'/../models/demo2model.php';
 include_once __DIR__.'/../urlprocess.php';
 
 
 /**
- * demo manager ontroller (vue -ban  megvalósított controller funkciók
- * igényelt model (includes/models/demomodel.php))
+ * demo2 manager ontroller (vue -ban  megvalósított controller funkciók
+ * igényelt model (includes/models/demo2model.php))
  *      methodusok: emptyRecord(), save($record), 
  *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order,$orderDir), 
  *      getTotal($filter)
@@ -20,21 +20,21 @@ include_once __DIR__.'/../urlprocess.php';
  * - broserform
  * - "üzleti logika" funkciók
  * Hivó url-elk:
- *  /task/demo.manager 
- *  /task/demo.manager/show/id
- *  /task/demo.manager/edit/id
- *  /task/demo.manager/browse/pno/order/ord/orderdir/ordDir/limit/lim/filter/fil
+ *  /task/demo2.manager 
+ *  /task/demo2.manager/show/id
+ *  /task/demo2.manager/edit/id
+ *  /task/demo2.manager/browse/pno/order/ord/orderdir/ordDir/limit/lim/filter/fil
  *       fil: 'all' vagy  'fieldName|value.....'
  * */
-class Demo extends Controller {
+class Demo2 extends Controller {
 
     /**
      * constructor
      */
 	function __construct() {
 		parent::__construct();
-		$this->model = new DemoModel();
-        $this->name = "demo";
+		$this->model = new Demo2Model();
+        $this->name = "demo2";
         $this->ckeditorFields = ['description']; // filedName lista
 	}
 
@@ -182,7 +182,7 @@ class Demo extends Controller {
 
     public function manager() {
         echo '<script type="text/javascript" src="vendor/axios/axios.js"></script>';
-        view('demomanager',[
+        view('demo2manager',[
             'show' => $this->request->input('show',''),
             'edit' => $this->request->input('edit',''),
             'page' => $this->request->input('browse',1),

@@ -188,7 +188,7 @@ class TableProcessor {
 					</div>
 					';
 		}
-		return $result;
+		return str_replace('\"',"'",$result);
 	} 
 	
 	public function showFields() : string {
@@ -197,10 +197,17 @@ class TableProcessor {
 			$fields = $this->fields;
 			foreach ($fields as $field) {
 					$result .= '
-					<div class="row">
+					<div class="row '.$field->Field.'">
 						<div class="col-12">
-							<label>{{ lng("'.strtoupper($field->Field).'") }}</label>:
-							<var v-html="record.'.$field->Field.'" class="'.$field->Field.'"></var>
+							<label>{{ lng("'.strtoupper($field->Field).'") }}:</label>
+							<var  v-html="record.'.$field->Field.'2" 
+								class="'.$field->Field.'"
+								v-if="ckeditorFields.indexOf(\"'.$field->Field.'\") >= 0">
+							</var>
+							<var  v-bind:class="'.$field->Field.'" v-html="record.'.$field->Field.'" 
+								class="'.$field->Field.'"
+								v-if="ckeditorFields.indexOf(\"'.$field->Field.'\") < 0">
+							</var>
 						</div>
 					</div>
 					';
@@ -220,8 +227,8 @@ class TableProcessor {
 				</div>
 			</div>
 			';
-		}			
-		return $result;
+		}	
+		return str_replace('\"',"'",$result);
 	} 
 
 	public function tableTh() : string {
@@ -230,16 +237,28 @@ class TableProcessor {
 			$fields = $this->fields;
 			foreach ($fields as $field) {
 				$result .= '
-				<th  class="'.$field->Field.'">{{ lng("'.strtoupper($field->Field).'") }}</th>
+				<th  class="'.$field->Field.'" id="th_'.$field->Field.'" v-on:click="thClick(\"'.$field->Field.'\")">
+					{{ lng("'.$field->Field.'") }}
+					<em class="fas fa-sort-down"></em>
+					<em class="fas fa-sort-up"></em>
+				</th>
 				';
 			}
 		} else {
 			$result .= '
-			<th>{{ lng("ID") }}</th>
-			<th>{{ lng("NAME") }}</th>
+			<th class="id" id="th_id" v-on:click="thClick(\"id\")">
+				{{ lng("ID") }}
+				<em class="fas fa-sort-down"></em>
+				<em class="fas fa-sort-up"></em>
+			</th>
+			<th class="name" id="th_name"  v-on:click="thClick(\"name")">
+				{{ lng("NAME") }}
+				<em class="fas fa-sort-down"></em>
+				<em class="fas fa-sort-up"></em>
+			</th>
 			';
 		}
-		return $result;
+		return str_replace('\"',"'",$result);
 	}
 
 	public function tableTr() : string {
@@ -247,17 +266,27 @@ class TableProcessor {
 		if ($this->tableExists) {
 			$fields = $this->fields;
 			foreach ($fields as $field) {
-				$result .= '
-				<td class="'.$field->Field.'">{{ item.'.$field->Field.' }}</td>
-				';
+				$result .= '<td class="'.$field->Field.'"><var v-html="item.'.$field->Field.'"></var></td>';
 			}
 		} else {
-			$result .= '
-			<td>{{ item.id }}</td>
-			<td>{{ item.name }}</td>
-			';
+			$result .= '<td>{{ item.id }}</td><td>{{ item.name }}</td>';
 		}
-		return $result;
+		$result .= '
+					<td>
+					<button type="button" class="btn btn-primary"  v-on:click="this.record = item; showClick()">
+						<em class="fas fa-eye" v-bind:title="lng(\"SHOW\")"></em>
+					</button>
+					<button type="button" class="btn btn-primary"  v-if="logedAdmin" 
+						v-on:click="this.record = item; editClick()">
+						<em class="fas fa-edit" v-bind:title="lng(\"EDIT\")"></em>
+					</button>
+					<button type="button" class="btn btn-danger" v-if="logedAdmin" 
+						v-on:click="this.record = item; delClick()">
+						<em class="fas fa-eraser" v-bind:title="lng(\"DELETE\")"></em>
+					</button>
+					</td> 
+		';
+		return str_replace('\"',"'",$result);
 	}
 
 
@@ -324,8 +353,8 @@ fwrite($fp,$str);
 fclose($fp);
 echo 'model created'."\n";
 
-// viewerek
-$lines = file(__DIR__.'/demobrowser.html');
+// viewer
+$lines = file(__DIR__.'/demomanager.html');
 $str = implode("",$lines);
 $str = str_replace('DEMO',strtoupper($name),$str);
 $str = str_replace('DEMOS',strtoupper($name).'S',$str);
@@ -333,44 +362,21 @@ $str = str_replace('demo',$name,$str);
 $str = str_replace('Demo',ucfirst($name),$str);
 $str = str_replace('//tableTh',$tp->tableTh(),$str);
 $str = str_replace('//tableTr',$tp->tableTr(),$str);
-$fp = fopen('includes/views/'.$name.'browser.html','w+');
-fwrite($fp,$str);
-fclose($fp);
-echo 'browser viewer created'."\n";
 
-$lines = file(__DIR__.'/demoform.html');
-$str = implode("",$lines);
-$str = str_replace('DEMO',strtoupper($name),$str);
-$str = str_replace('DEMOS',strtoupper($name).'S',$str);
-$str = str_replace('demo',$name,$str);
-$str = str_replace('Demo',ucfirst($name),$str);
 $str = str_replace('//formFields',$tp->formFields(),$str);
 $str = str_replace('//showFields',$tp->showFields(),$str);
 if (count($tp->fields) > 1) {
 	$str = str_replace('//focus','document.querySelector("input[name=\"'.$tp->fields[1]->Field.'\"]").focus();',$str);
 }
-$fp = fopen('includes/views/'.$name.'form.html','w+');
-fwrite($fp,$str);
-fclose($fp);
-echo 'form viewer created'."\n";
 
-$lines = file(__DIR__.'/demoshow.html');
-$str = implode("",$lines);
-$str = str_replace('DEMO',strtoupper($name),$str);
-$str = str_replace('DEMOS',strtoupper($name).'S',$str);
-$str = str_replace('demo',$name,$str);
-$str = str_replace('Demo',ucfirst($name),$str);
-$str = str_replace('//formFields',$tp->formFields(),$str);
-$str = str_replace('//showFields',$tp->showFields(),$str);
 if (count($tp->fields) > 1) {
 	$str = str_replace('//focus','document.querySelector("input[name=\"'.$tp->fields[1]->Field.'\"]").focus();',$str);
 }
-$fp = fopen('includes/views/'.$name.'show.html','w+');
+
+$fp = fopen('includes/views/'.$name.'manager.html','w+');
 fwrite($fp,$str);
 fclose($fp);
-echo 'show viewer created'."\n";
-
-
+echo 'viewer created'."\n";
 
 // languages
 $lines = file('languages/'.LNG.'.js');

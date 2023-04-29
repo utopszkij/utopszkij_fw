@@ -5,6 +5,8 @@
  * file upload feldolgozó szerver
  * 	 input POST egy darab file upload
  *   result {error:'errorTxt'} vagy {url:'teljes file URL'}
+ * 
+ * a cjeditorInit(selector) hivás után az editor widows.editors[selector] -al elérhető
  */
 
 	class MyUploadAdapter {
@@ -109,7 +111,8 @@
 	}
 
 	function ckeditorInit(domElementSelector) {
-				if (window.editor == undefined) {
+				if (window.editors == undefined) window.editors = [];
+				if (window.editors[domElementSelector] == undefined) {
                 ClassicEditor
                 .create( document.querySelector( domElementSelector ), {
                     language: 'hu',
@@ -176,6 +179,8 @@
                 } )
                 .then( editor => {
                     window.editor = editor;
+					if (window.editors == undefined) window.editors = [];
+					window.editors[domElementSelector] = editor;
                 } )
                 .catch( err => {
 					console.log('ckeditor error');

@@ -12,14 +12,13 @@
         }
 
         /**
-         * üres group rekord
+         * üres rekord
          */
         public function emptyRecord(): Record {
             $result = new Record();
-                    $result->id = 0;
-        $result->name = "";
-        $result->description = "";
-
+            $result->id = 0;
+            $result->name = "";
+            $result->description = "";
             return $result;
         }
 
@@ -58,12 +57,14 @@
          * @param string $order 
          * @return array
          */
-        public function getItems(int $page, int $limit, string $filter, string $order = 'id'): array {
+        public function getItems(int $page, int $limit, string $filter, 
+            string $order = 'id', string $orderDir = 'ASC'): array {
 			if ($page <= 0) $page = 1;
             $db = new Query($this->table);
             $db->offset((($page - 1) * $limit))
                ->limit($limit)
-               ->orderBy($order);
+               ->orderBy($order)
+               ->orderDir($orderDir);
             $this->filterToQuery($db,$filter);        
             $result = $db->all();
             return $result;        

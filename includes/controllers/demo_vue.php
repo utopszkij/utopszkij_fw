@@ -3,12 +3,14 @@ use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
 include_once __DIR__.'/../models/demomodel.php';
+include_once __DIR__.'/../urlprocess.php';
+
 
 /**
  * demo manager ontroller (vue -ban  megvalósított controller funkciók
  * igényelt model (includes/models/demomodel.php))
  *      methodusok: emptyRecord(), save($record), 
- *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
+ *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order,$orderDir), 
  *      getTotal($filter)
  * igényelt session adatok: loged,logedName, logedGroup
  *      opcionálisan: errorMsg, successMsg
@@ -19,9 +21,9 @@ include_once __DIR__.'/../models/demomodel.php';
  * - "üzleti logika" funkciók
  * Hivó url-elk:
  *  /task/demo.manager 
- *  /task/demo.manager/sow/id
+ *  /task/demo.manager/show/id
  *  /task/demo.manager/edit/id
- *  /task/demo.manager/browse/pno/order/ord/limit/lim/filter/fil
+ *  /task/demo.manager/browse/pno/order/ord/orderdir/ordDir/limit/lim/filter/fil
  *       fil: 'all' vagy  'fieldName|value.....'
  * */
 class Demo_vue extends Controller {
@@ -44,6 +46,11 @@ class Demo_vue extends Controller {
     public function api_getItem() {
         $id = $this->request->input('id');
         $result = $this->model->getById($id);
+        // ckeditor fields kezelése
+        foreach ($this->ckeditorFields as $field) {
+            $field2 = $field.'2';
+            $result->$field2 = urlprocess($result->$field);
+        }
         if ($this->accessRight('show',$result)) {
             echo JSON_encode($result);
         } else {
@@ -60,8 +67,9 @@ class Demo_vue extends Controller {
         $page = $this->request->input('page',1);
         $limit = $this->request->input('limit',20);
         $order = $this->request->input('order','id');
+        $orderDir = $this->request->input('orderdir','id');
         $filter = $this->request->input('filter','all');
-        $result = $this->model->getItems($page,$limit,$filter,$order);
+        $result = $this->model->getItems($page,$limit,$filter,$order, $orderDir);
         echo JSON_encode($result);
     }
 
@@ -177,8 +185,9 @@ class Demo_vue extends Controller {
             'edit' => $this->request->input('edit',''),
             'page' => $this->request->input('browse',1),
             'order' => $this->request->input('order','id'),
+            'orderDir' => $this->request->input('orderdir','ASC'),
             'filter' => $this->request->input('filter','all'),
-            'limit' => $this->request->input('limit',20),
+            'limit' => $this->request->input('limit',0),
             'loged' => $this->loged,
             'logedName' => $this->logedName,
             'logedGroup' => $this->logedGroup,
