@@ -5,7 +5,7 @@
 
 <div id="description">
 	<section id="imgHead">
-		<div class="row" style="height:50%">
+		<div class="row" style="height:30%">
 			<div class="col-12">&nbsp;</div>
 			<div class="col-12 text-center">
 				<h2>utopszkij_fw</h2>
@@ -19,7 +19,14 @@
 			</div>
 			<div class="col-3"></div>
 		</div>
-		<div class="row" style="height:50%"></div>
+		<div class="row">
+			<div class="col-12 text-center">
+				<a v-bind:href="HREF('book.items',{})" title="könyvek">
+				<img src="images/konyvtar.jpg" style="display:inline-block; height:300px; width:auto; margin-top:50px" />
+				</a>
+			</div>
+		</div>
+		<div class="row" style="height:30%"></div>
 	</section>	
 	<a name="about"></a>
 	<div class="row about">
@@ -90,7 +97,7 @@
 					<div class="_mt-5">
 						<a href="index.php?task=home.swdoc#__RefHeading___Toc187_953040041">
 							<div class="mb-2">
-								<img src="images/upgrade.jpg" />
+								<img src="images/upgrade.png" />
 							</div>
 							<h3 class="h4 mb-2">Autómatikus on-line frissités</h3>
 							<p class="text-muted mb-0">Admin jogú userek a github -ról egy kattintással frissithetik a programot.</p>
@@ -102,12 +109,12 @@
 	</section>
 
 	<div class="row download">
-		<div class="col-5"></div>
-		<div class="col-2 text-center">
+		<div class="col-1"></div>
+		<div class="col-10 text-center">
 				<a href="https://github.com/utopszkij/utopszkij_fw/archive/refs/heads/main.zip" 
 				class="btn" style="color:white; border-style:solid; border-color:white">Letöltés</a> 
 		</div>
-		<div class="col-5"></div>
+		<div class="col-1"></div>
 	</div>
 
 	<div id="portfolio">
@@ -175,7 +182,12 @@
 
 	<div class="row message">
 		<div class="col-12">
-			<h2 style="color:black">Kapcsolat</h2>
+			<h2 style="color:black">Kapcsolat felvétel</h2>
+		</div>	
+		<div class="col-2">
+			<img src="images/tibor.jpg" style="width:100%; margin:5px;" />
+		</div>
+		<div class="col-10">	
 			<label>A te E-mail címed:</label>
 			<input type="text" id="myEmail" class="form-control" />
 			<br />

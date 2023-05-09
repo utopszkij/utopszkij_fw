@@ -1,6 +1,6 @@
 /**
 * utopszkij_fw
-* globális javascript
+* utopszkij_fw standart  javascript
 * a HTML headerbe includolni!
 */
 	    const { createApp } = Vue; 
@@ -99,9 +99,6 @@
 			}
 		}
 
-		var rewrite = false;
-        var siteurl = "index.php"; 
-
 		/**
 		 * seo barát url képzéshez segéd rutin
 		 * @param string task
@@ -142,54 +139,118 @@
 			}
 		}
 		
-	// Make the DIV element draggable:
-	function dragElement(elmnt) {
-		var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-		elmnt.cursor='move';
-		/*
-		if (document.getElementById(elmnt.id + "header")) {
-			// if present, the header is where you move the DIV from:
-			document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-		} else {
-			// otherwise, move the DIV from anywhere inside the DIV:
-		}
-		*/
-		elmnt.onmousedown = dragMouseDown;
+		// Make the DIV element draggable:
+		function dragElement(elmnt) {
+			var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+			elmnt.cursor='move';
+			/*
+			if (document.getElementById(elmnt.id + "header")) {
+				// if present, the header is where you move the DIV from:
+				document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+			} else {
+				// otherwise, move the DIV from anywhere inside the DIV:
+			}
+			*/
+			elmnt.onmousedown = dragMouseDown;
 
-		function dragMouseDown(e) {
-			e = e || window.event;
-			e.preventDefault();
-			// get the mouse cursor position at startup:
-			pos3 = e.clientX;
-			pos4 = e.clientY;
-			document.onmouseup = closeDragElement;
-			// call a function whenever the cursor moves:
-			document.onmousemove = elementDrag;
-			elmnt.style.cursor = 'crosshair';
+			function dragMouseDown(e) {
+				e = e || window.event;
+				e.preventDefault();
+				// get the mouse cursor position at startup:
+				pos3 = e.clientX;
+				pos4 = e.clientY;
+				document.onmouseup = closeDragElement;
+				// call a function whenever the cursor moves:
+				document.onmousemove = elementDrag;
+				elmnt.style.cursor = 'crosshair';
+			}
+
+			function elementDrag(e) {
+				e = e || window.event;
+				e.preventDefault();
+				// calculate the new cursor position:
+				pos1 = pos3 - e.clientX;
+				pos2 = pos4 - e.clientY;
+				pos3 = e.clientX;
+				pos4 = e.clientY;
+				// set the element's new position:
+				elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+				elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+			}
+
+			function closeDragElement() {
+				// stop moving when mouse button is released:
+				document.onmouseup = null;
+				document.onmousemove = null;
+				elmnt.style.cursor = 'move';
+			}
+		}
+			
+		// világos/sötét téma váltás
+		function themeTogle() {
+			const currentTheme = getCookie("theme");
+			var theme = getCookie("theme");
+			if (currentTheme == "dark") {
+					document.body.className = 'light';
+					theme = 'light';
+				} else if (currentTheme == "light") {
+					document.body.className = 'dark';
+					theme = 'dark';
+				} else {
+					document.body.className = 'dark';
+					theme = 'dark';
+				}
+				setCookie("theme", theme,100);
 		}
 
-		function elementDrag(e) {
-			e = e || window.event;
-			e.preventDefault();
-			// calculate the new cursor position:
-			pos1 = pos3 - e.clientX;
-			pos2 = pos4 - e.clientY;
-			pos3 = e.clientX;
-			pos4 = e.clientY;
-			// set the element's new position:
-			elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-			elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+		// képek realtime betöltése, scrolltotop button megjelenítés/elrejtés
+		var oldOnscroll = function() {};
+		if (window.onscroll != undefined) {
+			oldOnscroll = window.onscroll.bind();
 		}
+		window.onscroll = function() {
+					window.scrollFunction(); window.scrollFunction();
+					if (window.scrollY < 20) {
+						document.getElementById('scrolltotop').style.display = 'none';
+						$('#fomenu').css('backgroundColor','transparent');
+						$('.nav-link').css('color','#f6f6f6');
+					} else {
+						document.getElementById('scrolltotop').style.display = 'block';
+						$('#fomenu').css('backgroundColor','white');
+						$('.nav-link').css('color','black');
+					}
+		};
 
-		function closeDragElement() {
-			// stop moving when mouse button is released:
-			document.onmouseup = null;
-			document.onmousemove = null;
-			elmnt.style.cursor = 'move';
-		}
-	}
+	// képernyő méretek tárolása cookie -ba
+	setCookie('screen_width',screen.width,100); 
+	setCookie('screen_height',screen.height,100); 
+	// window.setTimeout('window.scrollFunction()',1000);
+
+	$(function() {
+		// oldel betöltödés után fut:
 		
+		// sötét/világos téma init
+		var currentTheme = getCookie("theme");
+		if (currentTheme == '') {
+			currentTheme = 'light';
+		}
+		document.body.className = currentTheme;
+		setCookie("theme", currentTheme,100);
+
+		window.scrollFunction();
+		// iframe elemek átméretezése a parent div mérethez
+		var frames = document.getElementsByTagName("iframe");
+		var sz = 0, max = 0;
+		for (var i = 0; i < frames.length; i++) {
+			max = frames[i].parentNode.getBoundingClientRect().width * 0.9;
+			if (frames[i].width > max) {
+				sz = max / frames[i].width;
+				frames[i].width = Math.round(max);
+				frames[i].height = Math.round(frames[i].height * sz);
+			}
+		}	
+		// popup mozgatható 
+		dragElement(document.getElementById("popup"));
+	});
+
 		
-		// képernyő méretek tárolása csokiba
-		setCookie('screen_width',screen.width,100); 
-		setCookie('screen_height',screen.height,100); 

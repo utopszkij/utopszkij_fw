@@ -12,21 +12,25 @@
         }
 
         /**
-         * üres group rekord
+         * üres rekord
          */
         public function emptyRecord(): Record {
             $result = new Record();
-            //emptyRecord
+            $result->id = 0;
+            $result->name = "";
+            $result->description = "";
             return $result;
         }
 
 		/** a filter str alapján bőviti a Query -t
 		 * rendszerint át kell definiálni a mező tipusoktól függően
-		 * 'like' vagy '=' -s keresés
 		 * @param Query
 		 * @param string $filter 'name|value...'
 		 */ 
 		protected function filterToQuery(Query &$db, string $filter) {
+            if ($filter == 'all') {
+                return;
+            }
             if ($filter != '') {        
 				$filter = explode('|',$filter);        
 				$i=0;
@@ -53,12 +57,14 @@
          * @param string $order 
          * @return array
          */
-        public function getItems(int $page, int $limit, string $filter, string $order = 'id'): array {
+        public function getItems(int $page, int $limit, string $filter, 
+            string $order = 'id', string $orderDir = 'ASC'): array {
 			if ($page <= 0) $page = 1;
             $db = new Query($this->table);
             $db->offset((($page - 1) * $limit))
                ->limit($limit)
-               ->orderBy($order);
+               ->orderBy($order)
+               ->orderDir($orderDir);
             $this->filterToQuery($db,$filter);        
             $result = $db->all();
             return $result;        

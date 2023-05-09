@@ -161,7 +161,7 @@ class Controller {
     protected $addURL;
     protected $editURL;
     protected $browserTask;
-    protected $ckeditorFields = [];
+    public $ckeditorFields = [];
 
     function __construct() {
         $this->request = new Request();
@@ -183,6 +183,10 @@ class Controller {
         // $this->formURL = '...';
         // $this->browserTask = '...';
         // $this->ckeditorFields = ['fieldname',...]
+    }
+
+    public function logedAdmin(): bool {
+        return isAdmin();
     }
 
     /**
@@ -211,10 +215,10 @@ class Controller {
      */ 
     protected function filterParse(string $s):array {
 		$result = [];
-		if ($s != '') {
+		if (($s != 'all') | ($s == '')) {
 			$w = explode('|',$s);
 			$i = 0;
-			while ($i < count($w)) {
+			while ($i < (count($w) - 1)) {
 				$fn = $w[$i];
 				$fv = $w[$i+1];
 				$i = $i + 2;
@@ -309,7 +313,7 @@ class Controller {
             "filter" => $filter,
             "loged" => $this->loged,
             "logedName" => $this->loged,
-            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
+            "logedAdmin" => $this->logedAdmin(),
             "previous" => SITEURL,
             "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg',''),
@@ -338,7 +342,7 @@ class Controller {
             "record" => $item,
             "loged" => $this->loged,
             "logedName" => $this->loged,
-            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
+            "logedAdmin" => $this->logedAdmin(),
             "previous" => $this->browserURL,
             "browserUrl" => $this->browserURL,
             "errorMsg" => $this->session->input('errorMsg','')
@@ -375,9 +379,10 @@ class Controller {
      * GET: id, displaymode
      */
     public function edit() {
-        $id = $this->request->input('id',0);
-        $record = $this->model->getById($id);
-        $record->displayMode = $this->request->input('displaymode','show');
+        $id = $this->request->input('id',0, INTEGER);
+        $record = $this->model->getById((int)  $id);
+        // $record->displayMode = $this->request->input('displaymode','show');
+        $record->displayMode = 'edit';
         if (!$this->accessRight('edit',$record) & !$this->accessRight('show',$record)) {
             $this->session->set('errorMsg','ACCESDENIED');
             $this->items();
@@ -395,10 +400,10 @@ class Controller {
         } else {
             $viewName = $this->name.'show';
         }
-        view($viewName,[
-            "flowKey" => $this->newFlowKey(),
+        
+        view($viewName,["flowKey" => $this->newFlowKey(),
             "record" => $record,
-            "logedAdmin" => (strpos($this->logedGroup,'admin') > 0),
+            "logedAdmin" => $this->logedAdmin(),
             "loged" => $this->loged,
             "previous" => $this->browserURL,
             "browserUrl" => $this->browserURL,
@@ -412,8 +417,31 @@ class Controller {
      * GET: id
      */
     public function showform() {
-        $this->request->set('displaymode','show');
-        $this->edit();
+        $id = $this->request->input('id',0, INTEGER);
+        $record = $this->model->getById((int)  $id);
+        $record->displayMode = 'show';
+        if (!$this->accessRight('show',$record)) {
+            $this->session->set('errorMsg','ACCESDENIED');
+            $this->items();
+        }
+        if ($this->session->isset('oldRecord')) {
+            $record = $this->session->input('oldRecord');
+        }
+        foreach ($this->ckeditorFields as $ckeditorField) {
+			$fn2 = $ckeditorField.'2';
+			$record->$fn2 = urlprocess($record->$ckeditorField);
+		}
+        $this->browserURL = $this->request->input('browserUrl', $this->browserURL);
+        $viewName = $this->name.'show';
+        view($viewName,["flowKey" => $this->newFlowKey(),
+            "record" => $record,
+            "logedAdmin" => $this->logedAdmin(),
+            "loged" => $this->loged,
+            "previous" => $this->browserURL,
+            "browserUrl" => $this->browserURL,
+            "errorMsg" => $this->session->input('errorMsg',''),
+        ]);
+        $this->session->delete('errorMsg');
     }
 
     /**

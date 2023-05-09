@@ -3,6 +3,7 @@ use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
 include_once __DIR__.'/../models/usermodel.php';
+include_once __DIR__.'/../markdowntohtml.php';
 
 class Home extends Controller {
 
@@ -32,6 +33,7 @@ class Home extends Controller {
 			"errorMsg" => $errorMsg,
 			"successMsg" => $successMsg
 		]);
+
 	}
 
 	/**

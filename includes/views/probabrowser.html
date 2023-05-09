@@ -1,0 +1,130 @@
+git add .<div id="probas">
+    <div v-if="errorMsg != ''" class="alert alert-danger">
+        <div v-html="lng(errorMsg)"></div>
+    </div>
+    <div v-if="successMsg != ''" class="alert alert-success">
+        <div v-html="lng(successMsg)"></div>
+    </div>
+    
+    <h2 class="ribbon-banner"><span>{{ lng('PROBAS') }}</span></h2>
+	<!--
+	// lásd a model.php -t is!
+    <div class="row">
+		<div class="col-12">
+			<h4>{{ lng('SEARCH') }}</h4>
+			<form class="filterForm" id="filterForm" method="post" v-bind:action="HREF('proba.items',{})">
+				<input type="hidden" name="task" value="proba.items" />
+				<input type="hidden" name="page" value="1" />
+				<label>{{ lng('NAME') }}</label>
+				<input type="text" name="filter_name" id="filter_name"/>
+				<button type="submit" class="btn btn-primary" v-bind:title="lng('SEARCH')">
+					<em class="fas fa-search"></em>
+				</button>
+				<button type="button" class="btn btn-secondary" v-on:click="delSearchClick()">
+					<em class="fas fa-times"></em>
+				</button>
+			</form>
+		</div>
+	</div>
+	-->
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-bordered table-striped" style="width:auto" v-if="items.length > 0">
+				<thead>
+					<tr>
+				<th>{{ lng("ID") }}</th>
+				
+				<th>{{ lng("USERNAME") }}</th>
+				
+				<th>{{ lng("PASSWORD") }}</th>
+				
+				<th>{{ lng("REALNAME") }}</th>
+				
+				<th>{{ lng("EMAIL") }}</th>
+				
+				<th>{{ lng("AVATAR") }}</th>
+				
+				<th>{{ lng("EMAIL_VERIFYED") }}</th>
+				
+				<th>{{ lng("ENABLED") }}</th>
+				
+				<th>{{ lng("DELETED") }}</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr v-for="item in items">
+						
+				<td>{{ item.id }}</td>
+				
+				<td>{{ item.username }}</td>
+				
+				<td>{{ item.password }}</td>
+				
+				<td>{{ item.realname }}</td>
+				
+				<td>{{ item.email }}</td>
+				
+				<td>{{ item.avatar }}</td>
+				
+				<td>{{ item.email_verifyed }}</td>
+				
+				<td>{{ item.enabled }}</td>
+				
+				<td>{{ item.deleted }}</td>
+				 
+					</tr>
+				</tbody>
+			</table>
+		</div>
+    </div>
+    <div class="alert alert-info col-12" v-if="items.length == 0">{{ lng('NOT_ITEMS') }}</div>
+    <div v-if="items.length > 0">
+		include paginator
+    </div>
+    <div class="row" v-if="logedAdmin">
+		<div class="col-12">
+			<a class="btn btn-primary" v-bind:href="HREF('proba.new',{})">
+				<em class="fas fa-plus"></em><span>{{ lng('ADD') }}</span></a>
+		</div>
+    </div>
+</div>
+
+<script>
+    methods = {
+		afterMount() {
+			if (this.filter != undefined) {
+				// filter strintg (name|value....)  to filterForm
+				if (this.filter != '') {
+					var filter = this.filter.split('|');
+					var i = 0;
+					var fn = '';
+					while (i < filter.length) {
+						fn = filter[i];
+						document.getElementById('filter_'+fn).value = filter[i+1];
+						i = i + 2;
+					}
+				}
+			}
+		},
+        makePaginatorClass(p,page) {
+            var result = '';
+            if (p == page) {
+                result="actPaginatorItem";
+            } else {
+                result="paginatorItem"
+            }
+            return result;
+        },
+        delClick(id) {
+            popupConfirm(lng('SUREDELETE'), 
+            function() {
+                location=HREF('proba.delete',{'id':id, key:app.flowKey}); 
+            })
+        },
+        delSearchClick() {
+			document.getElementById('filter_name').value = '';
+			document.getElementById('filterForm').submit();
+		}    
+        
+    }
+</script>

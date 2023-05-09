@@ -1,0 +1,74 @@
+
+<div v-if="errorMsg != ''" class="alert alert-danger">
+    <div v-html="lng(errorMsg)"></div>
+</div>
+
+<div id="category">
+	<h2>{{ lng('CATEGORY') }}</h2>
+    <form id="categoryForm" v-bind:action="HREF('category.save',{})" method="post" class="form" 
+        enctype="multipart/form-data"  style="display:blocl">
+        <input type="hidden" v-model="flowKey" name="flowKey" />
+        <input type="hidden" value="category.save" name="task" />			
+		
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("ID") }}</label>:
+							<input type="number" name="id" v-model="record.id" disabled="disabled" />
+							<input type="hidden" name="id" v-model="record.id" />
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("CATEGORY_NAME") }}</label>:
+							<input type="text" name="category_name" id="category_name" v-model="record.category_name"  required="required" class="form-control category_name" />
+						</div>
+					</div>
+					
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">
+                    <em class="fas fa-check"></em>&nbsp;{{ lng('SAVE') }}
+                </button>&nbsp;
+                <a v-bind:href="previous" class="btn btn-secondary">
+                    <em class="fas fa-reply"></em>&nbsp;{{ lng('CANCEL') }}
+                </a>&nbsp;
+                <button type="button" 
+                   v-on:click="delClick()"
+                   v-if="record.id > 0"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+        <div class="row formButtons" v-if="!logedAdmin">
+            <div class="col-12">
+                <a v-bind:href="previous" class="btn btn-secondary">
+                    <em class="fas fa-reply"></em>&nbsp;{{ lng('BACK') }}
+                </a>
+            </div>
+        </div>
+    </form>    
+</div>
+
+
+
+<script>
+    methods = {
+		afterMount() {
+			if (this.record != undefined) {
+		        	document.querySelector("input[name=\"category_name\"]").focus();
+			}
+            // window.ckeditorInit('#description');
+		},
+        delClick() {
+            popupConfirm(lng('SUREDELETE'), 
+            function() {
+                location=HREF('category.delete',{id:app.record.id, key:app.flowKey}); 
+            })
+        },
+        editClick() {
+            document.location = HREF('category.editform',{id:this.record.id});
+		}    
+    }
+</script>

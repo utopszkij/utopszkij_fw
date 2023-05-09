@@ -100,30 +100,13 @@ tokens = {
     "ADMIN_CANNOT_UPDATE":"admin nem módosítható",
     "ADMIN_CANNOT_DELETE":"admin nem törölhető",
 
-	/* demo */
-	"DEMO":"Példa",
-	"DEMOS":"Példa adatok",
-	"NAME_REQUERED":"Nevet meg kell adni!",
-	"NOT_ITEMS":"Nincs adat",
-
+	
     /* demo */
   "DEMO":"demo",
   "DEMOS":"demos",
   "ID":"id",
-  "NAME":"name",
-
-    /* demo */
-  "DEMO":"demo",
-  "DEMOS":"demos",
-  "ID":"id",
-  "NAME":"name",
-
-    /* demo */
-  "DEMO":"demo",
-  "DEMOS":"demos",
-  "ID":"id",
-  "NAME":"name",
-  "DESCRIPTION":"description",
+  "NAME":"név",
+  "DESCRIPTION":"leírás",
 
     "END":"Vége"
 };

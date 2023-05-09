@@ -30,8 +30,12 @@
                 <em class="fas fa-code"></em>&nbsp;{{ lng('SWDOC') }}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="index.php?task=demo.items">
+                <a class="nav-link" href="index.php?task=demo.manager">
                 <em class="fas fa-wine-glass"></em>&nbsp;{{ lng('DEMO') }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" v-bind:href="HREF('book.items')">
+                <em class="fas fa-book"></em>&nbsp;{{ lng('BOOKS') }}</a>
               </li>
               <li class="nav-item">
                   <var class="nav-link" onclick="submenuToggle()" 

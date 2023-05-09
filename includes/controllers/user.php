@@ -85,7 +85,7 @@ class User extends Controller {
 		$_SESSION['logedGroup'] = '';
 		?>
 		<script>
-				document.location="index.php";		
+				document.location="<?php echo SITEURL; ?>/task/home.show";		
 		</script>
 		<?php			
 	}
@@ -155,7 +155,7 @@ class User extends Controller {
 				$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
 				?>
 				<script>
-					document.location="<?php echo SITEURL; ?>";		
+					document.location="<?php echo SITEURL; ?>/task/home.show";		
 				</script>
 				<?php			
 			} else {

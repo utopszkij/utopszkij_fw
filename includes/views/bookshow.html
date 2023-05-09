@@ -1,0 +1,134 @@
+
+<div v-if="errorMsg != ''" class="alert alert-danger">
+    <div v-html="lng(errorMsg)"></div>
+</div>
+
+<div id="book">
+	<h2>{{ lng('BOOK') }}</h2>
+    <div id="bookShow" class="form">
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="button" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                <button type="button" 
+                   v-on:click="delClick()"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+		<!-- 
+            FIGYELEM! a ckeditorral kezelt mezőknél itt egy "2" karaktert kell a mezőnév végére illeszteni 
+            pl. ha a "descrition" mező van ckeditorral kezelve:   v-html="record.description2"
+        -->
+		
+		<img v-if="record.image_url != ''" v-bind:src="record.image_url" 
+			style="width:300px; float:left; margin:5px;" class="img-fluid" alt="Responsive image">
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("ID") }}</label>:
+							<var v-html="record.id" class="id"></var>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("AUTHOR") }}:</label>
+                            <div style="display: inline-block; width:auto">
+                                <div v-for="author in record.authors">
+                                        {{ author.author_name }}
+                                </div>
+                            </div>    
+						</div>
+					</div>
+
+                    <div class="row">
+						<div class="col-12">
+							<label>{{ lng("TITLE") }}</label>:
+							<var v-html="record.title" class="title"></var>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("STORAGE") }}</label>:
+							<var v-html="record.storageName" class="storage"></var>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("BOOK_URL") }}</label>:
+							<a v-if="record.book_url != ''" v-bind:href="record.book_url" class="book_url">link</a>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("IMAGE_URL") }}</label>:
+							<var v-html="record.image_url" class="image_url"></var>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("YEAR") }}</label>:
+							<var v-html="record.year" class="year"></var>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("VOLUMES") }}</label>:
+							<var v-html="record.volumes" class="volumes"></var>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("CATEGORIES") }}</label>:
+							<var v-for="category in record.categories" v-html="category.category_name+', &nbsp;'" class="volumes"></var>
+						</div>
+					</div>
+					
+        <div class="row formButtons">
+            <div class="col-12">
+                <button type="button"  v-if="logedAdmin" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                <button type="button"  v-if="logedAdmin"
+                   v-on:click="delClick()"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+                <a v-bind:href="previous" class="btn btn-secondary">
+                    <em class="fas fa-reply"></em>&nbsp;{{ lng('BACK') }}
+                </a>
+            </div>
+        </div>
+    </div>    
+    
+    
+</div>
+
+
+
+<script>
+    methods = {
+		afterMount() {
+		},
+        delClick() {
+            popupConfirm(lng('SUREDELETE'), 
+            function() {
+                location=HREF('book.delete',{id:app.record.id, key:app.flowKey}); 
+            })
+        },
+        editClick() {
+            document.location = HREF('book.editform',{id:this.record.id});
+		}    
+    }
+</script>

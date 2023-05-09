@@ -5,7 +5,7 @@
 
 <div id="demo">
 	<h2>{{ lng('DEMO') }}</h2>
-    <form id="demoForm" action="index.php" method="post" class="form" 
+    <form id="demoForm" v-bind:action="HREF('demo.save',{})" method="post" class="form" 
         enctype="multipart/form-data"  style="display:blocl">
         <input type="hidden" v-model="flowKey" name="flowKey" />
         <input type="hidden" value="demo.save" name="task" />			
@@ -44,6 +44,7 @@
 			if (this.record != undefined) {
 		        	//focus
 			}
+            // window.ckeditorInit('#description');
 		},
         delClick() {
             popupConfirm(lng('SUREDELETE'), 

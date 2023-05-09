@@ -33,6 +33,9 @@
  * @return void
  */
 
+global $tokens;
+$tokens = false;
+
 function view(string $name,array $params, string $appName = 'app') {
     $scriptExist = false;
     
@@ -44,8 +47,10 @@ function view(string $name,array $params, string $appName = 'app') {
         $lines = file(__DIR__.'/../includes/views/'.$name.'_'.LNG.'.html');
     } else if (file_exists(__DIR__.'/../includes/views/'.$name.'.html')) {
         $lines = file(__DIR__.'/../includes/views/'.$name.'.html');
+    } else if (file_exists('includes/views/'.$name.'.html')) {
+        $lines = file('includes/views/'.$name.'.html');
     } else {
-        echo 'Fatal error '.$name.' view not found.'; exit();
+        echo 'Fatal error '.$name.' view not found. '.__DIR__; exit();
     }    
     echo '<div id="'.$appName.'" style="display:none">'."\n";  
     foreach ($lines as $line) {
@@ -88,6 +93,7 @@ function echoEndScript(array $params, string $appName) {
             location: encodeURI(window.location),
             lng: window.lng,
             siteurl: window.siteurl,
+            rewrite : '.REWRITE.',
             sid:"'.session_id().'"
             };
         },
@@ -102,4 +108,21 @@ function echoEndScript(array $params, string $appName) {
     </script>'."\n";
 }
 
+
+function lng(string $token) {
+    global $tokens;
+    $result = $token;
+    if (!$tokens) {
+        $s = file_get_contents(__DIR__.'/../languages/'.LNG.'.js');
+        $s = str_replace('tokens','',$s);
+        $s = str_replace('=','',$s);
+        $s = str_replace('};','}',$s);
+        $s = preg_replace('|/\*.+\*/|', '', $s);
+        $tokens = JSON_decode(trim($s));
+    }
+    if (isset($tokens->$token)) {
+        $result = $tokens->$token;
+    }
+    return $result;
+}
 ?>

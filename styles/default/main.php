@@ -3,6 +3,7 @@
   <meta>
     <meta charset="UTF-8">
 	<meta property="og:title"  content="<?php echo $title; ?>" />
+	<meta property="og:image" content="<?php echo SITEURL; ?>/images/konyvtar.jpg">
 	<base href="<?php echo SITEURL; ?>/">
 	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <title><?php echo $title; ?></title>
@@ -11,6 +12,8 @@
 	<!-- bootstrap -->	
 	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!-- jquery -->
+	<script src="vendor/jquery/jquery-2.2.4.min.js"></script>
 	<!-- vue -->
     <script src="vendor/vue/vue.global.js"></script>
 	<!-- axios -->
@@ -20,6 +23,7 @@
 	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
 	<link rel="stylesheet" href="<?php echo SITEURL; ?>/styles/default/style.css?t=<?php echo $fileVerzio.date('Ymdhis'); ?>"
+	
 	<!-- multi language -->
 	<?php
 		if (defined('LNG')) {
@@ -36,15 +40,20 @@
 			}	
 		}
 	?>
+	
+	<!-- REWRITE és SITEURL -->
 	<script type="text/javascript">
 		var rewrite = <?php echo (int)REWRITE; ?>;
         var siteurl = "<?php echo SITEURL; ?>"; 
 	</script>	
 
 	<!-- ckeditor -->
-	<script src="vendor/ckeditor/build/ckeditor.js"></script>
-	<script src="vendor/ckeditor/myckeditor.js"></script>
+	<?php if (count($comp->ckeditorFields) > 0) : ?>
+		<script src="vendor/ckeditor/build/ckeditor.js"></script>
+		<script src="vendor/ckeditor/myckeditor.js"></script>
+	<?php endif; ?>	
 
+	<!-- utopszkij_fw standart js -->
 	<script src="index.js"></script>
 </head>	 
 <body>
@@ -107,83 +116,38 @@
 				'fileVerzio' => Upgrade::versionAdjust($fileVerzio)
 			],'footer'); 
 		?>
+		<div class="row themeTogle text-center">
+			<div class="col-12">
+				<button type="button" class="btn btn-secondary" onclick="themeTogle()" style="width:auto">
+					<em class="fas fa-adjust"></em>Világos/sötét téma váltás</button>
+					<!-- cookie engedélyeztetés -->
+					<script type="text/javascript">
+						if (document.cookie.search('cookieEnabled=2') >= 0) {
+							document.write('<p id="cookieEnabled">Süti kezelés engedélyezve van. Letiltásához kattints ide:'+
+							'<a href="index.php" onclick="setCookie(\'cookieEnabled\',0,100);">Letilt</a></p>');
+						} else if (document.location.href.search('adatkezeles') < 0) {
+							popupConfirm('Ennek a web oldalnak a használatához un. "munkamenet sütik" használtata szükséges.'+
+							'<br />Lásd: <a href="index.php?task=adatkezeles">Adatkezelési leírás</a>'+
+							'<br />Kérjük engedélyezd a sütik kezelését!',
+							function() {
+								setCookie('cookieEnabled',2,100);
+								document.location='index.php';
+							})
+						}
+					</script>	
+			</div>
+		</div>
 	</div>
 	<button onclick="window.scrollTo(0,0);" id="scrolltotop" title="Fel a tetejére">
 		<em class="fa fa-arrow-up"></em>
 	</button>
-	<script src="vendor/jquery/jquery-2.2.4.min.js"></script>
-	<script>
-		if (document.cookie.search('cookieEnabled=2') >= 0) {
-			document.write('<p id="cookieEnabled">Süti kezelés engedélyezve van. Letiltásához kattints ide:'+
-			'<a href="index.php" onclick="setCookie(\'cookieEnabled\',0,100);">Letilt</a></p>');
-		} else if (document.location.href.search('adatkezeles') < 0) {
-			popupConfirm('Ennek a web oldalnak a használatához un. "munkamenet sütik" használtata szükséges.'+
-			'<br />Lásd: <a href="index.php?task=adatkezeles">Adatkezelési leírás</a>'+
-			'<br />Kérjük engedélyezd a sütik kezelését!',
-			function() {
-				setCookie('cookieEnabled',2,100);
-				document.location='index.php';
-			})
-		}
-	</script>	
+
 </body>
 <script type="text/javascript">
-
-		// világos/sötét téma váltás
-		function themeTogle() {
-			const currentTheme = getCookie("theme");
-			var theme = getCookie("theme");
-			if (currentTheme == "dark") {
-				document.body.className = 'light';
-				theme = 'light';
-			} else if (currentTheme == "light") {
-				document.body.className = 'dark';
-				theme = 'dark';
-			} else {
-				document.body.className = 'dark';
-				theme = 'dark';
-			}
-			setCookie("theme", theme,100);
-		}
-
-		// mozgatható elemek
-		dragElement(document.getElementById("popup"));
 
 		// sessionId csokiba
 		window.sessionId = "<?php echo session_id(); ?>";
 		setCookie("sid","<?php echo session_id(); ?>", 500);
-
-		// képek realtime betöltése, scrolltotop button megjelenítés/elrejtés
-		window.onscroll = function() {
-			window.scrollFunction(); window.scrollFunction()
-			if (window.scrollY < 20) {
-				document.getElementById('scrolltotop').style.display = 'none';
-				$('#fomenu').css('backgroundColor','transparent');
-				$('.nav-link').css('color','#f6f6f6');
-			} else {
-				document.getElementById('scrolltotop').style.display = 'block';
-				$('#fomenu').css('backgroundColor','white');
-				$('.nav-link').css('color','black');
-			}
-		};
-		window.setTimeout('window.scrollFunction()',1000);
-
-		window.rewrite = <?php echo (int)REWRITE; ?>;
-        window.siteurl = "<?php echo SITEURL; ?>"; 
-		
-		// iframe elemek átméretezése a parent div mérethez
-		var frames = document.getElementsByTagName("iframe");
-		var sz = 0, max = 0;
-		for (var i = 0; i < frames.length; i++) {
-			max = frames[i].parentNode.getBoundingClientRect().width * 0.9;
-			if (frames[i].width > max) {
-				sz = max / frames[i].width;
-				frames[i].width = Math.round(max);
-				frames[i].height = Math.round(frames[i].height * sz);
-			}
-		}
-		
-		
-		
+	
 </script>
 </html>

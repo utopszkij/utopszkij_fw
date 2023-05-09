@@ -1,0 +1,81 @@
+
+<div v-if="errorMsg != ''" class="alert alert-danger">
+    <div v-html="lng(errorMsg)"></div>
+</div>
+
+<div id="author">
+	<h2>{{ lng('AUTHOR') }}</h2>
+    <div id="authorShow" class="form">
+        <div class="row formButtons" v-if="logedAdmin">
+            <div class="col-12">
+                <button type="button" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                <button type="button" 
+                   v-on:click="delClick()"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+            </div>
+        </div>
+		<!-- 
+            FIGYELEM! a ckeditorral kezelt mezőknél itt egy "2" karaktert kell a mezőnév végére illeszteni 
+            pl. ha a "descrition" mező van ckeditorral kezelve:   v-html="record.description2"
+        -->
+		
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("ID") }}</label>:
+							<var v-html="record.id" class="id"></var>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							<label>{{ lng("AUTHOR_NAME") }}</label>:
+							<var v-html="record.author_name" class="author_name"></var>
+						</div>
+					</div>
+					
+        <div class="row formButtons">
+            <div class="col-12">
+                <button type="button"  v-if="logedAdmin" 
+                   v-on:click="editClick()"
+                   class="btn btn-primary">
+                    <em class="fas fa-edit"></em>&nbsp;{{ lng('EDIT') }}
+                </button>
+                &nbsp;
+                <button type="button"  v-if="logedAdmin"
+                   v-on:click="delClick()"
+                   class="btn btn-danger">
+                    <em class="fas fa-eraser"></em>&nbsp;{{ lng('DELETE') }}
+                </button>
+                &nbsp;
+                <a v-bind:href="HREF('author.items',{})" class="btn btn-secondary">
+                    <em class="fas fa-reply"></em>&nbsp;{{ lng('BACK') }}
+                </a>
+        </div>
+    </div>    
+    
+    
+</div>
+
+
+
+<script>
+    methods = {
+		afterMount() {
+		},
+        delClick() {
+            popupConfirm(lng('SUREDELETE'), 
+            function() {
+                location=HREF('author.delete',{id:app.record.id, key:app.flowKey}); 
+            })
+        },
+        editClick() {
+            document.location = HREF('author.editform',{id:this.record.id});
+		}    
+    }
+</script>

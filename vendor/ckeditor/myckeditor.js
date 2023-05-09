@@ -1,16 +1,26 @@
 /*
- *  ckeditr image upload kezelés
- *  és toolbar definiálás
+ * CKEditor 5's FileLoader instance.
+ * ckeditr image upload kezelés és toolbar definiálás
+ * 
+ * file upload feldolgozó szerver
+ * 	 input POST egy darab file upload
+ *   result {error:'errorTxt'} vagy {url:'teljes file URL'}
+ * 
+ * a cjeditorInit(selector) hivás után az editor widows.editors[selector] -al elérhető
  */
 
 	class MyUploadAdapter {
 		constructor( loader ) {
-			// CKEditor 5's FileLoader instance.
 			this.loader = loader;
+			console.log('MyUploadAdapter');
+			console.log(loader);
 
-			// URL ahol a file upload feldolgozo php van
+// ================================ config =========================================			
+			// URL ahol a file upload feldolgozo server van
 			this.url = 'upload.php';
-			this.uploads = ['jpg','jpeg','png','odt'];
+			// megengedett file kiterjesztések
+			this.uploads = ['jpg','jpeg','png','gif','tif'];
+// ================================ config =========================================			
 		}
 
 		// Starts the upload process.
@@ -19,7 +29,7 @@
 				.then( file => new Promise( ( resolve, reject ) => {
 					this._initRequest();
 					this._initListeners( resolve, reject, file );
-					this._sendRequest( file );
+					this._sendRequest( file ); // ez küldi fel a file -t
 				} ) );
 		}
 
@@ -55,7 +65,20 @@
 				//console.log(response);
 				// If the upload is successful, resolve the upload promise with an object containing
 				// at least the "default" URL, pointing to the image on the server.
+				console.log(response);
+				/**
+				 * response.url tartalma 'relPath/fileName.ext'
+				 * (a realPath -ot a lokalis upload feldolgozó upload.php állította be)
+				 * ebből képezzük a localurl -t és a baseFileName -t.
+				 * remoteFielStorage esetén itt kellene a kitölteni
+				 * a rejtett formot (url=localurl, destDir = mydomain, delUrl = mydomain/delfile.php
+				 * rejtett form elküldése
+				 * response.url átírása
+				 * response.url = 'http://utopszkij.great-site.net/{destDir}/+baseFileName
+				 */ 
+
 				resolve( {
+					
 					default: response.url
 				} );
 			} );
@@ -72,6 +95,7 @@
 
 		// Prepares the data and sends the request.
 		_sendRequest(file) {
+			// mosta a file.name tartalma: 'filename.ext' 
 			const data = new FormData();
 			data.append('upload', file );
 			//csrf_token CSRF protection
@@ -85,9 +109,10 @@
 			return new MyUploadAdapter( loader );
 		};
 	}
-	
+
 	function ckeditorInit(domElementSelector) {
-				if (window.editor == undefined) {
+				if (window.editors == undefined) window.editors = [];
+				if (window.editors[domElementSelector] == undefined) {
                 ClassicEditor
                 .create( document.querySelector( domElementSelector ), {
                     language: 'hu',
@@ -123,7 +148,7 @@
 								'superscript',
 								'undo',
 								'redo',
-								'sourceEditing'
+								'sourceEditing',
 							]
 					},
                     mediaEmbed: {
@@ -154,11 +179,12 @@
                 } )
                 .then( editor => {
                     window.editor = editor;
+					if (window.editors == undefined) window.editors = [];
+					window.editors[domElementSelector] = editor;
                 } )
                 .catch( err => {
 					console.log('ckeditor error');
                     console.log( err );
                 } );
             }	
-
 	}
