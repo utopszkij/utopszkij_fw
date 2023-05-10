@@ -22,6 +22,7 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 - ckeditor támogatás,
 - több megjelenitésverzió támogatása,
 - verzió követés a github main branch -ról.
+- "nyers erő" (brute force) támadás elleni védekezés
 
 ## Dokumentáció
 
@@ -161,6 +162,11 @@ ellenörzése, javítása (ckeditor mezőknél a controller __construct -ban és
 4. főmenüben (vagy máshol) a modult inditó link elhelyezése
 
 
+## verzió v2.1.0
+"nyers erő" támadás elleni védekezés
+5 hibás jelszó megadása  után a
+username 5 percre blokkolva
+### *************************************
 ## verzió v1.0.3
 table lock, unlock, tranzakció kezelés a database interface-be
 ### *************************************
