@@ -83,6 +83,7 @@ tokens = {
     "EMAIL_EXISTS":"Már van ezzel az e-mail -el fiók",
     "USER_NOT_FOUND":"Nincs ilyen fiók",
     "WRONG_PASSWORD":"Rossz jelszó",
+    "USER_LOCKED_WAIT_5MINS":"Több mint 5 hibás belépési kisérlet miatt a bejelentkezés 5 percre letiltva.",
     "NOT_ACTIVATED":"A fiók nincs aktiválva",
     "DISABLED":"Letiltott",
     "EMAIL_SENDED":"E-mail elküldve",

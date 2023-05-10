@@ -121,6 +121,30 @@ class Upgrade {
 		}	
 	}
 
+	protected function do_v2_1_0($dbverzio) {
+		if ($this->versionAdjust($dbverzio) < $this->versionAdjust('v2.1.0')) {
+
+			$table = new Table('users');
+			$table->integer('error_count');
+			$table->integer('locktime');
+			$table->alterInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+
+			$table = new Table('worktypes');
+			$table->id();
+			$table->string('name');
+			$table->createInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+			
+			$this->setDbVersion('v2.1.0');
+		}	
+	}
+
+
 	/**
 	 * szükség szerint adatbázis alterek, új táblák létrehozása
 	 * adatbázisban tárolt dbverzio frissitése
@@ -129,6 +153,7 @@ class Upgrade {
 	public function dbUpgrade(string $dbverzio) {
 		$this->do_v1_0($dbverzio);
 		$this->do_v1_1_0($dbverzio);
+		$this->do_v2_1_0($dbverzio);
 		// ide jönek a későbbi verziokhoz szükséges db alterek növekvő verzió szerint
 	}
 

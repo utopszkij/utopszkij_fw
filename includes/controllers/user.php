@@ -136,6 +136,12 @@ class User extends Controller {
 			$rec = $recs[0];
 			if ($rec->password != hash('sha256',$password.$rec->id)) {
 				$error = 'WRONG_PASSWORD<br>';
+				$rec->error_count = $rec->error_count + 1;
+				if ($rec->error_count > 5) {
+					$rec->locktime = time();
+				}
+				$rec->password = '';
+				$this->model->save($rec);
 			}
 			if ($rec->enabled != 1) {
 				$error .= 'DISABLED<br>';
@@ -148,11 +154,19 @@ class User extends Controller {
 			if ($rec->deleted == 1) {
 				$error .= 'USER_NOT_FOUND<br>';
 			}
+			if (($rec->locktime != 0) & ((time() - $rec->locktime) < 300)) {
+				$error = 'USER_LOCKED_WAIT_5MINS<br>';   // ILYENKOR CSAK EZ AZ EGY HIBAÜZENET!
+			}
+			
 			if ($error == '') {
 				$_SESSION['loged'] = $rec->id;
 				$_SESSION['logedName'] = $rec->username;
 				$_SESSION['logedAvatar'] = $rec->avatar;
 				$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
+				$rec->error_count = 0;
+				$rec->locktime = 0;
+				$rec->password = '';
+				$this->model->save($rec);
 				?>
 				<script>
 					document.location="<?php echo SITEURL; ?>/task/home.show";		
@@ -176,6 +190,8 @@ class User extends Controller {
 		$record->email = $this->request->input('email');
 		$record->email_verifyed = $this->request->input('email_verifyed',0);
 		$record->enabled = $this->request->input('enabled',0);
+		$record->error_count = 0;
+		$record->locktime = 0;
 		$this->session->set('oldRec', JSON_encode($record));
 		$record->deleted = 0;
 		$redirect = base64_decode($this->request->input('redirect'));
