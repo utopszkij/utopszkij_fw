@@ -8,60 +8,63 @@
             <span>{{ lng('REGISTRATION') }}</span>
         </h1>
 	</div>	
-    <form name="registration" action="index.php" method="post" enctype="multipart/form-data">
+    <form name="registration" id="registForm" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="task" value="user.doregist" />
     <input type="hidden" name="redirect" v-model="redirect" />
     <input type="hidden" name="flowKey" v-model="flowKey" />
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fa fa-user"></em>{{ lng('USERNAME') }}&nbsp;
-		</label><input type="text" name="username" id="username" v-model="record.username"
-            v-bind:placeholder="lng('NICKNAME')" required="true" class="form-control" />
+			</label><input type="text" name="username" id="username" v-model="record.username" 
+            v-bind:placeholder="lng('NICKNAME')" required class="form-control" />
         </div>
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fa fa-key"></em>{{ lng('PASSWORD') }}&nbsp;</label>
-		<input type="password" name="password" 
-            v-bind:placeholder="lng('PASSWORD')" required="true" class="form-control password"/>
+		<input type="password" name="password" id="password" 
+            v-bind:placeholder="lng('PASSWORD')" class="form-control password"/>
 		</div>	
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">
-        <label></label>
+        <label><em class="fa fa-key"></em>{{ lng('PASSWORD_RETYPE') }}</label>
 		<input type="password" name="password2" 
-		v-bind:placeholder="lng('PASSWORD_RETYPE')" required="true" class="form-control password"/>
+		v-bind:placeholder="lng('PASSWORD_RETYPE')"  class="form-control password"/>
 		</div>	
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fas fa-id-badge"></em>{{ lng('REALNAME') }}&nbsp;</label>
-		<input type="text" name="realname"  v-model="record.realname"
-		v-bind:placeholder="lng('REALNAME')" required="true" class="form-control"/>
+		<input type="text" name="realname"  v-model="record.realname" 
+		v-bind:placeholder="lng('REALNAME')" required class="form-control"/>
 		</div>	
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">
         <label><em class="fas fa-envelope"></em>{{ lng('EMAIL') }}&nbsp;</label>
-		<input type="text" name="email" v-model="record.email"
-		v-bind:placeholder="lng('EMAIL')" required="true" class="form-control"/>
+		<input type="email" name="email" v-model="record.email" 
+		v-bind:placeholder="lng('EMAIL')" required class="form-control"/>
 		</div>	
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">{{ lng('AVATARFILE') }}</div>
 		<div class="col-12">
-        <label><em class="fas fa-camera"></em>&nbsp;</label>
-		<input type="file" name="avatar" 
-            class="form-control"/>
+	        <label><em class="fas fa-camera"></em>&nbsp;</label>
+			<input type="file" name="avatar" class="form-control"/>
 		</div>	
 	</div>	
 	<div class="row">
-		<div class="col-1"><input type="checkbox" name="accept" value="1" /></div>
-		<strong class="col-11" v-html="lng(polocyAccept)"></strong>
+		<div class="col-12">
+			<label>&nbsp;</label>
+			<input type="checkbox" class="form-check-input" name="accept" value="1" />
+			<strong v-html="lng(polocyAccept)"></strong>
+		</div>
 	</div>	
 	<div class="row text-center">
 		<div class="col-12">
-    	    <button type="submit" class="btn btn-primary" name="submit" style="width:250px">
+    	    <button type="button" class="btn btn-primary" name="submitbtn" style="width:250px" 
+				v-on:click="formValidator()">
         	    <em class="fas fa-check"></em>&nbsp;{{ lng('OK') }}
         	</button>    
 		</div>
@@ -88,17 +91,85 @@
 <script>
 	methods = {
 		atob(s) {
-			/*
-			if ((s != '') & (s != undefined))  {
-			  return window.atob(s);
-			} else {
-			  return '';
-			}
-			*/
 			return s;
 		},
 		afterMount() {
 			document.getElementById('username').focus();
+		},
+		formControlSet(name, valid) {
+			// adjust formcontrol class
+			if (valid) {
+				$('form#registForm [name='+name+']').removeClass('is-invalid');
+			} else {
+				$('form#registForm [name='+name+']').addClass('is-invalid');
+				$('form#registForm [name='+name+']').focus();
+			}
+		},
+		formValidator() {
+			// if valid submit form, else display errorMsg
+			password = $('#password').val();
+			var username = $('#registForm input[name=username]').val();
+			var realname = $('#registForm input[name=realname]').val();
+			var email = $('#registForm input[name=email]').val();
+			var password2 = $('#registForm input[name=password2]').val();
+
+			var strength = 0;
+			var tips = "";
+			if (username == '') {
+				tips += lng('USERNAME_REQUED')+'<br>';
+				this.formControlSet('username',false);
+			} else {
+				this.formControlSet('username',true);
+			}
+			if (realname == '') {
+				tips += lng('REALNAME_REQUED')+'<br>';
+				this.formControlSet('realname',false);
+			} else {
+				this.formControlSet('realname',true);
+			}
+			if (email == '') {
+				tips += lng('EMAIL_REQUED')+'<br>';
+				this.formControlSet('email',false);
+			} else {
+				this.formControlSet('email',true);
+			}
+			this.formControlSet('password',true);
+			if (password.length < 8) {
+				tips += lng('PSW_TO_SHORT')+'<br>';
+				this.formControlSet('password',false);
+			} else {
+				strength += 1;
+			}
+			if (password.match(/[a-z,öüóőúéáűí]/) && password.match(/[A-Z,ÖÜÓŐÚÉÁŰÍ]/)) {
+				strength += 1;
+			} else {
+				tips += lng('PSW_REQURED_LU_ALFABETS')+'<br>';
+				this.formControlSet('password',false);
+			}
+			if (password.match(/\d/)) {
+				strength += 1;
+			} else {
+				tips += lng('PSW_REQURED_NUMBERS')+'<br>';
+				this.formControlSet('password',false);
+			}
+			if (password.match(/[^a-zA-Z\d]/)) {
+				strength += 1;
+			} else {
+				tips += lng('PSW_REQURED_SPEC_CHARS')+'<br>';
+				this.formControlSet('password',false);
+			}
+			if (password != password2) {
+				tips += lng('PASSWORDS_NOT_EQUALS')+'<br>';
+				this.formControlSet('password',false);
+			}
+
+			if (tips != '') {
+				console.log(tips);
+				popupMsg(tips,'alert-danger');
+			} else {	
+				document.getElementById('registForm').submit();
+			}	
+			return;
 		}
 	};
 </script>	

@@ -41,7 +41,13 @@
 		 * user jováhagyás kérés popup ablakban 
 		 * ids:  popup, popupOkBtn, popupNoBtn, popupTxt 
 		 */
-		function popupConfirm(txt, yesfun) {
+		function popupConfirm(txt, yesfun, yesClass, noClass) {
+			if (yesClass != undefined) {
+				document.getElementById('popupOkBtn').className = 'btn '+yesClass;
+			}
+			if (noClass != undefined) {
+				document.getElementById('popupNoBtn').className = 'btn '+noClass;
+			}
 			document.getElementById('popupOkBtn').style.display="inline-block";
 			document.getElementById('popupNoBtn').style.display='inline-block';
 			document.getElementById('popup').className='popupSimple';

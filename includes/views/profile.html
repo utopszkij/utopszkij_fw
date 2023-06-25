@@ -13,7 +13,7 @@
 				v-if="record.avatar != ''" />
 		</div>    
     </div>
-    <form name="profile" action="index.php" method="post" enctype="multipart/form-data">
+    <form name="profile" id="profileForm" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="task" value="user.saveprofile" />
         <input type="hidden" name="id" v-model="record.id" />
         <input type="hidden" name="flowKey" v-model="flowKey" />
@@ -103,8 +103,8 @@
         
         <div class="row text-center">
             <div class="col-12">
-                <button type="submit" class="btn btn-primary" name="submit" 
-                    style="width:250px"
+                <button type="button" class="btn btn-primary" name="submitBtn" 
+                    style="width:250px" v-on:click="formValidator()"
                     v-if="logedAdmin | (record.id == loged)">
                     <em class="fas fa-check"></em>&nbsp;{{ lng('OK') }}
                 </button>&nbsp;
@@ -146,6 +146,81 @@
 		afterMount() {
 			document.getElementById('realname').focus();
 		},
+		formControlSet(name, valid) {
+			// adjust formcontrol class if error thenset focus
+			if (valid) {
+				$('form#profileForm [name='+name+']').removeClass('is-invalid');
+			} else {
+				$('form#profileForm [name='+name+']').addClass('is-invalid');
+				$('form#profileForm [name='+name+']').focus();
+			}
+		},
+        formValidator() {
+			// if valid submit form, else display errorMsg
+			password = $('#profileForm [name=password]').val();
+			var username = $('#profileForm input[name=username]').val();
+			var realname = $('#profileForm input[name=realname]').val();
+			var email = $('#profileForm input[name=email]').val();
+			var password2 = $('#profileForm input[name=password2]').val();
+
+			var strength = 0;
+			var tips = "";
+			if (username == '') {
+				tips += lng('USERNAME_REQUED')+'<br>';
+				this.formControlSet('username',false);
+			} else {
+				this.formControlSet('username',true);
+			}
+			if (realname == '') {
+				tips += lng('REALNAME_REQUED')+'<br>';
+				this.formControlSet('realname',false);
+			} else {
+				this.formControlSet('realname',true);
+			}
+			if (email == '') {
+				tips += lng('EMAIL_REQUED')+'<br>';
+				this.formControlSet('email',false);
+			} else {
+				this.formControlSet('email',true);
+			}
+            this.formControlSet('password',true);
+            if (password != '') {
+                if (password.length < 8) {
+                    tips += lng('PSW_TO_SHORT')+'<br>';
+                    this.formControlSet('password',false);
+                } else {
+                    strength += 1;
+                }
+                if (password.match(/[a-z,öüóőúéáűí]/) && password.match(/[A-Z,ÖÜÓŐÚÉÁŰÍ]/)) {
+                    strength += 1;
+                } else {
+                    tips += lng('PSW_REQURED_LU_ALFABETS')+'<br>';
+                    this.formControlSet('password',false);
+                }
+                if (password.match(/\d/)) {
+                    strength += 1;
+                } else {
+                    tips += lng('PSW_REQURED_NUMBERS')+'<br>';
+                    this.formControlSet('password',false);
+                }
+                if (password.match(/[^a-zA-Z\d]/)) {
+                    strength += 1;
+                } else {
+                    tips += lng('PSW_REQURED_SPEC_CHARS')+'<br>';
+                    this.formControlSet('password',false);
+                }
+                if (password != password2) {
+                    tips += lng('PASSWORDS_NOT_EQUALS')+'<br>';
+                    this.formControlSet('password',false);
+                }
+            }    
+			if (tips == '') {
+				document.getElementById('profileForm').submit();
+			} else {
+                popupMsg(tips,'popupError');
+            }	
+
+        },
         cancelClick() {
             document.location = HREF('home.show',{});
         },

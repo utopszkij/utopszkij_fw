@@ -197,7 +197,7 @@ class Demo extends Controller {
             'errorMsg' => $this->session->input('errorMsg'),
             'successMsg' => $this->session->input('successMsg'),
             'items' => [],
-            'record' => [],
+            'record' => $this->model->emptyRecord(),
             'total' => 0,
             'ckeditorFields' => $this->ckeditorFields
         ]);

@@ -117,10 +117,12 @@ table.col-12 {margin:1% 1% 1% 1%}
 .filterForm #filtercreator {width:180px}
 .filterForm #filtercimke {width:180px}
 
-.browserTable tr {padding:2px;}
-.browserTable td {padding:5px; margin:2px; 
+.table-striped tr {padding:2px;}
+.table-striped td {padding:5px; margin:2px; 
   border-style:solid; border-width:1px; border-color:silver;}
-
+.table-striped th {cursor:pointer}
+#sortSelector table {display:inline-block; width:auto}
+#sortSelector th {cursor:pointer; display:inline-block; width:auto; margin:2px 20px 2px 2px }
 .light pre {line-height:15px; overflow:hidden; background-color:#f4e6e6; color:#404040; padding:5px;}
 .dark pre {line-height:15px; overflow:hidden; background-color:#52250c; color:#b69595; padding:5px;}
 pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:14px;}
@@ -139,6 +141,8 @@ pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:1
 .light #cookieEnabled {color: #f0f0f0}
 .dark #cookieEnabled {color: white}
 
+#visitorShow img.avatar {width:200px; height:auto; margin:5px;}
+#visitorForm img.avatar {width:200px; height:auto; margin:5px;}
 
 @media screen and (max-width: 992px) {
 }

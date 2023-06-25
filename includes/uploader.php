@@ -1,8 +1,6 @@
 <?php
 /*
-* Távoli file tároló kezelés
-* uploader, deleter| listener   
-* a kliens gépen kell használni.
+* File upload  kezelés
 * szükség van a CURL php bővitményre
 * 
 * Licence GNU GPL v3
@@ -10,10 +8,6 @@
 * Author email: tibor.fogler@gmail.com
 */
 class Uploader {
-	// ===================================== config ==================================================
-	public static $backendUrl = '';
-	// public static $backendUrl = "http://localhost/backend_file_store/server.php"; // where to upload file to
-	// ===============================================================================================
 
 	/**
 	 * Ékezets betük kigyomlálása
@@ -36,100 +30,13 @@ class Uploader {
     }
     
     /**
-     * File upload a távolo file tároló szerverre.
-     * Ha már létezik akkor felülírja.
-     * @param string input file fullpath
-     * @return "ERROR....:" | "fullURL"
-     */
-    public static function upload(string $filePath): string {
-			$ext = pathinfo($filePath,PATHINFO_EXTENSION);
-            if ($targetName == '') {
-                $targetName = pathinfo($_FILES[$cname]["name"],PATHINFO_BASENAME);
-            } else if (strpos($targetName,'.*') > 0) {
-				$targetName = str_replace('*',$ext,$targetName);
-            }
-			$cf = new CURLFile($filePath, mime_content_type($filePath), $targetName);
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, RemoteFile::remoteUrl);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, [
-			  "upload" => $cf, // attach file upload
-			]);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$result = curl_exec($ch);
-			if (curl_errno($ch)) {
-			  $resul = 'ERROR '.curl_error($ch);
-			} else {
-				$result = JSON_decode($result);
-				if (isset($result->error)) {
-					$result = $result->error;
-				} else if (isset($result->url)) {
-					$result = $result->url;
-				} else {
-					$result = "ERROR";
-				}
-			}
-			curl_close($ch);
-			return $result;
-	}
-	
-	/**
-	 * file törlés a távoli  szerverről
-	 * @param string fullURL
-	 * @return "OK" | "ERROR...."
-	 */ 
-	public static function delete(string $fileURL): string {
-		if (Uploader::remoteUrl != '') {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, RemoteFile::remoteUrl);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, [
-			  "delFile" => $fileURL
-			]);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$result = curl_exec($ch);
-			if (curl_errno($ch)) {
-			  $result = 'ERROR '.curl_error($ch);
-			}
-			curl_close($ch);
-			return $result;
-		} else {
-			$filePath = str_replace(SITEURL.'/','',$fileURL);
-			if (file_exists($filePath)) {
-				unlink($filePath);
-			}
-			return "OK";
-		}	
-	} 
-	
-	/**
-	 * file lista a távoli szerverről
-	 * @return [baseurl, fileUrl1, fileUrl2,....]
-	 */ 
-	public function getList():array {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, RemoteFile::remoteUrl);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, [
-			  "dir" => 1
-			]);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$result = curl_exec($ch);
-			if (curl_errno($ch)) {
-			  $result = 'ERROR '.curl_error($ch);
-			}
-			curl_close($ch);
-			return JSON_decode($result);
-	}
-
-    /**
      * File upload a képernyőn lévő file inputből. 
      * If target file exists overwrite it.
      * @param string input DOM component name
      * @param string target directory (not include last /)
      * @param string target Name+ext  optional, enable ''
      *   enable '.*' extension (use uploaded file extension)
-     * @param array  enabled extensions
+     * @param array  enabled extensions example:['jpg','jpeg','png']
      * @return {"error":" ''|errorMsg ", "name":"uploaded filename+ext", "url":"fileurl"}
      */
     public static function doUpload(string $cname, string $targetDir, 

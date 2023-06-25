@@ -162,6 +162,11 @@ ellenörzése, javítása (ckeditor mezőknél a controller __construct -ban és
 4. főmenüben (vagy máshol) a modult inditó link elhelyezése
 
 
+## verzió v2.1.1
+bejelentkezés email cimmel és jelszóval is lehetséges
+5 hibás jelszó megadása  után a
+username 5 percre blokkolva hibaüzenet kiirja a még hátralévő időt is.
+### *************************************
 ## verzió v2.1.0
 "nyers erő" támadás elleni védekezés
 5 hibás jelszó megadása  után a

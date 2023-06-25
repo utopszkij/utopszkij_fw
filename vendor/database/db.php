@@ -290,6 +290,8 @@ class Query {
 		} else if ($s === '') {
 			$result = '""';
 		} else if (strpos(' '.$s,'`') > 0) {
+			$s = str_replace('"','',$s);
+			$s = str_replace('--','__',$s);
 			$result = $s;	
 		} else if (is_numeric($s)) {
 			$result = $s;
@@ -302,6 +304,8 @@ class Query {
 			$s = substr($s,1,strlen($s)-2); // eltávolítja a kezdő és záró " -t
 			$result = '"'.$mysqli->real_escape_string((string)$s).'"';	
 		} else {
+			$s = str_replace('\"',"'",$s); // már escaped
+			$s = str_replace("\\'","'",$s); // már escaped 
 			$result = '"'.$mysqli->real_escape_string((string)$s).'"';	
 		}
 		return $result;

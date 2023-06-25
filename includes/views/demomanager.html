@@ -34,26 +34,26 @@
                 <tr>
                     
 				<th  class="id" id="th_id" v-on:click="thClick('id')">
-					{{ lng("id") }}
+					{{ lng("ID") }}
 					<em class="fas fa-sort-down"></em>
 					<em class="fas fa-sort-up"></em>
 				</th>
 				
 				<th  class="name" id="th_name" v-on:click="thClick('name')">
-					{{ lng("name") }}
+					{{ lng("NAME") }}
 					<em class="fas fa-sort-down"></em>
 					<em class="fas fa-sort-up"></em>
 				</th>
 				
 				<th  class="description" id="th_description" v-on:click="thClick('description')">
-					{{ lng("description") }}
+					{{ lng("DESCRIPTION") }}
 					<em class="fas fa-sort-down"></em>
 					<em class="fas fa-sort-up"></em>
 				</th>
 				
                 </tr>
                 <tr v-for="item in items">
-                    <td class="id"><var v-html="item.id"></var></td><td class="name"><var v-html="item.name"></var></td><td class="description"><var v-html="item.description"></var></td>
+                    <td class="id"><var v-html="encodeTd(item.id)"></var></td><td class="name"><var v-html="encodeTd(item.name)"></var></td><td class="description"><var v-html="encodeTd(item.description)"></var></td>
 					<td>
 					<button type="button" class="btn btn-primary"  v-on:click="this.record = item; showClick()">
 						<em class="fas fa-eye" v-bind:title="lng('SHOW')"></em>
@@ -108,7 +108,7 @@
 								class="id"
 								v-if="ckeditorFields.indexOf('id') >= 0">
 							</var>
-							<var  v-bind:class="id" v-html="record.id" 
+							<var  v-html="record.id" 
 								class="id"
 								v-if="ckeditorFields.indexOf('id') < 0">
 							</var>
@@ -122,7 +122,7 @@
 								class="name"
 								v-if="ckeditorFields.indexOf('name') >= 0">
 							</var>
-							<var  v-bind:class="name" v-html="record.name" 
+							<var  v-html="record.name" 
 								class="name"
 								v-if="ckeditorFields.indexOf('name') < 0">
 							</var>
@@ -136,7 +136,7 @@
 								class="description"
 								v-if="ckeditorFields.indexOf('description') >= 0">
 							</var>
-							<var  v-bind:class="description" v-html="record.description" 
+							<var  v-html="record.description" 
 								class="description"
 								v-if="ckeditorFields.indexOf('description') < 0">
 							</var>
@@ -252,7 +252,6 @@
                 // run oly once!
                 return;
             }
-            this.record = {};
             this.items = [];
             this.total = 0;
             this.selfUrl = '';
@@ -294,46 +293,7 @@
             window.afterMountFinished = true;
 		},
         showPaginator(page) {
-            var pageCount = Math.round((this.total / this.limit) + 0.5);
-            page = parseInt(page); // azért, hogy biztosan számolni lehessen vele
-            var pointCounter = 0; // megjelenitett '.' számláló
-            var k = (window.innerWidth * 0.6) / 36; // össesen ennyi .paginatorItem fér ki
-            k = (k - 5) / 2; // az aktuáis elemtől jobbra/balra ennyi fér ki.
-            if (page == 1) {
-                k = k + 2; // mivel nincs az első két elem; lehet több is
-            } 
-            if (page == pageCount) {
-                k = k + 2; // mivel nincs az utolsó két elem; lehet több is
-            } 
-            var s=lng('TOTAL')+':'+this.total+'<br /><ul class="paginator">';
-            if (page > 1) {	
-                s += '<li><span class="paginatorItem"><var onclick="app.page = 1; app.listClick()" title="első">&lt;&lt;</var></span></li>';
-                s += '<li><span class="paginatorItem"><var onclick="app.page = '+(page - 1)+'; app.listClick()" title="elöző">&lt;</var></span></li>';
-            }
-            var p = 1;
-            while (p <= pageCount) {
-                if (p == page) {
-                    s += '<li><input id="goPage" type="text" value="'+p+'" size="2"'+
-                    ' onchange="app.page = $(\'#goPage\').val(); app.listClick();" /></li>';
-                    pointCounter = 0;
-                } else {
-                    if (((p >= (page - k)) & (p < page)) | 
-                        ((p <= (page + k)) & (p > page))) {	
-                        s += '<li><span class="paginatorItem" onclick="app.page = '+p+'; app.listClick()" title="'+p+'">'+p+'</span></li>';
-                    } else {
-                        if (pointCounter == 0) {
-                            s += '<li class="kimarad">.</li>';
-                            pointCounter = pointCounter + 1;
-                        }
-                    }	
-                }	
-                p = p + 1;
-            }
-            if (page < pageCount) {
-                s += '<li><span class="paginatorItem"><var onclick="app.page = '+(page + 1)+'; app.listClick()" title="következő">&gt;</var></span></li>';
-                s += '<li><span class="paginatorItem"><var onclick="app.page = '+pageCount+'; app.listClick()" title="utolsó">&gt;&gt;</var></span></li>';
-            }
-            $('#paginator').html(s);
+            include showPaginator
         },  
         searchClick() {
             this.filter = 'name|'+document.getElementById('filter_name').value;
@@ -364,6 +324,9 @@
             if (this.order == undefined) { this.order = 'id'; }
             if (this.orderDir == undefined) { this.orderDir = 'ASC'; }
             if (this.filter == undefined) { this.filter = ''; }
+            if (this.page < 1) this.page = 1;
+            var pageCount = Math.round((this.total / this.limit) + 0.5);
+            if (this.page > pageCount) this.page = pageCount;
             this.selfUrl = HREF('demo.manager', {page:this.page});
             this.adjustShareLinks();
             $('#loader').show();
@@ -372,6 +335,7 @@
             .then(function(response) {
                 $('#loader').hide();
                 app.items = response.data;
+                //console.log(app.items);
                 $('#loader').show();
                 window.axios.get(HREF('demo.api_getTotal',
                     {filter:app.filter, sid: this.sid}))
@@ -401,6 +365,7 @@
                     $('#show').hide();
                     $('#form').hide();
                     $('#browser').show();
+                    window.scrollTo(0,0);
                 });
             });
         },
@@ -430,6 +395,8 @@
             $('#show').hide();
             $('#form').show();
             $('#browser').hide();
+            // rendszerint javítandó
+            $('#name').focus();
         },    
         editClick() {
             this.selfUrl = HREF('demo.manager', {edit:this.record.id});
@@ -520,6 +487,11 @@
             } 
             this.order = fieldName;
             this.listClick();
-        }
+        },
+        encodeTd(rawStr) {
+            // valamiért TD -ben az első/utolsó ' és " gondot okoz :(
+			return '&nbsp;'+rawStr+'&nbsp;';
+		}
+
     };
 </script>

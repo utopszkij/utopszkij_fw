@@ -12,12 +12,12 @@
     <input type="hidden" name="task" value="user.dologin" />
     <!-- input type="hidden" name="_redirect" v-model="redirect" / -->
     <input type="hidden" name="redirect" v-bind:value="HREF('home.show',{})" />
-    <input type="hidden" name="key" v-model="key" />
+    <input type="hidden" name="flowKey" v-model="flowkey" />
     <div class="row text-center">
 		<div class="col-12">
 			<em class="fas fa-user"></em>&nbsp;
     	    <input type="text" name="username" id="username" v-model="username"
-        	    v-bind:placeholder="lng('NICKNAME')" required="true" />
+        	    v-bind:placeholder="lng('NICKNAME_OR_EMAIL')" required="true" />
 		</div>	
 	</div>	
     <div class="row text-center">

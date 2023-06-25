@@ -1,1 +1,0 @@
-~/.ssh/id_utopszkij_fw 123456
