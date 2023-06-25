@@ -95,7 +95,6 @@ class Fw {
 				echo 'kodolási hiba userId='.$userId.' userName='.$userName; exit();	
 			}
 		}
-
 		// task kezelés
 		if (isset($_GET['task'])) {
 			$this->task = $_GET['task'];
@@ -104,7 +103,6 @@ class Fw {
 		} else {
 			$this->task = 'home.show';
 		}
-
 		if (strpos($this->task,'.')) {
 			$w = explode('.',$this->task);
 			$compName = $w[0];

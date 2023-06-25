@@ -50,13 +50,13 @@ class User extends Controller {
 			$result .= 'PASSWORDS_NOT_EQUALS<br>';
 		}
 		$old = $this->model->getBy('username',$record->username);
-		if (count($old) > 0) {
+		if ($old[0]->username == $record->username) {
 			if ($old[0]->id != $record->id) {
 				$result .= 'USER_EXISTS<br>';
 			}
 		}
 		$old = $this->model->getBy('email',$record->email);
-		if (count($old) > 0) {
+		if ($old[0]->email == $record->email) {
 			if ($old[0]->id != $record->id) {
 				$result .= 'EMAIL_EXISTS<br>';
 			}
@@ -116,32 +116,44 @@ class User extends Controller {
 	}
 	
 	public function dologin() {
-		// $this->checkFlowKey($this->browserURL);
-		$userName = $_POST['username'];
-		$password = $_POST['password'];
-		$redirect = urlencode($_POST['redirect']);
-		$recs = $this->model->getBy('username',$userName);
-		/*
+		$this->checkFlowKey($this->browserURL);
+		$userName = $this->request->input('username');
+		$password = $this->request->input('password');
+		$redirect = urldecode($_POST['redirect']);
 		if ($redirect == '') {
-			$redirect = base64_encode('index.php');
+			$redirect = SITEURL.'/task/home.show';
+		}	
+		$q = new Query('users');
+		$q->where('username','=',$userName);
+		$recs = $q->all();
+		if (count($recs) > 0) {
+			$rec = $recs[0];
+		} else {
+			$q = new Query('users');
+			$q->where('email','=',$userName);
+			$recs = $q->all();
+			if (count($recs) > 0) {
+				$rec = $recs[0];
+				$userName = $rec->username;
+			}	
 		}
-		*/
+		$recs = $this->model->getBy('username',$userName); // ez csinálja meg a error_counter és locktime beolvasást!
 		if (count($recs) == 0) {
-				$error = 'USER_NOT_FOUND';
+			$error = 'USER_NOT_FOUND<br>(0)';
+			$rec = $this->model->emptyRecord();
+		} else {
+			$rec = $recs[0];
+			if (($rec->locktime != 0) & ((time() - $rec->locktime) < 300)) {
+				$error = 'USER_LOCKED_WAIT_5MINS';   // ILYENKOR CSAK EZ AZ EGY HIBAÜZENET!
+				$error .= '<br>(left '.(300 - (time() - $rec->locktime)).' sec.)';
 				$this->session->set('errorMsg',$error);
 				$this->login();
-				return;			
-		} else {
+				return;
+			}
 			$error = '';
 			$rec = $recs[0];
 			if ($rec->password != hash('sha256',$password.$rec->id)) {
-				$error = 'WRONG_PASSWORD<br>';
-				$rec->error_count = $rec->error_count + 1;
-				if ($rec->error_count > 5) {
-					$rec->locktime = time();
-				}
-				$rec->password = '';
-				$this->model->save($rec);
+				$error .= 'WRONG_PASSWORD<br>';
 			}
 			if ($rec->enabled != 1) {
 				$error .= 'DISABLED<br>';
@@ -152,36 +164,44 @@ class User extends Controller {
 				}
 			}
 			if ($rec->deleted == 1) {
-				$error .= 'USER_NOT_FOUND<br>';
+				$error .= 'USER_NOT_FOUND<br>(1)';
 			}
-			if (($rec->locktime != 0) & ((time() - $rec->locktime) < 300)) {
-				$error = 'USER_LOCKED_WAIT_5MINS<br>';   // ILYENKOR CSAK EZ AZ EGY HIBAÜZENET!
+			if ($rec->username != $userName) {
+				$error = 'USER_NOT_FOUND<br>(2)';
+			}	
+		}// count($recs) > 0	
+		if ($error == '') {
+			$_SESSION['loged'] = $rec->id;
+			$_SESSION['logedName'] = $rec->username;
+			$_SESSION['logedAvatar'] = $rec->avatar;
+			$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
+			$rec->error_count = 0;
+			$rec->locktime = 0;
+			$rec->password = ''; // igy a save nem modosítja a jelszót
+			$this->model->save($rec);
+			?>
+			<script>
+				document.location="<?php echo $redirect; ?>";		
+			</script>
+			<?php			
+		} else {
+			$rec->error_count = $rec->error_count + 1;
+			if ($rec->error_count > 5) {
+				$rec->locktime = time();
+				$error .= 'USER_LOCKED_WAIT_5MINS';
 			}
-			
-			if ($error == '') {
-				$_SESSION['loged'] = $rec->id;
-				$_SESSION['logedName'] = $rec->username;
-				$_SESSION['logedAvatar'] = $rec->avatar;
-				$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
-				$rec->error_count = 0;
-				$rec->locktime = 0;
-				$rec->password = '';
-				$this->model->save($rec);
-				?>
-				<script>
-					document.location="<?php echo SITEURL; ?>/task/home.show";		
-				</script>
-				<?php			
-			} else {
-				$this->session->set('errorMsg',$error);
-				$this->login();
-			} 
-		}	
+			$rec->password = ''; // igy a save nem modosítja a jelszót
+			$this->model->save($rec);
+			$this->session->set('errorMsg',$error);
+			$this->login();
+		} 
+
 	}
 	
 	public function doregist() {
 		$this->checkFlowKey($this->browserURL);
-		$record = new Record();
+		$records = $this->model->getBy('username','');
+		$record = $records[0]; // most az error_count és a locktime az IP szerint van beállítva
 		$record->id = 0; 
 		$record->username = $this->request->input('username');
 		$record->password = $this->request->input('password');
@@ -190,10 +210,8 @@ class User extends Controller {
 		$record->email = $this->request->input('email');
 		$record->email_verifyed = $this->request->input('email_verifyed',0);
 		$record->enabled = $this->request->input('enabled',0);
-		$record->error_count = 0;
-		$record->locktime = 0;
-		$this->session->set('oldRec', JSON_encode($record));
 		$record->deleted = 0;
+		$this->session->set('oldRec', JSON_encode($record));
 		$redirect = base64_decode($this->request->input('redirect'));
 		$error = $this->validator($record);
 		if ($this->request->input('accept') != '1') {
@@ -201,8 +219,6 @@ class User extends Controller {
 		}
 		if ($error == '') {
 			$record->enabled = 1;
-			$record->email_verifyed = 0;
-			$id = $this->model->save($record);
 			$this->sendactivator($record->email);
 			if (LOGIN_MUST_VERIFYED_EMAIL) {
 				$this->session->set('successMsg','SAVED<br>EMAIL_SENDED');
@@ -445,6 +461,8 @@ class User extends Controller {
 		$record->password = $this->request->input('password',''); 
 		$record->password2 = $this->request->input('password2',''); 
 		$record->avatar = $old->avatar;
+		$record->error_count = $old->error_count;
+		$record->locktime = $old->locktime;
 		$backtask = $this->request->input('backtask','home.show');
 		if (!isAdmin() & ($record->id != $this->session->input('loged'))) {
 			echo 'Access violation';

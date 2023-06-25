@@ -55,6 +55,7 @@
 
 	<!-- utopszkij_fw standart js -->
 	<script src="index.js"></script>
+
 </head>	 
 <body>
 	<div id="fixBg"></div>
@@ -132,7 +133,9 @@
 							function() {
 								setCookie('cookieEnabled',2,100);
 								document.location='index.php';
-							})
+							},
+							'btn-success',
+							'btn-danger')
 						}
 					</script>	
 			</div>

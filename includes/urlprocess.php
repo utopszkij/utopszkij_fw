@@ -10,6 +10,7 @@ return $matches[0];
 /**
  * a $string ben lévő url -eket átalakítja <a...>...</a>
  * vagy youtube,vimeo. tiktok hívásra iframe --re
+ * néhány emoj -t is kezel
  * @param string $string
  * @return string
  */ 

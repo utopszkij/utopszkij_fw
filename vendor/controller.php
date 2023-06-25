@@ -137,8 +137,7 @@ class Session {
  * igényelt model methodusok: emptyRecord(), save($record), 
  *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
  *      getTotal($filter)
- * igényelt viewerek {name}browser, {name}form 
- *      a {name}form legyen alkalmas show funkcióra is record,loged,logedAdmin alapján
+ * igényelt viewerek {name}browser, {name}form, {name}show 
  *      a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is!
  *      a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü
  *             kontrolokoat tartalmazzon (beleértve az id -t is)
@@ -550,7 +549,7 @@ class Controller {
     }  
     
     /**
-     * "folyamat integritás" kezelés új flowKey -t képez, tárol sessionba 
+     * "folyamat integritás" (CSRF) kezelés új Key -t képez, tárol sessionba 
      * ezt el kell helyezni a formokban 
      * controllerben:
      * view('...',['flowKey'] => $this->newFlowKey(), ....])
@@ -565,7 +564,7 @@ class Controller {
     }
 
     /**
-     * flowKey ellenörzés, tárolás sessionba oldFlowKey -be, és átirás 'used' -re.
+     * flowKey (CSRF) ellenörzés, tárolás sessionba oldFlowKey -be, és átirás 'used' -re.
      * Ha 'used' van a sessionban vagy
      *    a requestben érkező flowKey == sessionban lévő oldFlowKey
      *    ez azt jelenti browser refrest csinált a user

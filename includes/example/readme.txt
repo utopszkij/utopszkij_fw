@@ -1,0 +1,2 @@
+Hagyományos stilusú példa (a vue csak a template megjelenitést végzi) a funkciók külön-külön task -ként valósulnak meg.
+Az egyes fájlokat értelem szerüen modosítva ai includes/controllers,  includes/models, includes/views könyvtárakba kell elhelyezni.

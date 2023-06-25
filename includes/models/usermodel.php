@@ -1,4 +1,9 @@
 <?php
+/**
+ * a useraccountokat és a vsitor IP -ket tartalamazza
+ * az error_count és a locktime az IP -nél van nyilvántartva.
+ */
+
     use \RATWEB\Model;
     use \RATWEB\DB\Query;
     use \RATWEB\DB\Record;
@@ -22,7 +27,6 @@
             $result->avatar = '';
             $result->email = '';
             $result->realname = '';
-            $result->group = '';
             $result->error_count = 0;
             $result->locktime = 0;
             return $result;
@@ -93,7 +97,32 @@
          */
         public function save(Record $record): int {
             unset($record->password2);
-            $recordId = $record->id;
+
+            // error_count és locktime tárolása
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $db = new Query('users');
+            $rec = $db->where('username','=',$ip)->first();
+            if (!isset($rec->id)) {
+                $rec = $this->emptyRecord();
+                $rec->id = 0;
+                $rec->deleted = 1; // igy az i címet bejelentkezésnél soha nem fogadja el, és a browser sem listázza.
+                $rec->username = $ip;
+                $rec->error_count = $record->error_count;
+                $rec->locktime = $record->locktime;
+                parent::save($rec);
+            } else {
+                $rec->error_count = $record->error_count;
+                $rec->locktime = $record->locktime;
+                parent::save($rec);
+            }
+
+            // user record tárolása  és avatar kép feltöltés  
+            if ($record->username == $ip) {
+                // user rekordot nem talált, az ip rekord van a $record -ban is
+                return 0;
+            } 
+            $record->error_count = 0;
+            $record->locktime = 0;
             if ($record->password != '') {
                 $id = parent::save($record);
                 $record->id = $id;
@@ -103,7 +132,9 @@
                 unset($record->password);
                 $id = parent::save($record);
             }  
+            $recordId = $id;
 
+            // ha ez az ADMIN felvitele akkor group rekord generálása    
             if (($record->username == ADMIN) & ($recordId == 0)) {
                 $q = new Query('user_group');
                 $r = new Record();
@@ -113,8 +144,8 @@
                 $q->insert($r);
             }
 
-            $record->avatar = '';
             // avatr kép feltöltés
+            $record->avatar = '';
             $error = '';
             if (isset($_FILES['avatar'])) {
                 if (file_exists($_FILES['avatar']['tmp_name'])) { 
@@ -156,6 +187,56 @@
                 } 
             }
             return $id;
+        }
+
+        /**
+         * user rekord olvasás id alapján
+         * az error_count és locktime adat ip alapján
+         */
+        public function getById(int $id): Record {
+            $result = parent::getById($id);
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $db = new Query('users');
+            $rec = $db->where('username','=',$ip)->first();
+            if (isset($rec->id)) {
+                $result->error_count = $rec->error_count;
+                $result->locktime = $rec->locktime;
+            } else {
+                $result->error_count = 0;
+                $result->locktime = 0;
+            }    
+            return $result;
+        }
+
+        /**
+         * user rekord olvasás adott mező érték alapján
+         * az error_count és locktime adat ip alapján
+         */
+        public function getBy(string $fieldName, $value): array {
+            $result = parent::getBy($fieldName, $value);
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $db = new Query('users');
+            $rec = $db->where('username','=',$ip)->first();
+            if (count($result) == 0) {
+                if (isset($rec->id)) {
+                    $result = [$rec];
+                } else {
+                    $result = [$this->emtyRecord()];
+                }    
+                return $result;
+            }
+            if (isset($rec->id)) {
+                for ($i = 0; $i < count($result); $i++) {
+                    $result[$i]->error_count = $rec->error_count;
+                    $result[$i]->locktime = $rec->locktime;
+                }    
+            } else {
+                for ($i = 0; $i < count($result); $i++) {
+                    $result[$i]->error_count = 0;
+                    $result[$i]->locktime = 0;
+                }    
+            }    
+            return $result;
         }
 
         /**

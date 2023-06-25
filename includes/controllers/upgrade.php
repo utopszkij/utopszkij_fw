@@ -315,6 +315,7 @@ class Upgrade {
 				$this->echoWritable(DOCROOT.'/includes/controllers');
 				$this->echoWritable(DOCROOT.'/includes/models');
 				$this->echoWritable(DOCROOT.'/includes/views');
+				$this->echoWritable(DOCROOT.'/languages');
 				?>
 			</div>
 			<p> </p>

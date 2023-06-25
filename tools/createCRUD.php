@@ -204,7 +204,7 @@ class TableProcessor {
 								class="'.$field->Field.'"
 								v-if="ckeditorFields.indexOf(\"'.$field->Field.'\") >= 0">
 							</var>
-							<var  v-bind:class="'.$field->Field.'" v-html="record.'.$field->Field.'" 
+							<var  v-html="record.'.$field->Field.'" 
 								class="'.$field->Field.'"
 								v-if="ckeditorFields.indexOf(\"'.$field->Field.'\") < 0">
 							</var>
@@ -238,7 +238,7 @@ class TableProcessor {
 			foreach ($fields as $field) {
 				$result .= '
 				<th  class="'.$field->Field.'" id="th_'.$field->Field.'" v-on:click="thClick(\"'.$field->Field.'\")">
-					{{ lng("'.$field->Field.'") }}
+					{{ lng("'.strtoupper($field->Field).'") }}
 					<em class="fas fa-sort-down"></em>
 					<em class="fas fa-sort-up"></em>
 				</th>
@@ -266,7 +266,7 @@ class TableProcessor {
 		if ($this->tableExists) {
 			$fields = $this->fields;
 			foreach ($fields as $field) {
-				$result .= '<td class="'.$field->Field.'"><var v-html="item.'.$field->Field.'"></var></td>';
+				$result .= '<td class="'.$field->Field.'"><var v-html="encodeTd(item.'.$field->Field.')"></var></td>';
 			}
 		} else {
 			$result .= '<td>{{ item.id }}</td><td>{{ item.name }}</td>';

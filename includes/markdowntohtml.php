@@ -143,7 +143,7 @@ if ($a > $b) {
 [link2](http://link2.html")
 
 ';
-echo markdownToHtml($text);
+// echo markdownToHtml($text);
 
 
 ?>

@@ -6,6 +6,14 @@ if (isset($_POST['sid'])) {
 	session_id($_POST['sid']);
 }
 session_start();
+// REMOE_ADDR tárolás/ellenörzés
+if (isset($_SESSION['REMOTE_ADDR'])) {
+	if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR']) {
+		echo 'Fatar error REMOTE_ADDR invalis'; exit();
+	}
+} else {
+	$_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+}
 global $components;
 
 // server infok hozzáférhetővé tétele a php számára
@@ -20,17 +28,17 @@ include_once('vendor/view.php');
 include_once('vendor/controller.php');
 include_once('vendor/fw.php');
 include_once('includes/models/statisticmodel.php');
-
 importComponent('upgrade');
 
 // statisztikai adatgyüjtés
 // $statisticModel = new StatisticModel();
 // $statisticModel->saveStatistic();
 
+
 $fw = new Fw();
 
 //+ ----------- verzio kezelés start ------------
-$fileVerzio = 'v2.1.0';
+$fileVerzio = 'v2.1.1';
 $upgrade = new \Upgrade();
 $dbverzio  = $upgrade->getDBVersion();
 $lastVerzio = $upgrade->getLastVersion();
