@@ -141,6 +141,8 @@ class User extends Controller {
 		if (count($recs) == 0) {
 			$error = 'USER_NOT_FOUND<br>(0)';
 			$rec = $this->model->emptyRecord();
+			
+			
 		} else {
 			$rec = $recs[0];
 			if (($rec->locktime != 0) & ((time() - $rec->locktime) < 300)) {

@@ -1,32 +1,33 @@
 .:
-összesen 128
+összesen 132
 -rwxrwxrwx  1 root      root       1379 2022-07-28 config-example.php
 -rwxrwxrwx  1 root      root       1303 2023-03-05 config.php
 -rwxrwxrwx  1 root      root       1205 2022-07-28 config_test.php
 -rwxrwxrwx  1 utopszkij utopszkij 17906 2023-04-02 controller.php
 -rw-r--r--  1 www-data  www-data    261 2023-04-23 debug.txt
-drwxrwxrwx  3 root      root       4096 2022-08-11 doc
--rwxrwxrwx  1 root      root          0 2023-06-25 files.txt
+drwxrwxrwx  3 root      root       4096 2023-07-23 doc
+-rwxrwxrwx  1 root      root          0 2023-07-26 files.txt
 drwxrwxrwx  4 root      root       4096 2023-05-01 images
 drwxrwxrwx  7 root      root       4096 2023-06-10 includes
 -rwxrwxrwx  1 utopszkij utopszkij  7475 2023-05-25 index.js
--rwxrwxrwx  1 utopszkij utopszkij  2064 2023-06-25 index.php
+-rwxrwxrwx  1 utopszkij utopszkij  2064 2023-07-16 index.php
 drwxrwxrwx  2 root      root       4096 2023-05-11 languages
 -rwxrwxrwx  1 root      root      35149 2022-07-21 LICENSE
 -rwxrwxrwx  1 root      root       6256 2023-06-25 readme.md
 drwxrwxrwx  3 utopszkij utopszkij  4096 2023-03-08 styles
 drwxrwxrwx  2 root      root       4096 2023-05-15 tests
-drwxrwxrwx  2 root      root       4096 2023-06-06 tools
--rw-r--r--  1 utopszkij utopszkij  3054 2023-03-10 upload.php
+drwxrwxrwx  2 root      root       4096 2023-07-24 tools
+-rw-r--r--  1 utopszkij utopszkij  4162 2023-07-24 upload.php
 drwxrwxrwx 14 root      root       4096 2023-06-10 vendor
 
 ./doc:
-összesen 48
--rwxrwxrwx 1 root root   601 2022-08-04 bintest.php
--rwxrwxrwx 1 root root   598 2022-07-20 footer.htm
-drwxrwxrwx 3 root root 20480 2023-03-08 html
--rwxrwxrwx 1 root root   169 2022-07-20 olvassel.txt
--rwxrwxrwx 1 root root 12295 2022-07-20 utopszkij_fw.cfg
+összesen 52
+-rw-rw-r-- 1 utopszkij utopszkij  3508 2023-02-26 ereg.php
+-rwxrwxrwx 1 root      root        598 2022-07-20 footer.htm
+drwxrwxrwx 3 root      root      20480 2023-03-08 html
+-rwxrwxrwx 1 root      root        169 2022-07-20 olvassel.txt
+-rw-rw-r-- 1 utopszkij utopszkij  3002 2023-07-23 upload_progress.html
+-rwxrwxrwx 1 root      root      12295 2022-07-20 utopszkij_fw.cfg
 
 ./doc/html:
 összesen 3024
@@ -459,17 +460,30 @@ drwxrwxrwx 2 root      root        4096 2023-03-08 search
 -rwxrwxrwx 1 utopszkij utopszkij   57109 2023-04-16 tibor.jpg
 -rw-rw-r-- 1 utopszkij utopszkij   12736 2023-04-16 upgrade.jpg
 -rw-rw-r-- 1 utopszkij utopszkij    4533 2023-04-16 upgrade.png
-drwxr-xr-x 2 www-data  www-data     4096 2023-04-06 uploads
+drwxr-xr-x 2 www-data  www-data     4096 2023-07-25 uploads
 drwxrwxrwx 2 root      root         4096 2023-05-13 users
 -rwxrwxrwx 1 root      root        21662 2023-04-16 utopszkij_fw.ico
 -rwxrwxrwx 1 root      root       187662 2023-04-16 utopszkij_fw.png
 -rwxrwxrwx 1 root      root        17588 2023-04-16 utopszkij_fw_smal.png
 
 ./images/uploads:
-összesen 60
--rw-r--r-- 1 www-data www-data 39223 2023-03-11 alak.jpg
--rw-r--r-- 1 www-data www-data  9173 2023-04-06 alakok.jpg
--rw-r--r-- 1 www-data www-data  6322 2023-04-06 korongozas.jpg
+összesen 2560
+-rw-r--r-- 1 www-data www-data 207395 2023-07-24 0_361057991_968989761005513_634330095869624991_n.jpg
+-rw-r--r-- 1 www-data www-data 199436 2023-07-25 1_357626810_681307610479308_5911299716190866390_n.jpg
+-rw-r--r-- 1 www-data www-data 117306 2023-07-25 1_360074971_842348767581790_2658555778086570151_n.jpg
+-rw-r--r-- 1 www-data www-data 185296 2023-07-25 1_361067487_814381040010075_8643059470971526144_n.jpg
+-rw-r--r-- 1 www-data www-data 189541 2023-07-25 1_361135820_245322178278216_4185591977467836736_n.jpg
+-rw-r--r-- 1 www-data www-data 250332 2023-07-25 1_361148651_1055387705896866_3597249993886749683_n.jpg
+-rw-r--r-- 1 www-data www-data 217889 2023-07-25 1_361284386_1758622374606456_913008198295624692_n.jpg
+-rw-r--r-- 1 www-data www-data 199436 2023-07-24 357626810_681307610479308_5911299716190866390_n.jpg
+-rw-r--r-- 1 www-data www-data 117306 2023-07-24 360074971_842348767581790_2658555778086570151_n.jpg
+-rw-r--r-- 1 www-data www-data 207395 2023-07-24 361057991_968989761005513_634330095869624991_n.jpg
+-rw-r--r-- 1 www-data www-data 189541 2023-07-24 361135820_245322178278216_4185591977467836736_n.jpg
+-rw-r--r-- 1 www-data www-data 250332 2023-07-24 361148651_1055387705896866_3597249993886749683_n.jpg
+-rw-r--r-- 1 www-data www-data 199436 2023-07-25 8_357626810_681307610479308_5911299716190866390_n.jpg
+-rw-r--r-- 1 www-data www-data  39223 2023-03-11 alak.jpg
+-rw-r--r-- 1 www-data www-data   9173 2023-04-06 alakok.jpg
+-rw-r--r-- 1 www-data www-data   6322 2023-04-06 korongozas.jpg
 
 ./images/users:
 összesen 10392
@@ -486,30 +500,30 @@ drwxrwxrwx 2 root      root         4096 2023-05-13 users
 
 ./includes:
 összesen 36
-drwxrwxrwx 2 root      root      4096 2023-06-09 controllers
+drwxrwxrwx 2 root      root      4096 2023-07-24 controllers
 drwxrwxr-x 2 utopszkij utopszkij 4096 2023-06-11 example
 drwxrwxrwx 2 utopszkij utopszkij 4096 2022-11-03 extras
 -rw-rw-r-- 1 utopszkij utopszkij 3923 2023-05-27 markdowntohtml.php
 drwxrwxrwx 2 root      root      4096 2023-06-08 models
 -rwxrwxr-x 1 utopszkij utopszkij 6480 2023-05-14 uploader.php
 -rwxrwxrwx 1 utopszkij utopszkij 3942 2023-05-14 urlprocess.php
-drwxrwxrwx 2 root      root      4096 2023-06-08 views
+drwxrwxrwx 2 root      root      4096 2023-07-24 views
 
 ./includes/controllers:
-összesen 104
+összesen 108
 -rw-rw-r-- 1 utopszkij utopszkij  3119 2023-04-07 author.php
 -rw-rw-r-- 1 utopszkij utopszkij  3042 2023-04-07 blog.php
 -rw-rw-r-- 1 utopszkij utopszkij 13115 2023-04-07 book.php
 -rw-rw-r-- 1 utopszkij utopszkij  3149 2023-04-07 category.php
--rwxrwxr-x 1 utopszkij utopszkij  6319 2023-06-07 demo.php
+-rwxrwxr-x 1 utopszkij utopszkij  8203 2023-07-24 demo.php
 -rwxrwxrwx 1 root      root       1763 2023-04-07 group.php
--rwxrwxrwx 1 utopszkij utopszkij  2481 2023-05-27 home.php
+-rwxrwxrwx 1 utopszkij utopszkij  2484 2023-07-16 home.php
 -rw-rw-r-- 1 utopszkij utopszkij  1750 2023-04-07 order.php
 -rw-rw-r-- 1 utopszkij utopszkij  8906 2023-04-07 product.php
 -rw-rw-r-- 1 utopszkij utopszkij  3134 2023-04-07 storage.php
 -rwxrwxrwx 1 utopszkij utopszkij  1186 2023-04-07 tag.php
 -rwxrwxrwx 1 root      root      14094 2023-05-10 upgrade.php
--rwxrwxrwx 1 root      root      18069 2023-06-25 user.php
+-rwxrwxrwx 1 root      root      18077 2023-07-16 user.php
 
 ./includes/example:
 összesen 24
@@ -545,7 +559,7 @@ drwxrwxrwx 2 root      root      4096 2023-06-08 views
 -rwxrwxrwx 1 root      root      12724 2023-05-13 usermodel.php
 
 ./includes/views:
-összesen 368
+összesen 376
 -rw-rw-r-- 1 utopszkij utopszkij  3841 2023-04-07 authorbrowser.html
 -rw-rw-r-- 1 utopszkij utopszkij  2564 2023-04-07 authorform.html
 -rw-rw-r-- 1 utopszkij utopszkij  2574 2023-04-07 authorshow.html
@@ -559,9 +573,9 @@ drwxrwxrwx 2 root      root      4096 2023-06-08 views
 -rw-rw-r-- 1 utopszkij utopszkij  2653 2023-04-07 categoryshow.html
 -rw-rw-r-- 1 utopszkij utopszkij  3390 2023-04-07 demobrowser.html
 -rw-rw-r-- 1 utopszkij utopszkij  2701 2023-04-07 demoform.html
--rw-rw-r-- 1 utopszkij utopszkij 19834 2023-06-07 demomanager.html
+-rw-rw-r-- 1 utopszkij utopszkij 22859 2023-07-25 demomanager.html
 -rw-rw-r-- 1 utopszkij utopszkij  2705 2023-04-07 demoshow.html
--rwxrwxrwx 1 root      root       8043 2023-05-10 description_hu.html
+-rwxrwxrwx 1 root      root       8223 2023-07-16 description_hu.html
 -rwxrwxrwx 1 root      root       2528 2023-04-19 footer.html
 -rwxrwxrwx 1 root      root       2223 2023-04-07 groupbrowser.html
 -rwxrwxrwx 1 root      root       2347 2023-04-07 groupform.html
@@ -621,11 +635,11 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2023-05-11 default
 -rw-rw-r-- 1 utopszkij utopszkij 9338 2023-05-15 visitormodelTest.php
 
 ./tools:
-összesen 76
+összesen 80
 -rwxr-xr-x 1 utopszkij utopszkij 13191 2023-06-07 createCRUD.php
--rw-r--r-- 1 utopszkij utopszkij 17437 2023-06-09 demomanager.html
+-rw-r--r-- 1 utopszkij utopszkij 19797 2023-07-25 demomanager.html
 -rwxr-xr-x 1 utopszkij utopszkij  2322 2023-06-06 demomodel.php
--rwxr-xr-x 1 utopszkij utopszkij  6319 2023-06-09 demo.php
+-rwxr-xr-x 1 utopszkij utopszkij  8211 2023-07-24 demo.php
 -rw-r--r-- 1 utopszkij utopszkij  2274 2023-05-10 demoshow.html
 -rwxrwxrwx 1 root      root         76 2023-06-06 documentor.sh
 -rwxrwxrwx 1 root      root         58 2023-06-06 files.sh
@@ -637,11 +651,11 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2023-05-11 default
 ./vendor:
 összesen 128
 -rwxrwxrwx  1 root      root        178 2022-07-26 autoload.php
-drwxrwxrwx  2 utopszkij utopszkij  4096 2022-11-26 axios
+drwxrwxrwx  2 utopszkij utopszkij  4096 2023-07-22 axios
 -rw-rw-r--  1 utopszkij utopszkij  7435 2023-04-06 bookmodel.php
 drwxrwxrwx  4 root      root       4096 2022-07-27 bootstrap
 drwxrwxrwx  6 utopszkij utopszkij  4096 2022-09-06 chart.js
-drwxrwxrwx  5 utopszkij utopszkij  4096 2023-03-11 ckeditor
+drwxrwxrwx  5 utopszkij utopszkij  4096 2023-07-24 ckeditor
 drwxrwxrwx  2 root      root       4096 2022-07-27 composer
 -rwxrwxrwx  1 root      root      18845 2023-06-10 controller.php
 drwxrwxrwx  2 root      root       4096 2023-05-21 database
@@ -661,9 +675,11 @@ drwxrwxrwx  2 root      root       4096 2023-02-18 vue
 drwxrwxrwx  3 root      root       4096 2022-07-26 yidas
 
 ./vendor/axios:
-összesen 272
+összesen 280
 -rwxrwxrwx 1 utopszkij utopszkij  91499 2022-11-26 axios.js
 -rwxrwxrwx 1 utopszkij utopszkij 180251 2022-11-26 axios.js.map
+-rw-rw-r-- 1 utopszkij utopszkij    770 2023-07-22 fileupload.txt
+-rw-rw-r-- 1 utopszkij utopszkij   1743 2023-07-22 uploadtest.html
 
 ./vendor/bootstrap:
 összesen 8
@@ -1537,7 +1553,7 @@ drwxrwxrwx 2 utopszkij utopszkij 4096 2022-09-06 plugin.tooltip
 összesen 36
 drwxr-xr-x 3 utopszkij utopszkij 4096 2023-03-07 build
 -rw-r--r-- 1 utopszkij utopszkij 2167 2023-03-07 LICENSE.md
--rw-rw-r-- 1 utopszkij utopszkij 5933 2023-04-28 myckeditor.js
+-rw-rw-r-- 1 utopszkij utopszkij 5758 2023-07-24 myckeditor.js
 -rw-r--r-- 1 utopszkij utopszkij 1819 2023-03-07 package.json
 -rw-r--r-- 1 utopszkij utopszkij 3496 2023-03-07 README.md
 drwxr-xr-x 2 utopszkij utopszkij 4096 2023-03-07 sample
