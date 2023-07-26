@@ -86,7 +86,7 @@
 
     <div id="show" style="display:none">
         <div id="demoShow" class="show">
-            <div class="row formButtons" v-if="logedAdmin">
+            <div class="formButtons" v-if="logedAdmin">
                 <div class="col-12">
                     <button type="button" 
                        v-on:click="editClick()"
@@ -129,7 +129,7 @@
 						</div>
 					</div>
 					
-					<div class="row description">
+					<div class="description">
 						<div class="col-12">
 							<label>{{ lng("DESCRIPTION") }}:</label>
 							<var  v-html="record.description2" 
@@ -142,7 +142,7 @@
 							</var>
 						</div>
 					</div>
-					
+
             <div class="row formButtons">
                 <div class="col-12">
                     <button type="button" v-if="logedAdmin"
@@ -215,6 +215,26 @@
 						</div>
 					</div>
 					
+                    <div class="row">
+                        <div class="col-12">
+                            <label>{{ lng('FILE') }}</label>
+                            <input type="file" id="file" name="file" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="progressTable" style="width:100%; display:none">
+                                <tr style="border-style:solid; border-width:1px; border-color:blue">
+                                    <td id="progressImg">&nbsp;</td>
+                                    <td style="background-color:white"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align:center"><var id="progressTxt"></var></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
             <div class="row formButtons" v-if="logedAdmin">
                 <div class="col-12">
                     <button type="button" class="btn btn-success" v-on:click="saveClick()">
@@ -288,6 +308,9 @@
                 this.listClick();                
             }
             for (key in this.ckeditorFields) {
+				window.ckeditorUploadServer = HREF('demo.api_upload',{});
+				console.log('window.ckeditorUploadServer='+window.ckeditorUploadServer);
+				
                 ckeditorInit('#'+this.ckeditorFields[key]);
             }
             window.afterMountFinished = true;
@@ -414,6 +437,51 @@
                 app.formClick();
             });    
         },
+        fileUpload(record) {
+            var progressTable = $('progressTable');
+			  var progressImg = $('progressImg');
+			  var progressTxt = $('progressTxt');
+			  progressImg.style='width:0%; background-color:blue';
+			  progressTxt.innerHTML = '0%';
+			  progressTable.show();
+			  // file upload
+			  var data = new FormData();
+			  data.append('foo', 'bar');
+			  data.append('file', document.getElementById('file').files[0]);
+			  data.append('uploadDir','./images/uploads');
+			  data.append('record', JSON.stringify(record));
+			  data.append('sid',this.sid);
+			  var config = {
+				onUploadProgress: function(progressEvent) {
+                  var progressTable = $('progressTable');
+        		  var progressImg = $('progressImg');
+			      var progressTxt = $('progressTxt');
+				  var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+				  progressImg.style='width:'+percentCompleted+'%; background-color:blue';
+				  progressTxt.innerHTML = percentCompleted+'%';
+				}
+			  };
+			  axios.post(HREF('demo.api_upload.php',{}), data, config) 
+			  .then(function (res) {
+				  // fileUrl beírása a rekordba
+				  if (res.data.url != undefined) {
+//+ Gyakran átírandó !!!!
+					  app.record.description += ' uploaded file:'+res.data.url;
+//-					  
+					  // this.sid = this.sid;
+					  axios.post(HREF('demo.api_save',{}),
+							   app.record, 
+							   { headers: {'Content-Type': 'multipart/form-data'}})
+					  .then(function(response) {
+							$('#loader').hide();
+							app.listClick();
+					  }) 
+				  } else {
+					$('#loader').hide();
+					popupMsg(res.data.error,'popupError');
+				  }
+				})
+		},        
         saveClick() {
             for (key in this.ckeditorFields) {
                 if (window.editors['#'+this.ckeditorFields[key]]) {
@@ -433,7 +501,12 @@
                     popupMsg(window.lng(result.error),'popupError');
                 } else {
                     app.record.id = result.id;
-                    app.listClick();
+                    //+ ha nincs file upload
+                    // app.listClick();
+                    //-
+                    //+ ha van file upload
+                    app.fileUpload(app.record);
+                    //-
                 }
             });    
         },

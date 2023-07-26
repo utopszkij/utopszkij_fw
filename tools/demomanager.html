@@ -119,6 +119,27 @@
                 </div>
             </div>
             //formFields
+            <!-- ha file upload is van 
+				<div class="row">
+					<div class="col-12">
+						<label>{{ lng('FILE') }}</label>
+						<input type="file" id="file" name="file" class="form-control" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<table id="progressTable" style="width:100%; display:none">
+							<tr style="border-style:solid; border-width:1px; border-color:blue">
+								<td id="progressImg">&nbsp;</td>
+								<td style="background-color:white"></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align:center"><var id="progressTxt"></var></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+            -->
             <div class="row formButtons" v-if="logedAdmin">
                 <div class="col-12">
                     <button type="button" class="btn btn-success" v-on:click="saveClick()">
@@ -153,7 +174,7 @@
     methods = {
 		afterMount() {
             if (window.afterMountFinished) {
-                // run oly once!
+                // run only once!
                 return;
             }
             this.items = [];
@@ -327,17 +348,9 @@
 				$('form#demoForm [name='+name+']').focus();
 			}
 		},
-        saveClick() {
-            for (key in this.ckeditorFields) {
-                if (window.editors['#'+this.ckeditorFields[key]]) {
-                   this.record[this.ckeditorFields[key]] = window.editors['#'+this.ckeditorFields[key]].getData();
-                }
-            }
-            var param = this.record;
-            param.sid = this.sid;
-
-            /* local validator example
+		localValidator() {
             var errorMsg = '';
+            /* local validator example
             this.formControlSet('field1',true);
             this.formControlSet('field2',true);
             ....
@@ -347,25 +360,87 @@
             }
             ....
             if (errorMsg != '') {
+				$('#loader').hide();
                 popoupMsg(errorMsg,'popupError');
-                return;
             }    
             */
-           
-            $('#loader').show();
-            axios.post(HREF('demo.api_save',{}),
-                       param, 
-                       { headers: {'Content-Type': 'multipart/form-data'}})
-            .then(function(response) {
-                $('#loader').hide();
-                var result = response.data;
-                if ((result.error != '') & (result.error != undefined)) {
-                    popupMsg(window.lng(result.error),'popupError');
-                } else {
-                    app.record.id = result.id;
-                    app.listClick();
+            return (errorMsg == '');
+		},
+		fileUpload(record) {
+			  var progressTable = $('progressTable');
+			  var progressImg = $('progressImg');
+			  var progressTxt = $('progressTxt');
+			  progressImg.style='width:0%; background-color:blue';
+			  progressTxt.innerHTML = '0%';
+			  progressTable.show();
+			  // file upload
+			  var data = new FormData();
+			  data.append('foo', 'bar');
+			  data.append('file', document.getElementById('file').files[0]);
+			  data.append('uploadDir', '/images/uploads');
+			  data.append('record', JSON.stringify(record));
+			  data.append('sid',this.sid);
+			  var config = {
+				onUploadProgress: function(progressEvent) {
+				  var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+				  progressImg.style='width:'+percentCompleted+'%; background-color:blue';
+				  progressTxt.innerHTML = percentCompleted+'%';
+				}
+			  };
+			  axios.post(HREF('demo.api_upload.php',{}), data, config) 
+			  .then(function (res) {
+				  // fileUrl beírása a rekordba
+				  if (res.data.url != undefined) {
+//+ Gyakran átírandó !!!!
+					  app.record.fileUrl = res.data.url;
+//-					  
+					  app.sid = this.sid;
+					  axios.post(HREF('demo.api_save',{}),
+							   app.record, 
+							   { headers: {'Content-Type': 'multipart/form-data'}})
+					  .then(function(response) {
+							$('#loader').hide();
+							app.listClick();
+					  }) 
+				  } else {
+					$('#loader').hide();
+					popupMsg(res.data.error,'popupError');
+				  }
+				})
+		},
+        saveClick() {
+            for (key in this.ckeditorFields) {
+                if (window.editors['#'+this.ckeditorFields[key]]) {
+                   this.record[this.ckeditorFields[key]] = window.editors['#'+this.ckeditorFields[key]].getData();
                 }
-            });    
+            }
+            var param = this.record;
+            param.sid = this.sid;
+			if (app.localValidator()) {
+				$('#loader').show();
+				axios.post(HREF('demo.api_save',{}),
+						   param, 
+						   { headers: {'Content-Type': 'multipart/form-data'}})
+				.then(function(response) {
+					var result = response.data;
+					if ((result.error != '') & (result.error != undefined)) {
+						popupMsg(window.lng(result.error),'popupError');
+					} else {
+						app.record.id = result.id;
+						// ha file upload is van:
+						//  app.fileUpload(app.record);
+						// ha nincs file upload:
+							$('#loader').hide();
+						    app.listClick();
+					}
+				})    
+				.catch(function (err) {
+ 				  $('#loader').hide();
+				  popoupMsg('save_error','popupError');
+				  console.log('save err');
+				  console.log(err);
+				});
+           } 
         },
         delClick() {
             popupConfirm(lng('SUREDELETE'), 

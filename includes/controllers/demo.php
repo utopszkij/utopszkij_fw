@@ -143,6 +143,71 @@ class Demo extends Controller {
         $record = $this->model->emptyRecord();
         echo JSON_encode($record);
     }
+    
+    /**
+     * api_upload
+     * POSTs: file, uploadDir, extensions(optional), record (JsonStr optional)
+     * @return {error:'....'} vagy {'url':'....'}
+     */ 
+    public function api_upload() {
+        $error = '';
+        if (isset($_POST['record'])) {
+			$record = JSON_decode($_POST['record']);
+			if ($record->id > 0) {
+				if (!$this->accessRight('edit',$record)) {
+					$error = 'ACCES_DENIED';
+				}
+			} else {
+				if (!$this->accessRight('new',$record)) {
+					$error = 'ACCES_DENIED';
+				}
+			}
+		} else {
+			$record = new \stdClass();
+			$record->id = 0;
+		}
+				
+        if ($error == '') {
+		  if (isset($_POST['uploadDir'])) {
+			  $uploadDir = $_POST['uploadDir'];
+		  } else {
+			  $uploadDir = 'images/uploads';
+		  }
+		  if (isset($_POST['extensions'])) {
+			  $extensions = JSON_decode($_POST['extensions']);
+		  } else {
+			  $extensions = Array('jpg','jpeg','png','gif','tif');
+		  }
+		  $uploadUrl = $uploadDir.'/'; 
+		  $uploadDir .= '/';
+		  $result = JSON_encode(array('error'=>'not_uploaded_file'));
+
+		  foreach ($_FILES as $fn => $fv) {
+
+				$uploadFile = $uploadDir.$record->id.'_'. preg_replace( '/[^a-z0-9\.]/i', '_',(basename($_FILES[$fn]['name'])));
+				$uploadFileExt = pathinfo($uploadFile,PATHINFO_EXTENSION);
+				if (!in_array($uploadFileExt, $extensions)) {
+					$result = JSON_encode(array('error'=>'upload_not_enabled'));
+				} else {
+
+					if (file_exists($uploadFile)) {
+						unlink($uploadFile);
+					}
+					if (move_uploaded_file($_FILES[$fn]['tmp_name'], $uploadFile)) {
+						$url = $uploadUrl.$record->id.'_'. preg_replace( '/[^a-z0-9\.]/i', '_',(basename($_FILES[$fn]['name'])));
+						$result = JSON_encode(array('url'=>$url));
+					} else {
+						$result = JSON_encode(array('error'=>'error_in_upload'));
+					}
+				}
+			}
+		} else {
+			$result = JSON_encode(array('error'=>$error));
+		}
+		echo $result;
+		exit();
+	}
+    
 
     /**
      * loged user hozzáférés ellenörzése
