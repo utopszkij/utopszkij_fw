@@ -3,216 +3,44 @@ use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 
 include_once __DIR__.'/../models/demomodel.php';
-include_once __DIR__.'/../urlprocess.php';
-
 
 /**
- * demo manager ontroller (vue -ban  megvalósított controller funkciók
+ * demo controller 
  * igényelt model (includes/models/demomodel.php))
  *      methodusok: emptyRecord(), save($record), 
- *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order,$orderDir), 
+ *      getById($id), deleteById($id), getItems($page,$limit,$filter,$order), 
  *      getTotal($filter)
+ * igényelt viewerek includes/views/demobrowser, includes/views/demoform 
+ *      a demoform legyen alkalmas show funkcióra is a record, loged, logedAdmin -tól függően
+ *      a browser jelenitse meg szükség szerint az errorMsg, successMsg adatot is!
+ *      a form jelenitse meg szükség szerint az errorMsg adatot is, a rekord mezőivel azonos nevü
+ *             input vagy select elemeket tartalmazzon 
+ *      (beleértve az id -t is)
  * igényelt session adatok: loged,logedName, logedGroup
  *      opcionálisan: errorMsg, successMsg
- * igényelt viewer: denomanager.html 
- * - showform,
- * - editorform,
- * - broserform
- * - "üzleti logika" funkciók
- * Hivó url-elk:
- *  /task/demo.manager 
- *  /task/demo.manager/show/id
- *  /task/demo.manager/edit/id
- *  /task/demo.manager/browse/pno/order/ord/orderdir/ordDir/limit/lim/filter/fil
- *       fil: 'all' vagy  'fieldName|value.....'
- * */
+ * 
+ * A taskok public function -ként legyenek definiálva 
+ *   standart taskok: items, edit, new, save, delete.
+ */
 class Demo extends Controller {
 
-    /**
-     * constructor
-     */
 	function __construct() {
 		parent::__construct();
-		$this->model = new DemoModel();
+		// $this->model = new DemoModel();
         $this->name = "demo";
-        $this->ckeditorFields = ['description']; // filedName lista
+        $this->browserURL = 'index.php?task=demo.items';
+        $this->addURL = 'index.php?task=demo.new';
+        $this->editURL = 'index.php?task=demo.edit';
+        $this->browserTask = 'demo.items';
+        $this->model = new DemoModel();
+        $this->ckeditorFields = []; // filedName lista
 	}
-
-    /**
-     * api getItem 
-     * POSTs: id
-     * @return JSON record or {} or {error:'ACCES_DENIED'}
-     */
-    public function api_getItem() {
-        $id = $this->request->input('id');
-        $result = $this->model->getById($id);
-        // ckeditor fields kezelése
-        foreach ($this->ckeditorFields as $field) {
-            $field2 = $field.'2';
-            $result->$field2 = urlprocess($result->$field);
-        }
-        if ($this->accessRight('show',$result)) {
-            echo JSON_encode($result);
-        } else {
-            echo JSON_encode(['error'=>'ACCES_DENIED']);
-        }
-    }
-
-    /**
-     * api getItems 
-     * POSTs: page, limit, order, filter
-     * @return JSON array of record
-     */
-    public function api_getItems() {
-        $page = $this->request->input('page',1);
-        $limit = $this->request->input('limit',20);
-        $order = $this->request->input('order','id');
-        $orderDir = $this->request->input('orderdir','id');
-        $filter = $this->request->input('filter','all');
-        $result = $this->model->getItems($page,$limit,$filter,$order, $orderDir);
-        echo JSON_encode($result);
-    }
-
-    /**
-     * api getTotal 
-     * POSTs: filter
-     * @return JSON total
-     */
-    public function api_getTotal() {
-        $filter = $this->request->input('filter');
-        $result = $this->model->getTotal($filter);
-        echo JSON_encode($result);
-    }
-
-    /**
-     * api save 
-     * POSTs: record mezői
-     * @return JSON {id:##} or {error:xxxxxx}
-     */
-    public function api_save() {
-        $record = $this->model->emptyRecord();
-        foreach ($record as $key => $value) {
-            if (isset($_POST[$key])) {
-                $record->$key = urldecode($this->request->input($key,'',HTML));
-            }
-        }
-
-        $error = '';
-        if ($record->id > 0) {
-            if (!$this->accessRight('edit',$record)) {
-                $error = 'ACCES_DENIED';
-            }
-        } else {
-            if (!$this->accessRight('new',$record)) {
-                $error = 'ACCES_DENIED';
-            }
-        }
-        if ($error == '') {
-            $error = $this->validator($record);
-        }    
-
-        if ($error != '') {
-            echo '{"error":"'.$error.'"}';
-        } else {
-            $result = $this->model->save($record);
-            echo '{"id":'.$result.'}';
-        }    
-    }
-    
-    /**
-     * api_upload
-     * POSTs: file, uploadDir, extensions(JSON str optional), record (JSONstr optional), sid
-     * @return {error:'....'} vagy {'url':'....'}
-     */ 
-    public function api_upload() {
-        $error = '';
-        if (isset($_POST['record'])) {
-			$record = JSON_decode($_POST['record']);
-			if ($record->id > 0) {
-				if (!$this->accessRight('edit',$record)) {
-					$error = 'ACCES_DENIED';
-				}
-			} else {
-				if (!$this->accessRight('new',$record)) {
-					$error = 'ACCES_DENIED';
-				}
-			}
-		} else {
-			$record = new \stdClass();
-			$record->id = 0;
-		}
-				
-        if ($error == '') {
-		  if (isset($_POST['uploadDir'])) {
-			  $uploadDir = $_POST['uploadDir'];
-		  } else {
-			  $uploadDir = 'images/uploads';
-		  }
-		  if (isset($_POST['extensions'])) {
-			  $extensions = JSON_decode($_POST['extensions']);
-		  } else {
-			  $extensions = Array('jpg','jpeg','png','gif','tif');
-		  }
-		  $uploadUrl = $uploadDir.'/'; 
-		  $uploadDir .= '/';
-		  $result = JSON_encode(array('error'=>'not_uploaded_file'));
-
-		  foreach ($_FILES as $fn => $fv) {
-				$uploadFile = $uploadDir.$record->id.'_'. preg_replace( '/[^a-z0-9\.]/i', '_',(basename($_FILES[$fn]['name'])));
-				$uploadFileExt = pathinfo($uploadFile,PATHINFO_EXTENSION);
-				if (!in_array($uploadFileExt, $extensions)) {
-					$result = JSON_encode(array('error'=>'upload_not_enabled'));
-				} else {
-
-					if (file_exists($uploadFile)) {
-						unlink($uploadFile);
-					}
-					if (move_uploaded_file($_FILES[$fn]['tmp_name'], $uploadFile)) {
-						$url = $uploadUrl.$record->id.'_'. preg_replace( '/[^a-z0-9\.]/i', '_',(basename($_FILES[$fn]['name'])));
-						$result = JSON_encode(array('url'=>$url));
-					} else {
-						$result = JSON_encode(array('error'=>'error_in_upload'));
-					}
-				}
-			}
-		} else {
-			$result = JSON_encode(array('error'=>$error));
-		}
-		echo $result;
-		exit();
-	}
-
-    /**
-     * api delete 
-     * GET: id
-     * @return JSON {error:xxxxxx} or {error:""}
-     */
-    public function api_delete() {
-        $id = $this->request->input('id');
-        $record = $this->model->getById($id);
-        if (!$this->accessRight('delete',$record)) {
-            echo '{"error":"ACCES_DENIED"}';
-        } else {
-            $result = $this->model->delById($id);
-            echo '{"error":""}';
-        }    
-    }
-
-    /**
-     * api emptyRecord 
-     * @return JSON empty record
-     */
-    public function api_emptyRecord() {
-        $record = $this->model->emptyRecord();
-        echo JSON_encode($record);
-    }
 
     /**
      * loged user hozzáférés ellenörzése
      * @param string $action  'new'|'edit'|'delete'|'show'
      * @param RecordObject $record
      * @return bool
-     * ================== Gyakran javítandó ==================
      */    
     protected function accessRight(string $action, $record): bool {
 		// $this->loged  -- a bejelentkezett user azonosítója
@@ -233,7 +61,6 @@ class Demo extends Controller {
      * rekord ellenörzés (update vagy insert előtt)
      * @param RecordObject $record
      * @return string üres ha minden OK, egyébként hibaüzenet
-     * ================= Rendszerint javítandó =================
      */    
     protected function validator($record): string {
 		$result = '';
@@ -242,29 +69,28 @@ class Demo extends Controller {
 		}
         return $result;
     }
-
-    public function manager() {
-        echo '<script type="text/javascript" src="vendor/axios/axios.js"></script>';
-        view('demomanager',[
-            'show' => $this->request->input('show',''),
-            'edit' => $this->request->input('edit',''),
-            'page' => $this->request->input('browse',1),
-            'order' => $this->request->input('order','id'),
-            'orderDir' => $this->request->input('orderdir','ASC'),
-            'filter' => $this->request->input('filter','all'),
-            'limit' => $this->request->input('limit',0),
-            'loged' => $this->loged,
-            'logedName' => $this->logedName,
-            'logedGroup' => $this->logedGroup,
-            'logedAdmin' => $this->logedAdmin,
-            'errorMsg' => $this->session->input('errorMsg'),
-            'successMsg' => $this->session->input('successMsg'),
-            'items' => [],
-            'record' => $this->model->emptyRecord(),
-            'total' => 0,
-            'ckeditorFields' => $this->ckeditorFields
-        ]);
-    }
+    
+    /**
+     * rekord készlet lekérdezés
+     * GET|POST page, order, limit, filter, 
+     * POST filter_name....
+     */ 
+    public function items($order = 1) {
+		// képernyöről POST -ban érkező filter_name paraméterek
+		// átalakitása 'name|value...' string formára
+		$pFilter = [];
+		foreach ($_POST as $fn => $fv) {
+			if (substr($fn,0,7) == 'filter_') {
+				$fv = $this->request->input($fn); // sql injection szürés
+				$pFilter[] = substr($fn,7,100); 
+				$pFilter[] = $fv; 
+			}
+		}
+		if ($this->request->input('filter') == '') {
+			$this->request->set('filter', implode('|',$pFilter));
+		}
+		parent::items();
+	}
 	
 }
 

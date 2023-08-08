@@ -9,32 +9,10 @@
         enctype="multipart/form-data"  style="display:blocl">
         <input type="hidden" v-model="flowKey" name="flowKey" />
         <input type="hidden" value="demo.save" name="task" />			
-		
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("ID") }}</label>:
-							<input type="number" name="id" v-model="record.id" disabled="disabled" />
-							<input type="hidden" name="id" v-model="record.id" />
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("NAME") }}</label>:
-							<input type="text" name="name" id="name" v-model="record.name"  required="required" />
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<label>{{ lng("DESCRIPTION") }}</label>:
-							<textarea cols="60" rows="5" name="description" id="description" v-html="record.description"></textarea>
-						</div>
-					</div>
-					
+		//formFields
         <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
-                <button type="button" class="btn btn-success" v-on:click="okClick()">
+                <button type="bitton" class="btn btn-success" v-on:click="okClick()">
                     <em class="fas fa-check"></em>&nbsp;{{ lng('SAVE') }}
                 </button>&nbsp;
                 <a v-bind:href="previous" class="btn btn-secondary">
@@ -64,9 +42,9 @@
     methods = {
 		afterMount() {
 			if (this.record != undefined) {
-		        	document.querySelector("input[name=\"name\"]").focus();
+		        // JAVÍTANDÓ!
+                $('#demoForm #name').focus();
 			}
-			window.ckeditorInit('textarea#description');
 		},
         delClick() {
             popupConfirm(lng('SUREDELETE'), 
@@ -79,20 +57,16 @@
 		},
         validator() {
             result = '';
-            if ($('#demoForm #name').val() == '1') {
+/*  JAVÍTANDÓ        
+            if ($('#demoForm #name').val() == '') {
                 result += 'NAME_REQUED<br />';
                 $('#demoForm #name').addClass('is-invalid');
                 $('#demoForm #name').focus();
             } else {
                 $('#demoForm #name').removeClass('is-invalid');
             }
-            if ($('#demoForm #description').val() == '') {
-                result += 'DESCRIPTION_REQUED<br />';
-                $('#demoForm #name').addClass('is-invalid');
-                $('#demoForm #name').focus();
-            } else {
-                $('#demoForm #name').removeClass('is-invalid');
-            }
+            ....
+*/
             return result;
         },
         okClick() {
@@ -102,6 +76,6 @@
             } else {
                 popupMsg(erorMsg,'popupError');
             }    
-        }    
+        }               
     }
 </script>

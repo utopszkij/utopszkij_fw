@@ -123,5 +123,21 @@ tokens = {
   "BOOKS":"Könyvek",
   "BOOK":"Könyv",
 
+  /* account */
+  "ACCOUNT":"fiók",
+  "ACCOUNTS":"fiokok",
+  "ID":"id",
+  "USERNAME":"Bejelentkezési név",
+  "PASSWORD":"Jelszó",
+  "PASSWORD_REPEAT":"Jelszó ismét",
+  "REALNAME":"Név",
+  "EMAIL":"E-mail",
+  "AVATAR":"avatar kép",
+  "EMAIL_VERIFYED":"e-mail ellenörzött",
+  "ENABLED":"Engedélyezett",
+  "DELETED":"Törölt",
+  "ERROR_COUNT":"Hiba számláló",
+  "LOCKTIME":"Zárolás időpontja",
+
   "END":"Vége"
 };
