@@ -144,6 +144,9 @@ pre code {display:block; max-height:14px; padding:0px; margin:0px; line-height:1
 #visitorShow img.avatar {width:200px; height:auto; margin:5px;}
 #visitorForm img.avatar {width:200px; height:auto; margin:5px;}
 
+#accountShow label {height:auto}
+#accountShow #userGroups var {border-style:solid; border-width:1px; padding:2px; margin:2px}
+
 @media screen and (max-width: 992px) {
 }
 
