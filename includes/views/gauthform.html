@@ -1,22 +1,11 @@
 <div class="row" id="gauthenticator">
     <div class="col-12">
-    <form method="post" action="index.php">
+    <form method="post" action="index.php" class="form">
         <input type="hidden" name="task" value="user.gauthcheck" />
-        <h2>Google két lépcsős azonosítás</h2>
-        <!--
-        <p>Okostelefonjára telepítse a google authenticator applikációt!</p>
-        <p>Az applikációt elnditva kattintson a "+" ikonra, majd a "QR-kód beolvasása" gombra, és olvassa be QR-kodot!</p>
-        <p>Vagy hozzon létre egy fiokot a <strong>{{ secret}}</strong> beállító kulcsot használva!</p>
-        <p>
-            <img v-bind:src="qrCodeUrl" style="max-width:80%"/>
-        </p>
-        -->
-        <p>Írd be a telefonon látható kodot (6 számjegy):
-            <input type="text" name="oneCode" id="oneCode" />
-        </p>
-        <p>
-            <button type="submit">Rendben</button>
-        </p>
+        <h2>{{ lng('TWOFACTOR') }}</h2>
+        <label>Kulcs /key (6 number):&nbsp;</label>
+        <input type="number" name="oneCode" id="oneCode" class="form-control"/>&nbsp;
+        <button type="submit" class="btn btn-primary">Rendben</button>
     </form>
     </div>
 </div>

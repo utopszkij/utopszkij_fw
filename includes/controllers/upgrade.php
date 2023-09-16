@@ -37,7 +37,7 @@ class Upgrade {
 			$this->branch = $_SESSION['branch'];
 			$_SESSION['branch'] = $this->branch;
 		}
-		$this->github = 'https://raw.githubusercontent.com/utopszkij/__utopszkij_fw/'.$this->branch.'/';  // ====== FIGYELEM ÁTIRNI !!!! ===========
+		$this->github = 'https://raw.githubusercontent.com/utopszkij/utopszkij_fw/'.$this->branch.'/';  // ====== FIGYELEM ÁTIRNI !!!! ===========
 		$this->githubReadme = $this->github.'readme.md';
 	}
 
@@ -204,21 +204,21 @@ class Upgrade {
 	 */
 	public function getLastVersion() {
 		$result = 'v0.0';
-		if (file_exists($this->githubReadme)) {
+		//if (file_exists($this->githubReadme)) { valamiért ez falsot ad :(
+			echo 'BBB';
 			$lines = file($this->githubReadme);
 			// keresi az új verio sort
 			for ($i=0; (($i<count($lines)) & 
 						(strpos(strtolower($lines[$i]), '# verzió ') <= 0)); $i++) {
-							//echo 'ciklusban '.$lines[$i].'<br>';
 			}
-			// echo 'ciklus után '.$lines[$i].'<br>'; exit();
+			echo 'ciklus után '.$lines[$i].'<br>'; 
 			if ($i < count($lines)) {
 				$w = explode(' ', strtolower($lines[$i]));
 				if (count($w) > 2) {
 					$result = trim($w[2]);
 				}	
 			}
-		}	
+		//}	
 		return $result;
 	}
 	

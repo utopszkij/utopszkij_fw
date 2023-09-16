@@ -82,6 +82,7 @@ tokens = {
     "PSW_REQURED_LU_ALFABETS":"a jelszó tartalmazzon kis és nagy betüt",
     "PSW_REQURED_SPEC_CHARS":"a jelszó tartalmazzon speciális karaktert",
     "TWOFACTOR":"Google két lépcsős azonosítás",
+    "SECRET_KEY":"Biztonsági kulcs",
       
     "PROFILE":"Profil",
 	"AVATARFILE":"Avatar képfájl (jpg vagy png, nem kötelező)",
