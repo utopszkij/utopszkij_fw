@@ -14,6 +14,7 @@ PHP-MYSQL-VUE keretrendszer web oldalak fejlesztéséhez.
 - MVC struktúra,
 - több nyelvüség támogatása,
 - login/logout/regist rendszer, Google és Facebook login támogatása,
+- Google kétlépcsős azonosítás támogatása,
 - usergroups rendszer,
 - SEO url támogatása,
 - facebook megosztás támogatása,
@@ -52,7 +53,6 @@ GNU v3
 - mysql 5+
 ### fejlesztéshez
 - phpunit (unit test futtatáshoz)
-- doxygen (php dokumentáció előállításhoz)
 - nodejs (js unittesthez)
 - php és js szintaxist támogató forrás szerkesztő vagy IDE
 
@@ -69,6 +69,7 @@ GNU v3
 Könyvtár szerkezet a futtató web szerveren:
 ```
 [document_root]
+  [doc]
   [images]
      kép fájlok (alkönyvtárak is lehetnek)
   [includes]
@@ -112,25 +113,6 @@ cd reporoot
 phpunit tests
 ./tools/viewtest.sh
 ```
-## software documentáció
-
-includes/views/swdoc.html
-
-doc/html/index.html
-
-## A sw. dokumentáció előállítása
-telepiteni kell a doxygen dokumentáció krátort.
-
-[https://doxygen.nl/](doxygen)  Köszönet a sw. fejlesztőinek.
-
-A telepitési könyvtáraknak megfelelően módosítani kell documentor.sh fájlt.
-
-Ezután linux terminálban:
-
-```
-cd reporoot
-./tools/documentor.sh
-```
 
 ## ÚJ CRUD modul létrehozása
 
@@ -161,6 +143,19 @@ ellenörzése, javítása (ckeditor mezőknél a controller __construct -ban és
 {componentName}show.html -ben kell javítani )
 4. főmenüben (vagy máshol) a modult inditó link elhelyezése
 
+# Új verzó publikálása
+- index.php modosítása
+- readme.md modosítása
+
+```
+cd {projectRoot}
+tools/documentor.sh
+tools/files.sh
+git checkout -b v....
+git add .
+git commit
+tools/git.sh push origin v....
+```
 
 ## verzió v2.3.0
 Google kétlépcsős azonosítás támogatása

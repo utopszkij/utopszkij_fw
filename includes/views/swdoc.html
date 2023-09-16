@@ -10,6 +10,9 @@
 	<p style="margin-left: 0.5cm; margin-bottom: 0cm; background: transparent; line-height: 100%">
 	<a href="index.php?x=1&task=home.swdoc#__RefHeading___Toc147_953040041">1. Általános
 	áttekintés	</a></p>
+	<p> </p>
+	<p> phpDocumentor-al kreált forrás program dokumentáció: <a href="doc/index.html">link</a> </p>
+	<p> </p>
 	<p style="margin-left: 1cm; margin-bottom: 0cm; background: transparent; line-height: 100%">
 	<a href="index.php?x=1&task=home.swdoc#__RefHeading___Toc149_953040041">1.1. Adatbázis
 	interfész	</a></p>
@@ -76,7 +79,6 @@ nélkül is boldogulni fogsz vele. A keretredszer Model – Viewer –
 Controller struktúra szerint épül fel (MVC). A mysql elérés egy
 egyedi, laravel -re emlékeztető interfészen keresztül történik.
 A web oldalak megjelenítéséhez vuejs -t és bootstrap -ot használ.</p>
-<p>Php class -ok dokumentációja: <a href="doc/html/index.html">doc/html/index.html</a>
 </p>
 <h3><a name="__RefHeading___Toc149_953040041"></a><a name="11adatbzisinterfsz"></a><a name="__RefHeading___Toc130_1001536460"></a>
 1.1. Adatbázis interfész</h3>
@@ -335,7 +337,7 @@ outputja</p>
 <br/>
 </p>
 <p>1. Az index.php -ban módositsuk a <strong>$fileVerzio</strong> adatot!</p>
-<p>2. A <strong>readme.md</strong> fájlban modosítsuk a változás történet részt!</p>
+<p>2. A <strong>readme.md</strong> fájlban modosítsuk a változás történet részt! Szintaxisra ügyelni!</p>
 <p>3. Szükség esetén az <strong>includes/controllers/upgrade.php</strong> fájlba készitsük el az adatbázist modosító kódot!</p>
 <p>5. linux terminálban:</p>
 <pre>cd {documentroot}
@@ -344,7 +346,7 @@ outputja</p>
 git checkout -b v#.#.#
 git add .
 git commit
-git push origin v#.#.#
+tools/git.sh push origin v#.#.#
 </pre>
 <h2><a name="__RefHeading___multilanguage"></a>6. Több nyelvüség</h2>
 <p>A config.php -ban szerepeljen egy <strong>define("LNG","lngCode");</strong> sor. </p>

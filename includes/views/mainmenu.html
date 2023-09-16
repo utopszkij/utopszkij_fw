@@ -1,4 +1,5 @@
 <div>
+<div>
 	<nav class="navbar navbar-expand-lg navbar-dark" id="fomenu">
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,10 +30,10 @@
                 <a class="nav-link" href="index.php?task=home.swdoc">
                 <em class="fas fa-code"></em>&nbsp;{{ lng('SWDOC') }}</a>
               </li>
-              <li class="nav-item">
+              <!-- li class="nav-item">
                 <a class="nav-link" href="index.php?task=demo.manager">
                 <em class="fas fa-wine-glass"></em>&nbsp;{{ lng('DEMO') }}</a>
-              </li>
+              </li -->
               <li class="nav-item">
                 <a class="nav-link" v-bind:href="HREF('book.items')">
                 <em class="fas fa-book"></em>&nbsp;{{ lng('BOOKS') }}</a>
@@ -79,15 +80,22 @@
                   </li>
             </ul>
           </div>
-      </nav>	
-      <div class="warning" v-if="(lastVerzio > fileVerzio) & (MULTIUSER) & (isAdmin)">
-          <a v-bind:href="HREF('upgrade.upgrade1',{version:lastVerzio})" 
-              class="btn btn-primary">
-              {{ lng('NEWVERSION') }} {{ lastVerzio }} 
-          </a>
-      </div>	
-      <div style="text-align:right">{{ fileVerzio }}&nbsp;</div> 
- 
+        </nav>	
+</div>
+
+<div class="warning" style="margin-top:70px;"
+  v-if="(lastVerzio > fileVerzio) & (MULTIUSER) & (isAdmin)">
+  <a v-bind:href="HREF('upgrade.upgrade1',{version:lastVerzio})" 
+      class="btn btn-primary">
+      {{ lng('NEWVERSION') }} {{ lastVerzio }} 
+  </a>
+</div>	
+<div style="margin-top:70px; text-align:right; color:white"
+  v-if="(lastVerzio <= fileVerzio) | (!MULTIUSER) | (!isAdmin)">
+      {{ lastVerzio }}&nbsp; 
+  </a>
+</div>	
+
 </div>
 
 <script>

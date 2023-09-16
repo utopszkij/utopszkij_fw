@@ -277,7 +277,7 @@ class User extends Controller {
 		}
 		if ($error == '') {
 			// unit test ne küldjön levelet
-			if (($email != 'test@test.test') & (LOGIN_MUST_VERIFYED_EMAIL)) {
+			if ($email != 'test@test.test')  {
 				$ga = new PHPGangsta_GoogleAuthenticator();
 				$secret = $recs[0]->secret;
 				$qrCodeUrl = $ga->getQRCodeGoogleUrl(SITEURL, $secret); 
