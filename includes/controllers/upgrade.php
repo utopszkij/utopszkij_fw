@@ -3,6 +3,8 @@
 use \RATWEB\DB\Query;
 use \RATWEB\DB\Record;
 use \RATWEB\DB\Table;
+require_once 'vendor/PHPGangsta/GoogleAuthenticator.php';
+
 
 /*
 
@@ -144,6 +146,29 @@ class Upgrade {
 		}	
 	}
 
+	protected function do_v2_3_0($dbverzio) {
+		if ($this->versionAdjust($dbverzio) < $this->versionAdjust('v2.3.0')) {
+			$table = new Table('users');
+			$table->string('secret');
+			$table->integer('twofactor');
+			$table->alterInDB();
+			if ($table->error != '') {
+				echo $table->error.'<br>';
+			}	
+			$q = new Query('users');
+			$recs = $q->all();
+			foreach ($recs as $rec) {
+				$ga = new PHPGangsta_GoogleAuthenticator();
+				$secret = $ga->createSecret(); 
+				$rec->secret = $secret;
+				$rec->twofactor = 0;
+				$q = new Query('users');
+				$q->where('id','=',$rec->id)->update($rec);
+			}
+
+			$this->setDbVersion('v2.3.0');
+		}	
+	}
 
 	/**
 	 * szükség szerint adatbázis alterek, új táblák létrehozása
@@ -154,6 +179,7 @@ class Upgrade {
 		$this->do_v1_0($dbverzio);
 		$this->do_v1_1_0($dbverzio);
 		$this->do_v2_1_0($dbverzio);
+		$this->do_v2_3_0($dbverzio);
 		// ide jönek a későbbi verziokhoz szükséges db alterek növekvő verzió szerint
 	}
 

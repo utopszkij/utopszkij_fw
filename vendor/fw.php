@@ -64,6 +64,8 @@ class Fw {
 				$rec = $db->first();
 				if (!isset($rec->id)) {
 					// nincs, létrehozzuk és az újra jelentkezünk be
+					$ga = new PHPGangsta_GoogleAuthenticator();
+					$secret = $ga->createSecret(); 
 					$rec = new \RATWEB\DB\Record();
 					$rec->username = $userName;
 					$rec->password = $w[2];
@@ -73,24 +75,33 @@ class Fw {
 					$rec->email_verifyed = 1;
 					$rec->enabled = 1;
 					$rec->deleted = 0;
+					$rec->error_count = 0;
+					$rec->locktime = 0;
+					$rec->secret = $secret;
+					$rec->twofactor = 0;
 					$userId = $db->insert($rec);
-
+					$rec->id = $userId;
 				} else {
 					// van; erre jelentkezünk be
 					$userId = $rec->id;
 				}
 				// bejelentkeztetés
-				$_SESSION['logedAvatar'] = $rec->avatar;
-				$_SESSION['loged'] = $userId;
-				$_SESSION['logedName'] = $userName;
-				// logedGroups
-				$q = new \RATWEB\DB\Query('user_group','ug');
-				$w = $q->select(['g.id, g.name'])
-					->join('INNER','groups','g','g.id','=','ug.group_id')
-					->where('ug.user_id','=',$userId)
-					->orderBy('g.name')
-					->all();
-				$_SESSION['logedGroup'] = JSON_encode($w);
+				if ($rec->twofactor == 1) {
+					$_SESSION['gauthuser'] = JSON_encode($rec);
+					$_GET['task'] = 'user.gauthform';
+				} else {
+					$_SESSION['logedAvatar'] = $rec->avatar;
+					$_SESSION['loged'] = $userId;
+					$_SESSION['logedName'] = $userName;
+					// logedGroups
+					$q = new \RATWEB\DB\Query('user_group','ug');
+					$w = $q->select(['g.id, g.name'])
+						->join('INNER','groups','g','g.id','=','ug.group_id')
+						->where('ug.user_id','=',$userId)
+						->orderBy('g.name')
+						->all();
+					$_SESSION['logedGroup'] = JSON_encode($w);
+				}
 			} else {
 				echo 'kodolási hiba userId='.$userId.' userName='.$userName; exit();	
 			}

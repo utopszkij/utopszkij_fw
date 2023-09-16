@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['oauth_0',['OAuth',['../class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_o_auth.html',1,'PHPMailer::PHPMailer']]],
-  ['oauthtokenprovider_1',['OAuthTokenProvider',['../interface_p_h_p_mailer_1_1_p_h_p_mailer_1_1_o_auth_token_provider.html',1,'PHPMailer::PHPMailer']]]
+  ['model_0',['Model',['../class_r_a_t_w_e_b_1_1_model.html',1,'RATWEB']]]
 ];

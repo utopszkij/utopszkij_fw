@@ -163,7 +163,7 @@
         </div>    
     </div><!-- show -->
 
-    <div id="form" style="display:none">
+    <div id="form" style="display:none" v-on:keyup.enter="saveClick()">
         <h2>{{ lng('DEMO') }}</h2>
         <h3 v-if="record.id == 0">{{ lng('ADD') }}</h3>
         <h3 v-if="record.id > 0">{{ lng('EDIT') }}</h3>
@@ -473,12 +473,14 @@
 							   app.record, 
 							   { headers: {'Content-Type': 'multipart/form-data'}})
 					  .then(function(response) {
-							$('#loader').hide();
+                        $('#loader').hide();
 							app.listClick();
 					  }) 
 				  } else {
 					$('#loader').hide();
-					popupMsg(res.data.error,'popupError');
+					// popupMsg(res.data.error,'popupError');
+                    $('#loader').hide();
+					app.listClick();
 				  }
 				})
 		},        

@@ -65,7 +65,7 @@ class Demo extends Controller {
     protected function validator($record): string {
 		$result = '';
 		if ($record->name == '') {
-			$result = 'NAME_REQUERED';
+			$result .= 'NAME_REQUERED<br />';
 		}
         return $result;
     }
@@ -91,8 +91,80 @@ class Demo extends Controller {
 		}
 		parent::items();
 	}
-	
+
+    /**
+     * api_upload
+     * POSTs: record mezői, file, uploadDir, extensions
+     * return {'error':''} vagy {error:'hibaüzenet'} és ha nincs hiba akkor sessionba succesMsg 
+    */ 
+	public function api_upload() {
+//+ gyakran modosítandó
+		$this->session->set('errorMsg','');
+		$this->session->set('successMsg','');
+		$error = '';
+		// record kialakítása
+		$record = $this->model->emptyRecord();
+		foreach ($record as $fn => $fv) {
+			$record->$fn = $this->request->input($fn); 
+			// if ($fn == 'htmlfield') $record->$fn = $this->request->input($fn,'HTML');
+		}
+		// record validálás 
+		$error = $this->validator($record);
+		if ($error == '') {
+			  	// record tárolása adatbáziba
+			  	$id = $this->model->save($record);
+				$record->id = $id;
+				$this->session->set('successMsg','SAVED');
+
+				/*+ ha file upload is van
+				if (isset($_POST['uploadDir'])) {
+					$uploadDir = $_POST['uploadDir'];
+				} else {
+					$uploadDir = 'images/uploads';
+				}
+				if (isset($_POST['extensions'])) {
+				  $extensions = JSON_decode($_POST['extensions']);
+			  	} else {
+				  $extensions = Array('jpg','jpeg','png','gif','tif');
+			  	}
+				$uploadUrl = $uploadDir.'/'; 
+			  	$uploadDir .= '/';
+				$uploadFileCname = $_FILE['file'];
+				$uploadFileExt = pathinfo($uploadFileCname,PATHINFO_EXTENSION);
+				$uploadFile = $uploadDir.$id.'.'.$uploadFileExt;
+				if (!in_array($uploadFileExt, $extensions)) {
+					$result = JSON_encode(array('error'=>'UPLOAD_NOT_ENABLED'));
+					$this->session->set('successMsg','');
+				} else {
+					if (file_exists($uploadFile)) {
+						unlink($uploadFile);
+					}
+					if (move_uploaded_file($_FILES[$fn]['tmp_name'], $uploadFile)) {
+						// record modositása a file url beírása
+						$url = $uploadUrl.$record->id.'_'. preg_replace( '/[^a-z0-9\.]/i', '_',(basename($_FILES[$fn]['name'])));
+						$record->fileUrl = $url;
+						$record->save();
+						$this->session->set('errorMsg','');
+						$this->session->set('successMsg','SAVED');
+					} else {
+						$this->session->set('successMsg','');
+						$result = JSON_encode(array('error'=>'ERROR_IN_FILEUPLOAD'));
+						$this->model->delById($record->id);
+					}
+				}
+				*/
+
+		} else {
+			$this->session->set('successMsg','');
+			$result = JSON_encode(array('error'=>$error));
+		}
+		echo $result;
+		exit();
+	}		
+//-	
 }
+	
+
 
 
 ?>

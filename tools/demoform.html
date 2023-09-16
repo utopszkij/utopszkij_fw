@@ -5,11 +5,26 @@
 
 <div id="demo">
 	<h2>{{ lng('DEMO') }}</h2>
-    <form id="demoForm" action="index.php" method="post" class="form" 
+    <form id="demoForm" action="index.php" method="post" class="form"  v-on:keyup.enter="okClick()"
         enctype="multipart/form-data"  style="display:blocl">
         <input type="hidden" v-model="flowKey" name="flowKey" />
         <input type="hidden" value="demo.save" name="task" />			
 		//formFields
+
+        <div class="row">
+            <div class="col-12">
+                <table id="progressTable" style="width:100%; display:none">
+                    <tr style="border-style:solid; border-width:1px; border-color:blue">
+                        <td id="progressImg">&nbsp;</td>
+                        <td style="background-color:white"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align:center"><var id="progressTxt"></var></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
         <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="bitton" class="btn btn-success" v-on:click="okClick()">
@@ -69,10 +84,54 @@
 */
             return result;
         },
+        upload() {
+            var progressTable = $('#progressTable');
+			  var progressImg = $('#progressImg');
+			  var progressTxt = $('#progressTxt');
+              var fn = '';
+			  progressImg.style='width:0%; background-color:blue';
+			  progressTxt.innerHTML = '0%';
+			  progressTable.show();
+			  var data = new FormData();
+			  data.append('foo', 'bar');
+              for (fn in this.record) {
+                data[fn] = $('#demoForm #'+fn).val();
+              }
+//+ gyakran átirandó              
+			  data.append('file', document.getElementById('file').files[0]);
+			  data.append('uploadDir','./images/uploads');
+			  data.append('extensions', '["zip","doc","pdf","odt"]');
+//-
+			  data.append('sid',this.sid);
+			  var config = {
+				onUploadProgress: function(progressEvent) {
+                    var progressTable = $('#progressTable');
+        		  var progressImg = $('#progressImg');
+			      var progressTxt = $('#progressTxt');
+				  var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+				  progressImg.style='width:'+percentCompleted+'%; background-color:blue';
+				  progressTxt.innerHTML = percentCompleted+'%';
+				}
+			  };
+              // api_upload server:
+              //  POST: sid, record mezői, uploadDir, extensions, file
+              //  RETURN '{"errro":""}' és sessionba successMsg vagy errorMsg
+			  axios.post(HREF('demo.api_upload',{}), data, config) 
+			  .then(function (res) {
+                    var progressTable = $('#progressTable');
+        		    progressTable.hidde();
+                    if (res.data.error == '') {
+                        location = HREF('demo.items',{});
+                        return;
+                    } else {
+                        popupMsg(res.data.error,'popupError');
+                    }    
+				});
+		},                
         okClick() {
             var errorMsg = this.validator();
             if (errorMsg == '') {
-                $('#demoForm').submit();
+                this.upload();
             } else {
                 popupMsg(erorMsg,'popupError');
             }    

@@ -70,15 +70,18 @@ tokens = {
     "GOOGLELOGIN": "Belépés Google -al",
     "DOREGIST":"Még nincs fiókod? - regisztrálj! (klikk ide)",
 	"REGISTHELP":"Valós email címet adjál meg! Aktiváló email-t kapsz erre a címre."+
-        "A bejelentkezés csak az ebben szereplő linkre kattintás után lesz lehetséges."+
-        "A jelszó minimum 8 karakter, tartalmazzon kis és nagy betüt, számot, speciális karaktert!",
-	"REGISTHELP2":"Bejelentkezés után a \"profil\" oldalon avatar képet tölthetsz fel, jelszót változtathatsz, törölheted a fiókodat.",
+        "A bejelentkezés csak az ebben szereplő linkre kattintás után lesz lehetséges. "+
+        "A jelszó minimum 8 karakter, tartalmazzon kis és nagy betüt, számot, speciális karaktert! "+
+        "Két lépcsős azonosítás bekapcsolása esetén az aktiváló email-ben kapod meg a konfiguráláshoz szükséges infokat, "+
+        "szükség esetén az aktiváló levél újraküldsével újra lekérheted ezeket.",
+	"REGISTHELP2":"Bejelentkezés után a \"profil\" oldalon avatar képet tölthetsz fel, jelszót változtathatsz, törölheted a fiókodat ",
     "PSW_REQUERED":"jelszót meg kell adni",
     "PSW_TO_SHORT":"a jelszó túl rövid (min 8 karakter szükséges)",
     "PSW_NOT_EQUALS":"a két jelszó nem azonos",
     "PSW_REQURED_NUMBERS":"a jelszó tartalmazzon számjegyet",
     "PSW_REQURED_LU_ALFABETS":"a jelszó tartalmazzon kis és nagy betüt",
     "PSW_REQURED_SPEC_CHARS":"a jelszó tartalmazzon speciális karaktert",
+    "TWOFACTOR":"Google két lépcsős azonosítás",
       
     "PROFILE":"Profil",
 	"AVATARFILE":"Avatar képfájl (jpg vagy png, nem kötelező)",

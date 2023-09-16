@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['blog_0',['Blog',['../class_blog.html',1,'']]],
-  ['blogmodel_1',['BlogModel',['../class_blog_model.html',1,'']]]
+  ['author_0',['Author',['../class_author.html',1,'']]],
+  ['authormodel_1',['AuthorModel',['../class_author_model.html',1,'']]]
 ];
