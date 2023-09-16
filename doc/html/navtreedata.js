@@ -44,9 +44,9 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_2var_2www_2html_2utopszkij_fw_2vendor_2yidas_2socket-mailer_2src_2_mailer_8php-example.html",
-"class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_h_p_mailer.html#ab7e6e8a95653c3562feff15f3f5795ff",
-"class_upgrade.html#a8f1dca671bab889dffda9cc74d0d0915"
+"_list-_unsubscribe-example.html",
+"class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_p_h_p_mailer.html#a58c011aa0d493a352c8d8d585a5e85d2",
+"class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_s_m_t_p.html#af1cd1f904bc5404a8eb7fc4cf350fd67"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

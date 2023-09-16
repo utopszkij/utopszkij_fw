@@ -121,7 +121,8 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This class is copied in every Composer installed project and available to all</p>
 <p >See also <a href="https://getcomposer.org/doc/07-runtime.md#installed-versions">https://getcomposer.org/doc/07-runtime.md#installed-versions</a></p>
-<p >To require its presence, you can require <code>composer-runtime-api ^2.0</code> </p>
+<p >To require its presence, you can require <code>composer-runtime-api ^2.0</code></p>
+<p >@final </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a3a09ac4f4e098f4c04c31cfb88a8e256" name="a3a09ac4f4e098f4c04c31cfb88a8e256"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3a09ac4f4e098f4c04c31cfb88a8e256">&#9670;&nbsp;</a></span>getAllRawData()</h2>
@@ -146,7 +147,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Returns the raw data of all installed.php which are currently loaded for custom implementations</p>
-<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return list&lt;array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array&lt;string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}&gt;}&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return list&lt;array{root: array{name: string, pretty_version: string, version: string, reference: string|null, type: string, install_path: string, aliases: string[], dev: bool}, versions: array&lt;string, array{pretty_version?: string, version?: string, reference?: string|null, type?: string, install_path?: string, aliases?: string[], dev_requirement: bool, replaced?: string[], provided?: string[]}&gt;}&gt; </dd></dl>
 
 </div>
 </div>
@@ -301,7 +302,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p >Returns the raw installed.php data for custom implementations</p>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Use <a class="el" href="class_composer_1_1_installed_versions.html#a3a09ac4f4e098f4c04c31cfb88a8e256">getAllRawData()</a> instead which returns all datasets for all autoloaders present in the process. getRawData only returns the first dataset loaded, which may not be what you expect. </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array&lt;string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}&gt;} </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return array{root: array{name: string, pretty_version: string, version: string, reference: string|null, type: string, install_path: string, aliases: string[], dev: bool}, versions: array&lt;string, array{pretty_version?: string, version?: string, reference?: string|null, type?: string, install_path?: string, aliases?: string[], dev_requirement: bool, replaced?: string[], provided?: string[]}&gt;} </dd></dl>
 
 </div>
 </div>
@@ -360,7 +361,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>array @psalm-return array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string} </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>array @psalm-return array{name: string, pretty_version: string, version: string, reference: string|null, type: string, install_path: string, aliases: string[], dev: bool} </dd></dl>
 
 </div>
 </div>
@@ -511,7 +512,7 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>void</dd></dl>
-<p>@psalm-param array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array&lt;string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}&gt;} $data </p>
+<p>@psalm-param array{root: array{name: string, pretty_version: string, version: string, reference: string|null, type: string, install_path: string, aliases: string[], dev: bool}, versions: array&lt;string, array{pretty_version?: string, version?: string, reference?: string|null, type?: string, install_path?: string, aliases?: string[], dev_requirement: bool, replaced?: string[], provided?: string[]}&gt;} $data </p>
 
 </div>
 </div>

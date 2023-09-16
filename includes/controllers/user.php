@@ -10,6 +10,8 @@ require 'vendor/phpmailer/src/PHPMailer.php';
 require 'vendor/phpmailer/src/SMTP.php';
 
 include_once __DIR__.'/../models/usermodel.php';
+require_once 'vendor/PHPGangsta/GoogleAuthenticator.php';
+
 
 class User extends Controller {
 
@@ -97,6 +99,7 @@ class User extends Controller {
 		$record->realname = '';
 		$record->email = '';
 		$record->avatar = '';
+		$record->twofactor = 0;
 		if ($this->session->input('oldRec') != '') {
 			$old = JSON_decode($this->session->input('oldRec'));
 			if (isset($old->id) & ($old->id == 0)) {
@@ -173,19 +176,24 @@ class User extends Controller {
 			}	
 		}// count($recs) > 0	
 		if ($error == '') {
-			$_SESSION['loged'] = $rec->id;
-			$_SESSION['logedName'] = $rec->username;
-			$_SESSION['logedAvatar'] = $rec->avatar;
-			$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
+
 			$rec->error_count = 0;
 			$rec->locktime = 0;
 			$rec->password = ''; // igy a save nem modosítja a jelszót
 			$this->model->save($rec);
-			?>
-			<script>
-				document.location="<?php echo $redirect; ?>";		
-			</script>
-			<?php			
+			if ($rec->twofactor) {
+				$this->gauthform($rec);
+			} else {
+				$_SESSION['loged'] = $rec->id;
+				$_SESSION['logedName'] = $rec->username;
+				$_SESSION['logedAvatar'] = $rec->avatar;
+				$_SESSION['logedGroup'] = JSON_encode($this->model->getGroups($rec->id));
+				?>
+				<script>
+					document.location="<?php echo $redirect; ?>";		
+				</script>
+				<?php			
+			}
 		} else {
 			$rec->error_count = $rec->error_count + 1;
 			if ($rec->error_count > 5) {
@@ -202,6 +210,8 @@ class User extends Controller {
 	
 	public function doregist() {
 		$this->checkFlowKey($this->browserURL);
+		$ga = new PHPGangsta_GoogleAuthenticator();
+		$secret = $ga->createSecret(); 
 		$records = $this->model->getBy('username','');
 		$record = $records[0]; // most az error_count és a locktime az IP szerint van beállítva
 		$record->id = 0; 
@@ -213,6 +223,9 @@ class User extends Controller {
 		$record->email_verifyed = $this->request->input('email_verifyed',0);
 		$record->enabled = $this->request->input('enabled',0);
 		$record->deleted = 0;
+		$record->secret = $secret;
+		$record->locktime = 0;
+		$record->error_count = 0;
 		$this->session->set('oldRec', JSON_encode($record));
 		$redirect = base64_decode($this->request->input('redirect'));
 		$error = $this->validator($record);
@@ -221,6 +234,7 @@ class User extends Controller {
 		}
 		if ($error == '') {
 			$record->enabled = 1;
+			$record->id = $this->model->save($record);
 			$this->sendactivator($record->email);
 			if (LOGIN_MUST_VERIFYED_EMAIL) {
 				$this->session->set('successMsg','SAVED<br>EMAIL_SENDED');
@@ -264,20 +278,39 @@ class User extends Controller {
 		if ($error == '') {
 			// unit test ne küldjön levelet
 			if (($email != 'test@test.test') & (LOGIN_MUST_VERIFYED_EMAIL)) {
+				$ga = new PHPGangsta_GoogleAuthenticator();
+				$secret = $recs[0]->secret;
+				$qrCodeUrl = $ga->getQRCodeGoogleUrl(SITEURL, $secret); 
 				// aktiváló email küldése $recs[0] alapján
 				$code = base64_encode($recs[0]->password.'-'.$recs[0]->id);
+
 				$mailBody = '<div>
-				<h2>Fiók aktiváláshoz ksattints az alábbi linkre!</h2>
+				<h2>'.SITEURL.'</h2>
+				';
+				if ($recs[0]->twofactor) {
+					$mailBody .= '<p>
+					Telepitsd okostelefonodra a google authenticator applikációt!
+					(Install google authenticator app into your phone!)
+					Az app-ban hozzál létre egy fiókot!
+					(create new account into app!)</p>
+					<p>
+					Kulcs (key) :<strong>'.$secret.'</strong>
+					</p>
+					<p>Vagy olvasd be a QRCODE -ot (or read QRCODE):
+					<img src="'.$qrCodeUrl.'" />
+					</p>';
+				}
+				$mailBody .= '
+				<h3>Fiók aktiváláshoz kattints az alábbi linkre! (click this link!)</h3>
 				<p> </p>
 				<p><a href="'.SITEURL.'/index.php?task=user.doactivate&code='.$code.'">
 					'.SITEURL.'/index.php?task=user.doactivate&code='.$code.'
 				   </a>
 				</p>
 				<p> </p>
-			    <p>vagy másold a fenti web címet a böngésző cím sorába!</p>
-				<p> </p>
-				</div>';
-				
+			    <p>vagy másold a fenti web címet a böngésző cím sorába! (or CTRL/C - CTRL/V into browser)</p>
+				<p> </p>';
+				$mailBody .= '</div>';
 				$this->mailer->setFrom(MAIL_FROM_ADDRESS);
 				$this->mailer->addAddress($recs[0]->email);     //Add a recipient
 				$this->mailer->isHTML(true);                                  //Set email format to HTML
@@ -384,6 +417,7 @@ class User extends Controller {
 	 * $-GET $code  elfelejtett jelszó email-ben lévő link hívta
 	 */
 	public function profile() {
+		$ga = new PHPGangsta_GoogleAuthenticator();
 		$error = '';
 		$id = $this->request->input('id',0,INTEGER);
 		$code = $this->request->input('code','');
@@ -432,7 +466,8 @@ class User extends Controller {
 				"userGroups" => $this->model->getGroups($record->id),
 				"allGroups" => $this->model->getAllGroups(),
 				"logedGroup" => $this->logedGroup,
-				"backtask" => $backtask
+				"backtask" => $backtask,
+				"qrCodeUrl" => $ga->getQRCodeGoogleUrl(SITEURL, $record->secret)
 			]);
 			$this->session->delete('errorMsg');
 			$this->session->delete('successMsg');
@@ -465,6 +500,8 @@ class User extends Controller {
 		$record->avatar = $old->avatar;
 		$record->error_count = $old->error_count;
 		$record->locktime = $old->locktime;
+		$record->secret = $old->secret;
+		$record->twofactor = $this->request->input('twofactor',0); 
 		$backtask = $this->request->input('backtask','home.show');
 		if (!isAdmin() & ($record->id != $this->session->input('loged'))) {
 			echo 'Access violation';
@@ -565,6 +602,64 @@ class User extends Controller {
 					JSON_encode($rec, JSON_PRETTY_PRINT).
 				'</code></pre>';
 			}
+		}	
+	}
+
+	/**
+	 * google authentication form megjelenitése $rec és secret megjegyzése sessionba
+	 * @param user record
+	 * @result void  -->gauthcheck
+	 */
+	public function gauthform($rec = false) {
+		if ($rec) {
+			$this->session->set('gauthuser', JSON_encode($rec));
+		} else {
+			$rec = JSON_decode($this->session->input('gauthuser'));
+		}	
+		$ga = new PHPGangsta_GoogleAuthenticator();
+		// $secret = $ga->createSecret(); 
+		$secret = $rec->secret;
+		$this->session->set('secret',$secret);
+		$qrCodeUrl = $ga->getQRCodeGoogleUrl('utopszkij_fw '.$secret, $secret); 
+		view('gauthform',["secret" => $secret,
+						 "qrCodeUrl" => $qrCodeUrl
+						 ]);
+	}
+
+	/**
+	 * google authenticator form feldolgozása, 
+	 * ha jó akkor a sessinban lévő rec -re bejelentkezés
+	 * $_POST: oneCode
+	 * $_SESSION: secret, gauthuser
+	 */
+	public function gauthcheck() {
+		$rec = JSON_decode($this->session->input('gauthuser'));
+		$ga = new PHPGangsta_GoogleAuthenticator();
+		$oneCode = $this->request->input('oneCode');
+		$secret = $this->session->input('secret');
+		if ($ga->verifyCode($secret, $oneCode, 2)) {    // 2 = 2*30sec clock tolerance
+			// bejelentkeztetés és goto home.show
+			$_SESSION['logedAvatar'] = $rec->avatar;
+			$_SESSION['loged'] = $rec->id;
+			$_SESSION['logedName'] = $rec->username;
+			// logedGroups
+			$q = new \RATWEB\DB\Query('user_group','ug');
+			$w = $q->select(['g.id, g.name'])
+				->join('INNER','groups','g','g.id','=','ug.group_id')
+				->where('ug.user_id','=',$rec->id)
+				->orderBy('g.name')
+				->all();
+			$_SESSION['logedGroup'] = JSON_encode($w);
+			echo '<script>
+				location="index.php";
+			</script>';
+		} else {
+			$_SESSION['logedAvatar'] = '';
+			$_SESSION['loged'] = 0;
+			$_SESSION['logedName'] = 'guest';
+			// logedGroups
+			$_SESSION['logedGroup'] = '';
+			echo 'Hibás kód'; exit();
 		}	
 	}
 }

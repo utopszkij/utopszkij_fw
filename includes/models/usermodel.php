@@ -29,6 +29,8 @@
             $result->realname = '';
             $result->error_count = 0;
             $result->locktime = 0;
+            $result->secret = '';
+            $result->twofactor = 0;
             return $result;
         }
 
@@ -105,7 +107,7 @@
             if (!isset($rec->id)) {
                 $rec = $this->emptyRecord();
                 $rec->id = 0;
-                $rec->deleted = 1; // igy az i címet bejelentkezésnél soha nem fogadja el, és a browser sem listázza.
+                $rec->deleted = 1; // igy az ip címet bejelentkezésnél soha nem fogadja el, és a browser sem listázza.
                 $rec->username = $ip;
                 $rec->error_count = $record->error_count;
                 $rec->locktime = $record->locktime;
@@ -145,9 +147,9 @@
             }
 
             // avatr kép feltöltés
-            $record->avatar = '';
             $error = '';
             if (isset($_FILES['avatar'])) {
+                $record->avatar = '';
                 if (file_exists($_FILES['avatar']['tmp_name'])) { 
                     $target_dir = DOCROOT.'/images/users';
                     if (!is_dir($target_dir.'/')) {

@@ -83,6 +83,31 @@
             :checked="record.enabled == 1"
             :disblaed="!logedAdmin">
             </div>
+        </div>  
+        <div class="row text-center">
+            <div class="col-12">
+            <label>{{ lng('ENABLED') }}&nbsp;</label>
+            <input type="checkbox" name="enabled" value="1" 
+            :checked="record.enabled == 1"
+            :disblaed="!logedAdmin">
+            </div>
+        </div>  
+        <div class="row text-center">
+            <div class="col-12">
+                <label>{{ lng('TWOFACTOR') }}&nbsp;</label>
+                <select name="twofactor" v-model="record.twofactor" 
+                :disblaed="((record.id != loged) & (!logedAdmin))">
+                    <option value="0">{{ lng('NO') }}</option>
+                    <option value="1">{{ lng('YES') }}</option>
+                </select>
+            </div>
+        </div>  
+          
+        <div class="row text-center" v-if="((record.id == loged) & (record.twofactor == 1))">
+            <div class="col-12">
+                {{ lng('SECRET_KEY') }} <strong>{{ record.secret }}</strong><br />
+                <img v-bind:src="qrCodeUrl" />
+            </div>
         </div>    
         <div class="row text-center">
             <div class="col-12">

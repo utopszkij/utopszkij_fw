@@ -54,6 +54,16 @@
 			<input type="file" name="avatar" class="form-control"/>
 		</div>	
 	</div>	
+	<div class="row text-center">
+		<div class="col-12">
+			<label>{{ lng('TWOFACTOR') }}&nbsp;</label>
+			<select name="twofactor" class="form-control" v-model="record.twofactor">
+				<option value="0">{{ lng('YES') }}</option>
+				<option value="1">{{ lng('NO') }}</option>
+			</select>
+		</div>
+	</div>	
+
 	<div class="row">
 		<div class="col-12">
 			<label>&nbsp;</label>

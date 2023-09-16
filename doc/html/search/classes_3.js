@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['exception_0',['Exception',['../class_p_h_p_mailer_1_1_p_h_p_mailer_1_1_exception.html',1,'PHPMailer::PHPMailer']]]
+  ['demo_0',['Demo',['../class_demo.html',1,'']]],
+  ['demo2model_1',['Demo2Model',['../class_demo2_model.html',1,'']]],
+  ['demomodel_2',['DemoModel',['../class_demo_model.html',1,'']]]
 ];

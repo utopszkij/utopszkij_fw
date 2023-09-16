@@ -178,7 +178,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">?string</td><td>$vendorDir </td></tr>
+    <tr><td class="paramtype">string&#160;|&#160;null</td><td class="paramname">$vendorDir</td><td></td></tr>
   </table>
   </dd>
 </dl>
@@ -221,7 +221,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramtype">string</td><td class="paramname">$prefix</td><td>The prefix </td></tr>
-    <tr><td class="paramtype">string[]&#160;|&#160;string</td><td class="paramname">$paths</td><td>The PSR-0 root directories </td></tr>
+    <tr><td class="paramtype"></td><td class="paramname">list&lt;string&gt;|string</td><td>$paths The PSR-0 root directories </td></tr>
     <tr><td class="paramtype">bool</td><td class="paramname">$prepend</td><td>Whether to prepend the directories</td></tr>
   </table>
   </dd>
@@ -247,7 +247,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramtype">string[]</td><td class="paramname">$classMap</td><td>Class to filename map @psalm-param array&lt;string, string&gt; $classMap</td></tr>
+    <tr><td class="paramname">array&lt;string,string&gt;</td><td>$classMap Class to filename map</td></tr>
   </table>
   </dd>
 </dl>
@@ -290,7 +290,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramtype">string</td><td class="paramname">$prefix</td><td>The prefix/namespace, with trailing '\' </td></tr>
-    <tr><td class="paramtype">string[]&#160;|&#160;string</td><td class="paramname">$paths</td><td>The PSR-4 base directories </td></tr>
+    <tr><td class="paramtype"></td><td class="paramname">list&lt;string&gt;|string</td><td>$paths The PSR-4 base directories </td></tr>
     <tr><td class="paramtype">bool</td><td class="paramname">$prepend</td><td>Whether to prepend the directories</td></tr>
   </table>
   </dd>
@@ -367,7 +367,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>string[] Array of classname =&gt; path @psalm-return array&lt;string, string&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>array&lt;string, string&gt; Array of classname =&gt; path </dd></dl>
 
 </div>
 </div>
@@ -385,7 +385,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return array&lt;string, string&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>list&lt;string&gt; </dd></dl>
 
 </div>
 </div>
@@ -403,7 +403,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return array&lt;string, string&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>list&lt;string&gt; </dd></dl>
 
 </div>
 </div>
@@ -421,7 +421,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>string[] </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>array&lt;string, list&lt;string&gt;&gt; </dd></dl>
 
 </div>
 </div>
@@ -439,7 +439,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>array[] @psalm-return array&lt;string, array&lt;int, string&gt;&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>array&lt;string, list&lt;string&gt;&gt; </dd></dl>
 
 </div>
 </div>
@@ -465,8 +465,8 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Returns the currently registered loaders indexed by their corresponding vendor directories.</p>
-<dl class="section return"><dt>Returns</dt><dd>self[] </dd></dl>
+<p >Returns the currently registered loaders keyed by their corresponding vendor directories.</p>
+<dl class="section return"><dt>Returns</dt><dd>array&lt;string, self&gt; </dd></dl>
 
 </div>
 </div>
@@ -589,7 +589,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramtype">string</td><td class="paramname">$prefix</td><td>The prefix </td></tr>
-    <tr><td class="paramtype">string[]&#160;|&#160;string</td><td class="paramname">$paths</td><td>The PSR-0 base directories</td></tr>
+    <tr><td class="paramtype"></td><td class="paramname">list&lt;string&gt;|string</td><td>$paths The PSR-0 base directories</td></tr>
   </table>
   </dd>
 </dl>
@@ -678,7 +678,7 @@ Jordi Boggiano <a href="#" onclick="location.href='mai'+'lto:'+'j.b'+'og'+'gia'+
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramtype">string</td><td class="paramname">$prefix</td><td>The prefix/namespace, with trailing '\' </td></tr>
-    <tr><td class="paramtype">string[]&#160;|&#160;string</td><td class="paramname">$paths</td><td>The PSR-4 base directories</td></tr>
+    <tr><td class="paramtype"></td><td class="paramname">list&lt;string&gt;|string</td><td>$paths The PSR-4 base directories</td></tr>
   </table>
   </dd>
 </dl>

@@ -346,6 +346,87 @@ class Book extends Controller {
         $this->items();
 
     }
+
+    public function api_upload() {
+        /*
+        $flowKey = $this->request->input('flowKey','');
+        if (!$this->checkFlowKey($flowKey)) {
+            $this->session->set('errorMsg','FLOWKEY');
+            // $this->items();
+            echo '{"error":"FLOWKEY_ERROR"}';
+            return;
+        }
+        */
+        $item = $this->model->emptyRecord();
+        $item->id = $this->request->input('id',0);
+        $item->title = $this->request->input('title','');
+        $item->storage = $this->request->input('storage','');
+        $item->image_url = $this->request->input('image_url','');
+        $item->book_url = $this->request->input('book_url','');
+        $item->volumes = $this->request->input('volumes','');
+        $item->year = $this->request->input('year','');
+
+        // ha kép upload volt tárol és beir a rekord-ba
+        $result = Uploader::doImgUpload('image','images/uploads','');
+        if (!isset($result->errorMsg) & (isset($result->name)))  {
+            if ($result->name != '') {
+                $item->image_url = 'images/uploads/'.$result->name;
+            }
+        }
+        $item->id = $this->model->save($item);
+        // kategóriák kezelése
+        $categoryModel = new CategoryModel();
+        $newCategories = [];
+        for ($i = 0; $i < 30; $i++) {
+            $category = $this->request->input('category'.$i,'');
+            if ($category != '') {
+                $newCategories[] = (int)$category;
+            }
+        }
+        $oldCategories = $categoryModel->getBookCategories($item->id);
+        // újak kapcsoláa
+        foreach ($newCategories as $newCategory) {
+            if (!in_array($newCategory,$oldCategories)) {
+                $categoryModel->addBookCategory($item->id,(int)$newCategory);
+            }
+        }
+        // régi felesleges kapcsolatok törlése
+        foreach ($oldCategories as $oldCategory) {
+            if (!in_array($oldCategory,$newCategories)) {
+                $categoryModel->deleteBookCategory($item->id,(int)$oldCategory);
+            }
+        }
+
+
+
+        // szerzők kezelése
+        $authorModel = new AuthorModel();
+        $newAutors = [];
+        for ($i = 0; $i < 30; $i++) {
+            $author = $this->request->input('author'.$i,'');
+            if ($author != '') {
+                $newAuthors[] = (int)$authorModel->addAuthor($author);
+            }
+        }
+        $oldAuthors = $authorModel->getBookAuthors($item->id);
+        // újak kapcsoláa
+        foreach ($newAuthors as $newAuthor) {
+            if (!in_array($newAuthor,$oldAuthors)) {
+                $authorModel->addBookAuthor($item->id,(int)$newAuthor);
+            }
+        }
+        // régi felsleges kapcsolatok törlése
+        foreach ($oldAuthors as $oldAuthor) {
+            if (!in_array($oldAuthor,$newAuthors)) {
+                $authorModel->deleteBookAuthor($item->id,(int)$oldAuthor);
+            }
+        }
+
+        $this->session->set('successMsg','SAVED');
+        echo '{"error":""}';
+        return;
+    }
+
 	
 }
 

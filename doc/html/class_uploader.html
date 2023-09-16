@@ -91,18 +91,51 @@ $(document).ready(function(){initNavTree('class_uploader.html',''); initResizabl
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4df08acc94bd479a9f13f446cb3cf1f6"><td class="memItemLeft" align="right" valign="top"><a id="a4df08acc94bd479a9f13f446cb3cf1f6" name="a4df08acc94bd479a9f13f446cb3cf1f6"></a>
-static&#160;</td><td class="memItemRight" valign="bottom"><b>remove_accent</b> ($str)</td></tr>
-<tr class="separator:a4df08acc94bd479a9f13f446cb3cf1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbf68d7226ad475281fd29b3a16ef3ad"><td class="memItemLeft" align="right" valign="top"><a id="abbf68d7226ad475281fd29b3a16ef3ad" name="abbf68d7226ad475281fd29b3a16ef3ad"></a>
-static&#160;</td><td class="memItemRight" valign="bottom"><b>clearFileName</b> ($s)</td></tr>
-<tr class="separator:abbf68d7226ad475281fd29b3a16ef3ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac093d62594fa0b1f712231ffdfadf47a"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_uploader.html#ac093d62594fa0b1f712231ffdfadf47a">remove_accent</a> (string $str)</td></tr>
+<tr class="separator:ac093d62594fa0b1f712231ffdfadf47a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa59c6f66b47055cae5f202a265324547"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_uploader.html#aa59c6f66b47055cae5f202a265324547">clearFileName</a> (string $s)</td></tr>
+<tr class="separator:aa59c6f66b47055cae5f202a265324547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef96d6e6ab4b0b224a08f5f92533525f"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_uploader.html#aef96d6e6ab4b0b224a08f5f92533525f">doUpload</a> (string $cname, string $targetDir, string $targetName='', array $filter=[])</td></tr>
 <tr class="separator:aef96d6e6ab4b0b224a08f5f92533525f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d910fe16db76f83d219b6874d17b3c7"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_uploader.html#a7d910fe16db76f83d219b6874d17b3c7">doImgUpload</a> (string $cname, string $targetDir, string $targetName='')</td></tr>
 <tr class="separator:a7d910fe16db76f83d219b6874d17b3c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa59c6f66b47055cae5f202a265324547" name="aa59c6f66b47055cae5f202a265324547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa59c6f66b47055cae5f202a265324547">&#9670;&nbsp;</a></span>clearFileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static clearFileName </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>$s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >file név tisztitása </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_uploader.html#aef96d6e6ab4b0b224a08f5f92533525f">doUpload()</a>.</p>
+
+</div>
+</div>
 <a id="a7d910fe16db76f83d219b6874d17b3c7" name="a7d910fe16db76f83d219b6874d17b3c7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d910fe16db76f83d219b6874d17b3c7">&#9670;&nbsp;</a></span>doImgUpload()</h2>
 
@@ -152,6 +185,8 @@ static&#160;</td><td class="memItemRight" valign="bottom"><b>clearFileName</b> (
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>{"error":" ''|errorMsg ", "name":"uploaded filename+ext"} </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="class_book.html#a1bc2526ef94ce5e2fd574a48775e5772">Book\save()</a>.</p>
+
 </div>
 </div>
 <a id="aef96d6e6ab4b0b224a08f5f92533525f" name="aef96d6e6ab4b0b224a08f5f92533525f"></a>
@@ -199,18 +234,51 @@ static&#160;</td><td class="memItemRight" valign="bottom"><b>clearFileName</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p >File upload. If target file exists overwrite it. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >File upload a képernyőn lévő file inputből. If target file exists overwrite it. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">string</td><td>input DOM component name </td></tr>
     <tr><td class="paramname">string</td><td>target directory (not include last /) </td></tr>
     <tr><td class="paramname">string</td><td>target Name+ext optional, enable '' enable '.*' extension (use uploaded file extension) </td></tr>
-    <tr><td class="paramname">array</td><td>enabled extensions </td></tr>
+    <tr><td class="paramname">array</td><td>enabled extensions example:['jpg','jpeg','png'] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>{"error":" ''|errorMsg ", "name":"uploaded filename+ext"} </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>{"error":" ''|errorMsg ", "name":"uploaded filename+ext", "url":"fileurl"} </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="class_uploader.html#a7d910fe16db76f83d219b6874d17b3c7">doImgUpload()</a>.</p>
+
+</div>
+</div>
+<a id="ac093d62594fa0b1f712231ffdfadf47a" name="ac093d62594fa0b1f712231ffdfadf47a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac093d62594fa0b1f712231ffdfadf47a">&#9670;&nbsp;</a></span>remove_accent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static remove_accent </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>$str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Ékezets betük kigyomlálása </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
 
 </div>
 </div>

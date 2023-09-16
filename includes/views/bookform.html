@@ -6,7 +6,7 @@
 <div id="book">
 	<h2>{{ lng('BOOK') }}</h2>
     <form id="bookForm" v-bind:action="HREF('book.save',{})" method="post" class="form" 
-        enctype="multipart/form-data"  style="display:blocl">
+        enctype="multipart/form-data"  style="display:blocl"   v-on:keyup.enter="okClick()">
         <input type="hidden" v-model="flowKey" name="flowKey" />
         <input type="hidden" value="book.save" name="task" />			
 		
@@ -105,6 +105,20 @@
 							</div> 
 						</div>							
 					</div>
+					<div class="row">
+						<div class="col-12">
+							<table id="progressTable" style="width:100%; display:none">
+								<tr style="border-style:solid; border-width:1px; border-color:blue">
+									<td id="progressImg">&nbsp;</td>
+									<td style="background-color:white"></td>
+								</tr>
+								<tr>
+									<td colspan="2" style="text-align:center"><var id="progressTxt"></var></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+			
         <div class="row formButtons" v-if="logedAdmin">
             <div class="col-12">
                 <button type="submit" class="btn btn-success">
@@ -171,6 +185,7 @@
 			'</div>';
 			$('#authorsRow').append(s);	
 			this.authorCount++;
-		}	    
+		}
+
     }
 </script>

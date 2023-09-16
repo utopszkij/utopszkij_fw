@@ -1,46 +1,55 @@
 {
     "packages": [
         {
-            "name": "yidas/socket-mailer",
-            "version": "1.0.0",
-            "version_normalized": "1.0.0.0",
+            "name": "phpgangsta/googleauthenticator",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/yidas/php-socket-mailer.git",
-                "reference": "a9258787969baeb8edc1c2ba0782a16074295710"
+                "url": "https://github.com/PHPGangsta/GoogleAuthenticator.git",
+                "reference": "505c2af8337b559b33557f37cda38e5f843f3768"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yidas/php-socket-mailer/zipball/a9258787969baeb8edc1c2ba0782a16074295710",
-                "reference": "a9258787969baeb8edc1c2ba0782a16074295710",
+                "url": "https://api.github.com/repos/PHPGangsta/GoogleAuthenticator/zipball/505c2af8337b559b33557f37cda38e5f843f3768",
+                "reference": "505c2af8337b559b33557f37cda38e5f843f3768",
                 "shasum": ""
             },
-            "time": "2018-09-19T08:30:57+00:00",
+            "require": {
+                "php": ">=5.3"
+            },
+            "time": "2019-03-20T00:55:58+00:00",
+            "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
-                "psr-4": {
-                    "yidas\\socketMailer\\": "src"
-                }
+                "classmap": [
+                    "PHPGangsta/GoogleAuthenticator.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "BSD-4-Clause"
             ],
-            "description": "PHP SMTP Mailer library using fsockopen.",
-            "homepage": "https://github.com/yidas/php-socket-mailer",
+            "authors": [
+                {
+                    "name": "Michael Kliewe",
+                    "email": "info@phpgangsta.de",
+                    "homepage": "http://www.phpgangsta.de/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Google Authenticator 2-factor authentication",
             "keywords": [
-                "Socket",
-                "fsockopen",
-                "mailer",
-                "php",
-                "smtp"
+                "googleauthenticator",
+                "rfc6238",
+                "totp"
             ],
             "support": {
-                "issues": "https://github.com/yidas/php-socket-mailer/issues",
-                "source": "https://github.com/yidas/php-socket-mailer"
+                "issues": "https://github.com/PHPGangsta/GoogleAuthenticator/issues",
+                "source": "https://github.com/PHPGangsta/GoogleAuthenticator"
             },
-            "install-path": "../yidas/socket-mailer"
+            "install-path": "../phpgangsta/googleauthenticator"
         }
     ],
     "dev": true,
