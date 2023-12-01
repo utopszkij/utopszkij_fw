@@ -7,6 +7,7 @@ DEFINE('LNG','hu');
 DEFINE('LOGIN_MUST_VERIFYED_EMAIL',true); // csak ellenörzött email -el lehet bejelentkezni
 DEFINE('MULTIUSER',true); // true: több felhasználós mód, false: egy felhasználós mód
 DEFINE('ADMIN','admin'); // az első system admin user belépési neve
+DEFINE('CONFIG','default');
 // GDPR
 DEFINE('ADATKEZELO','Gipsz Jakab<br />1036 Budapest, Jézusszive utca 61<br />gipsz.jakab@gmail.com<br />https://gipsz-jakab.hu');
 DEFINE('ADATFELDOLGOZO','Zabhegyező kft<br />1165 Budapest, Faluvége út 101.<br />info@zabhegyezo.hu<br />Weboldal: www.zabhegyezo.hu');
